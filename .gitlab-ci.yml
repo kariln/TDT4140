@@ -1,0 +1,40 @@
+stages:
+  - analysis
+  - test
+
+flake8:
+  stage: analysis
+  image: python:3.7
+  before_script:
+    - cd shopstop_backend
+    - pip install -r requirements.txt
+  script:
+    - flake8 shopstop
+
+test-django:
+  stage: test
+  image: python:3.7
+  before_script:
+    - cd shopstop_backend
+    - pip install -r requirements.txt
+  script:
+    - coverage run --source="shopstop" manage.py test
+    - coverage report
+
+ESLint:
+  stage: analysis
+  image: node:alpine
+  before_script:
+    - cd shopstop-frontend
+    - yarn
+  script:
+    - yarn lint
+
+test-jest:
+  stage: test
+  image: node:alpine
+  before_script:
+    - cd shopstop-frontend
+    - yarn
+  script:
+    - yarn test --passWithNoTests

@@ -7,7 +7,8 @@
         "web": "expo start --web",
         "eject": "expo eject",
         "prettier:write": "npx prettier --write **/*.{js,jsx,ts,tsx,json} && npx prettier --write *.{js,jsx,ts,tsx,json}",
-        "lint": "tsc --noEmit && eslint --ext .js,.jsx,.ts,.tsx ./"
+        "lint": "tsc --noEmit && eslint --ext .js,.jsx,.ts,.tsx ./",
+        "test": "jest"
     },
     "dependencies": {
         "expo": "~36.0.0",
@@ -33,8 +34,12 @@
         "eslint-plugin-prettier": "^3.1.2",
         "eslint-plugin-react": "^7.18.3",
         "eslint-plugin-react-hooks": "^2.3.0",
+        "jest": "^25.1.0",
         "prettier": "^1.19.1",
         "typescript": "~3.6.3"
+    },
+    "jest": {
+        "preset": "react-native"
     },
     "private": true
 }
