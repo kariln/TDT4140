@@ -1,3 +1,4 @@
+
 node_modules/
 .expo/
 npm-debug.*
@@ -15,3 +16,14 @@ yarn-error.log
 .DS_Store
 
 vscode.code-workspace
+
+venv/
+
+# Django #
+*.log
+*.pot
+*.pyc
+__pycache__
+db.sqlite3
+media
+
