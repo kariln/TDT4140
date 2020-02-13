@@ -1,10 +1,10 @@
 from django.contrib import admin
 
-from shopstop_backend.shopstop.models import Placeholder
+from .models import List
 
 
-class PlaceholderAdmin(admin.ModelAdmin):
+class ListAdmin(admin.ModelAdmin):
     pass
 
 
-admin.site.register(Placeholder, PlaceholderAdmin)
+admin.site.register(List, ListAdmin)
