@@ -6,5 +6,8 @@ module.exports = {
         'prettier',
         'prettier/@typescript-eslint',
         'prettier/react'
-    ]
+    ],
+    rules: {
+        'react/prop-types': ['error', { ignore: ['navigation', 'route'] }]
+    }
 };
