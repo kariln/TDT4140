@@ -1,5 +1,13 @@
 import React from 'react';
-import { StyleSheet, View, FlatList, Text } from 'react-native';
+import {
+    StyleSheet,
+    View,
+    FlatList,
+    Text,
+    TouchableOpacity
+} from 'react-native';
+import { Icon } from 'react-native-elements';
+import { useNavigation } from '@react-navigation/native';
 
 import ListsItem from './ListOverviewItem';
 
@@ -13,6 +21,7 @@ const styles = StyleSheet.create({
 });
 
 const Lists = () => {
+    const navigation = useNavigation();
     // Mock data of the lists, with a name and an id
     const DATA = [
         {
@@ -38,6 +47,28 @@ const Lists = () => {
                 )}
                 keyExtractor={item => item.id}
             />
+            <TouchableOpacity
+                style={{
+                    borderWidth: 1,
+                    borderColor: 'rgba(0,0,0,0.2)',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginLeft: '50%',
+                    width: 70,
+                    height: 70,
+                    backgroundColor: '#fff',
+                    borderRadius: 140
+                }}
+                onPress={() => navigation.navigate('addList')}
+            >
+                <Icon
+                    name={'add'}
+                    type={'material'}
+                    raised
+                    size={35}
+                    color="#01a699"
+                />
+            </TouchableOpacity>
         </View>
     );
 };

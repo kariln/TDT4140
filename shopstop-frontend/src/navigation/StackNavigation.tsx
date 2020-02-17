@@ -4,6 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 // imports of our own components
 import ListOverview from '../screens/ListOverviewScreen';
 import SingleList from '../screens/SingleListScreen';
+import AddNewList from '../screens/AddNewListScreen';
 
 const Stack = createStackNavigator();
 
@@ -26,6 +27,7 @@ const MyStack = () => {
                 }}
             />
             <Stack.Screen name="list" component={SingleList} />
+            <Stack.Screen name="addList" component={AddNewList} />
         </Stack.Navigator>
     );
 };
