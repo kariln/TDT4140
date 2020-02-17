@@ -1,10 +1,10 @@
 import React from 'react';
 
 // imports of our own components
-import DrawerComponent from './src/navigation/DrawerNavigation';
+import MainStack from './src/navigation/StackNavigation';
 
 const App = () => {
-    return <DrawerComponent />;
+    return <MainStack />;
 };
 
 export default App;

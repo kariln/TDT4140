@@ -1,37 +1,29 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 
+import { NavigationContainer } from '@react-navigation/native';
+
 // imports of our own components
-import ListOverview from '../screens/ListOverviewScreen';
 import SingleList from '../screens/SingleListScreen';
-import AddNewList from '../screens/AddNewListScreen';
+import MyDrawer from './DrawerNavigation';
 
 const Stack = createStackNavigator();
 
-// if we want to hide the header from the stack navigator, use this as prop in stack.navigator ------>   headerMode="none"
-const MyStack = () => {
+const MainStack = () => {
     return (
-        <Stack.Navigator>
-            <Stack.Screen
-                name="lists"
-                component={ListOverview}
-                options={{
-                    title: 'Oversikt over hanndlelistene',
-                    headerStyle: {
-                        backgroundColor: '#add8e6'
-                    },
-                    headerTintColor: '#fff',
-                    headerTitleStyle: {
-                        fontWeight: 'bold'
-                    }
-                }}
-            />
-            <Stack.Screen name="list" component={SingleList} />
-            <Stack.Screen name="addList" component={AddNewList} />
-        </Stack.Navigator>
+        <NavigationContainer>
+            <Stack.Navigator headerMode="screen">
+                <Stack.Screen
+                    name="drawer"
+                    component={MyDrawer}
+                    options={{ headerShown: false }}
+                />
+                <Stack.Screen name="list" component={SingleList} />
+            </Stack.Navigator>
+        </NavigationContainer>
     );
 };
 
-export default MyStack;
+export default MainStack;
 
 // this component basically lets us navigate through screens easily, so we can click a list, and get sent into a new component which shows the list, and easily go back etc.
