@@ -1,13 +1,12 @@
 import React from 'react';
 import { Text } from 'react-native';
-import PropTypes from 'prop-types';
 
-const ListItem = ({ item }) => {
-    return <Text>denne varen er {item}</Text>;
-};
+export interface ListItemInterface {
+    item: string;
+}
 
-ListItem.propTypes = {
-    item: PropTypes.string.isRequired
+const ListItem: React.FC<ListItemInterface> = props => {
+    return <Text>denne varen er {props.item}</Text>;
 };
 
 export default ListItem;

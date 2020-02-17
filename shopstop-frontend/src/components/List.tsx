@@ -4,16 +4,18 @@ import ListItem from './ListItem';
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        backgroundColor: '#fff',
         alignItems: 'center',
+        backgroundColor: '#fff',
+        flex: 1,
         paddingTop: '20%'
     }
 });
 
-const List = ({ route }) => {
-    const { id } = route.params; // this is the id that we do the query on
+export interface ListInterface {
+    id: string;
+}
 
+const List: React.FC<ListInterface> = props => {
     // mock data av varer i handlelisten
     const DATA = [
         {
@@ -31,7 +33,7 @@ const List = ({ route }) => {
     ];
     return (
         <View style={styles.container}>
-            <Text>id: {id}</Text>
+            <Text>id: {props.id}</Text>
             <FlatList
                 data={DATA}
                 renderItem={({ item }) => <ListItem item={item.name} />}
