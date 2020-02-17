@@ -10,7 +10,11 @@ const Stack = createStackNavigator();
 const SubStack = () => {
     return (
         <Stack.Navigator>
-            <Stack.Screen name="lists" component={ListOverview} />
+            <Stack.Screen
+                name="lists"
+                component={ListOverview}
+                options={{ title: 'Handlelistene mine' }}
+            />
         </Stack.Navigator>
     );
 };

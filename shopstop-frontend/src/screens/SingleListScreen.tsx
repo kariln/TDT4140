@@ -4,7 +4,7 @@ import List from '../components/List';
 
 // These lines below makes a new type for the route prop which we use in interface.
 type RootStackParamList = {
-    list: { id: string };
+    list: { id: string; title: string };
 };
 type ProfileScreenRouteProp = RouteProp<RootStackParamList, 'list'>;
 
@@ -13,7 +13,7 @@ export interface SingleListInterface {
 }
 
 const SingleList: React.FC<SingleListInterface> = props => {
-    return <List id={props.route.params.id} />;
+    return <List id={props.route.params.id} title={props.route.params.title} />;
 };
 
 export default SingleList;

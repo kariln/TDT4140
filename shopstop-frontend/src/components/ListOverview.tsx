@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, FlatList, Text } from 'react-native';
+import { StyleSheet, View, FlatList } from 'react-native';
 
 import ListsItem from './ListOverviewItem';
 
@@ -8,19 +8,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#fff',
         flex: 1,
-        paddingTop: '20%'
-    },
-    addButton: {
-        borderWidth: 1,
-        borderColor: 'rgba(0,0,0,0.2)',
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginLeft: '50%',
-        marginTop: '5%',
-        width: 70,
-        height: 70,
-        backgroundColor: '#fff',
-        borderRadius: 140
+        paddingTop: '10%'
     }
 });
 
@@ -36,45 +24,44 @@ const Lists = () => {
             title: 'Second List'
         },
         {
-            id: '58694a0f-3da1-471f-bd96-145571e29d72',
+            id: '58694a0f-3da1-471f-bd96-145571e29d73',
             title: 'Third List'
         },
         {
-            id: '58694a0f-3da1-471f-bd96-145571e29d72',
+            id: '58694a0f-3da1-471f-bd96-145571e29d74',
             title: 'Third List'
         },
         {
-            id: '58694a0f-3da1-471f-bd96-145571e29d72',
+            id: '58694a0f-3da1-471f-bd96-145571e29d75',
             title: 'Third List'
         },
         {
-            id: '58694a0f-3da1-471f-bd96-145571e29d72',
+            id: '58694a0f-3da1-471f-bd96-145571e29d76',
             title: 'Third List'
         },
         {
-            id: '58694a0f-3da1-471f-bd96-145571e29d72',
+            id: '58694a0f-3da1-471f-bd96-145571e29d77',
             title: 'Third List'
         },
         {
-            id: '58694a0f-3da1-471f-bd96-145571e29d72',
+            id: '58694a0f-3da1-471f-bd96-145571e29d78',
             title: 'Third List'
         },
         {
-            id: '58694a0f-3da1-471f-bd96-145571e29d72',
+            id: '58694a0f-3da1-471f-bd96-145571e29d79',
             title: 'Third List'
         },
         {
-            id: '58694a0f-3da1-471f-bd96-145571e29d72',
+            id: '58694a0f-3da1-471f-bd96-145571e29d721',
             title: 'Third List'
         },
         {
-            id: '58694a0f-3da1-471f-bd96-145571e29d72',
+            id: '58694a0f-3da1-471f-bd96-145571e29d722',
             title: 'Third List'
         }
     ];
     return (
         <View style={styles.container}>
-            <Text>Her er listene, du kan trykke inn på dem</Text>
             <FlatList
                 data={DATA}
                 renderItem={({ item }) => (
@@ -87,18 +74,3 @@ const Lists = () => {
 };
 
 export default Lists;
-
-/*
-<TouchableOpacity
-    style={styles.addButton}
-    onPress={() => navigation.navigate('addList')}
->
-    <Icon
-        name={'add'}
-        type={'material'}
-        raised
-        size={35}
-        color="#01a699"
-    />
-</TouchableOpacity>
-*/

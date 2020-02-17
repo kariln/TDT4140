@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, FlatList, Text } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import ListItem from './ListItem';
 
 const styles = StyleSheet.create({
@@ -13,9 +14,11 @@ const styles = StyleSheet.create({
 
 export interface ListInterface {
     id: string;
+    title: string;
 }
 
 const List: React.FC<ListInterface> = props => {
+    const navigation = useNavigation();
     // mock data av varer i handlelisten
     const DATA = [
         {
@@ -31,6 +34,10 @@ const List: React.FC<ListInterface> = props => {
             name: 'kake'
         }
     ];
+
+    navigation.setOptions({
+        title: props.title
+    });
     return (
         <View style={styles.container}>
             <Text>id: {props.id}</Text>
