@@ -53,6 +53,8 @@ build_staging_image:
     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
+    - ssh-keyscan shopstop.xyz >> ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
   script:
     - rsync -a ./ ubuntu@shopstop.xyz:~/staging
     - ssh ubuntu@shopstop.xyz "cd staging; docker build -t registry.shopstop.xyz/shopstop-backend:staging" .
@@ -70,6 +72,8 @@ build_production_image:
     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
+    - ssh-keyscan shopstop.xyz >> ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
   script:
     - rsync -a ./ ubuntu@shopstop.xyz:~/production
     - ssh ubuntu@shopstop.xyz "cd production; docker build -t registry.shopstop.xyz/shopstop-backend:production ."
@@ -86,6 +90,8 @@ deploy_staging:
     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
+    - ssh-keyscan shopstop.xyz >> ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
   script:
     - ssh ubuntu@shopstop.xyz "cd staging; ENVIRONMENT=staging docker-compose stop"
     - ssh ubuntu@shopstop.xyz "cd staging; ENVIRONMENT=staging docker-compose rm -f"
@@ -106,6 +112,8 @@ deploy_production:
     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
+    - ssh-keyscan shopstop.xyz >> ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
   script:
     - ssh ubuntu@shopstop.xyz "cd production; ENVIRONMENT=production docker-compose stop"
     - ssh ubuntu@shopstop.xyz "cd production; ENVIRONMENT=production docker-compose rm -f"
