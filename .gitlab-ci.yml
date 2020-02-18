@@ -56,6 +56,7 @@ build_staging_image:
     - ssh-keyscan shopstop.xyz >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
   script:
+    - ssh ubuntu@shopstop.xyz sudo rm -r staging
     - rsync -a ./ ubuntu@shopstop.xyz:~/staging
     - ssh ubuntu@shopstop.xyz "cd staging; docker build -t registry.shopstop.xyz/shopstop-backend:staging" .
     - ssh ubuntu@shopstop.xyz docker push registry.shopstop.xyz/shopstop-backend:staging
@@ -75,6 +76,7 @@ build_production_image:
     - ssh-keyscan shopstop.xyz >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
   script:
+    - ssh ubuntu@shopstop.xyz sudo rm -r production
     - rsync -a ./ ubuntu@shopstop.xyz:~/production
     - ssh ubuntu@shopstop.xyz "cd production; docker build -t registry.shopstop.xyz/shopstop-backend:production ."
     - ssh ubuntu@shopstop.xyz docker push registry.shopstop.xyz/shopstop-backend:production
