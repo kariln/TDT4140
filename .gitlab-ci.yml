@@ -45,6 +45,7 @@ test-jest:
 
 build_staging_image:
   stage: deploy
+  image: ubuntu
   before_script:
     - eval $(ssh-agent -s)
     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
@@ -59,6 +60,7 @@ build_staging_image:
   
 build_production_image:
   stage: deploy
+  image: ubuntu
   before_script:
     - eval $(ssh-agent -s)
     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
@@ -73,6 +75,7 @@ build_production_image:
 
 deploy_staging:
   stage: deploy
+  image: ubuntu
   before_script:
     - eval $(ssh-agent -s)
     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
@@ -91,6 +94,7 @@ deploy_staging:
 
 deploy_production:
   stage: deploy
+  image: ubuntu
   before_script:
     - eval $(ssh-agent -s)
     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
