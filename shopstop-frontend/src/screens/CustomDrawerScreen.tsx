@@ -1,8 +1,30 @@
 import React from 'react';
-import { Text } from 'react-native';
+import { Text, StyleSheet, View } from 'react-native';
+import GroupOverview from '../components/GroupOverview';
+
+const styles = StyleSheet.create({
+    container: {
+        alignItems: 'center',
+        backgroundColor: '#fff',
+        paddingTop: '20%',
+        flex: 1
+    },
+    divider: {
+        borderBottomColor: 'black',
+        borderBottomWidth: 1,
+        alignSelf: 'stretch',
+        margin: 10
+    }
+});
 
 const CustomDrawerContent = () => {
-    return <Text>Her kan jeg lage custom ting til drawer</Text>;
+    return (
+        <View style={styles.container}>
+            <Text>Enten profil eller bilde her</Text>
+            <View style={styles.divider} />
+            <GroupOverview />
+        </View>
+    );
 };
 
 export default CustomDrawerContent;
