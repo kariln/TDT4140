@@ -45,6 +45,7 @@ test-jest:
 
 build_staging_image:
   stage: deploy
+  image: docker
   script:
     - docker build -t registry.shopstop.xyz/shopstop-backend:staging .
     - docker push registry.shopstop.xyz/shopstop-backend:staging
@@ -53,6 +54,7 @@ build_staging_image:
   
 build_production_image:
   stage: deploy
+  image: docker
   script:
     - docker build -t registry.shopstop.xyz/shopstop-backend:production .
     - docker push registry.shopstop.xyz/shopstop-backend:production
