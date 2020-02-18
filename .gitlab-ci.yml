@@ -79,6 +79,7 @@ deploy_staging:
   stage: deploy
   image: alpine
   before_script:
+    - apk --update add rsync
     - apk --update add openssh-client
     - eval $(ssh-agent -s)
     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
@@ -99,6 +100,7 @@ deploy_production:
   stage: deploy
   image: alpine
   before_script:
+    - apk --update add rsync
     - apk --update add openssh-client
     - eval $(ssh-agent -s)
     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
