@@ -45,19 +45,29 @@ test-jest:
 
 build_staging_image:
   stage: deploy
-  image: docker
+  before_script:
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
   script:
-    - docker build -t registry.shopstop.xyz/shopstop-backend:staging .
-    - docker push registry.shopstop.xyz/shopstop-backend:staging
+    - scp -r docker-compose.yml ubuntu@shopstop.xyz:~/staging
+    - ssh ubuntu@shopstop.xyz "cd staging; docker build -t registry.shopstop.xyz/shopstop-backend:staging" .
+    - ssh ubuntu@shopstop.xyz docker push registry.shopstop.xyz/shopstop-backend:staging
   only:
     - develop
   
 build_production_image:
   stage: deploy
-  image: docker
+  before_script:
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
   script:
-    - docker build -t registry.shopstop.xyz/shopstop-backend:production .
-    - docker push registry.shopstop.xyz/shopstop-backend:production
+    - scp -r docker-compose.yml ubuntu@shopstop.xyz:~/production
+    - ssh ubuntu@shopstop.xyz "cd production; docker build -t registry.shopstop.xyz/shopstop-backend:production ."
+    - ssh ubuntu@shopstop.xyz docker push registry.shopstop.xyz/shopstop-backend:production
   only:
     - master
 
@@ -69,7 +79,6 @@ deploy_staging:
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
   script:
-    - scp docker-compose.yml ubuntu@shopstop.xyz:~/staging
     - ssh ubuntu@shopstop.xyz "cd staging; ENVIRONMENT=staging docker-compose stop"
     - ssh ubuntu@shopstop.xyz "cd staging; ENVIRONMENT=staging docker-compose rm -f"
     - ssh ubuntu@shopstop.xyz "cd staging; ENVIRONMENT=staging docker-compose pull"
@@ -88,7 +97,6 @@ deploy_production:
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
   script:
-    - scp docker-compose.yml ubuntu@shopstop.xyz:~/production
     - ssh ubuntu@shopstop.xyz "cd production; ENVIRONMENT=production docker-compose stop"
     - ssh ubuntu@shopstop.xyz "cd production; ENVIRONMENT=production docker-compose rm -f"
     - ssh ubuntu@shopstop.xyz "cd production; ENVIRONMENT=production docker-compose pull"
