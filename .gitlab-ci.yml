@@ -53,7 +53,7 @@ build_staging_image:
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
   script:
-    - scp -r docker-compose.yml ubuntu@shopstop.xyz:~/staging
+    - rsync -a ./ ubuntu@shopstop.xyz:~/staging
     - ssh ubuntu@shopstop.xyz "cd staging; docker build -t registry.shopstop.xyz/shopstop-backend:staging" .
     - ssh ubuntu@shopstop.xyz docker push registry.shopstop.xyz/shopstop-backend:staging
   only:
@@ -69,7 +69,7 @@ build_production_image:
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
   script:
-    - scp -r docker-compose.yml ubuntu@shopstop.xyz:~/production
+    - rsync -a ./ ubuntu@shopstop.xyz:~/production
     - ssh ubuntu@shopstop.xyz "cd production; docker build -t registry.shopstop.xyz/shopstop-backend:production ."
     - ssh ubuntu@shopstop.xyz docker push registry.shopstop.xyz/shopstop-backend:production
   only:
