@@ -1,8 +1,9 @@
 stages:
   - analysis
   - test
+  - deploy
 
-flake8:
+lint-python:
   stage: analysis
   image: python:3.7
   before_script:
@@ -10,6 +11,7 @@ flake8:
     - pip install -r requirements.txt
   script:
     - flake8 shopstop
+    - isort -rc -c shopstop/
 
 test-django:
   stage: test
@@ -40,3 +42,57 @@ test-jest:
     - yarn
   script:
     - yarn test --passWithNoTests
+
+build_staging_image:
+  stage: deploy
+  script:
+    - docker build -t registry.shopstop.xyz/shopstop-backend:staging .
+    - docker push registry.shopstop.xyz/shopstop-backend:staging
+  only:
+    - develop
+  
+build_production_image:
+  stage: deploy
+  script:
+    - docker build -t registry.shopstop.xyz/shopstop-backend:production .
+    - docker push registry.shopstop.xyz/shopstop-backend:production
+  only:
+    - master
+
+deploy_staging:
+  stage: deploy
+  before_script:
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+  script:
+    - scp docker-compose.yml ubuntu@shopstop.xyz:~/staging
+    - ssh ubuntu@shopstop.xyz "cd staging; ENVIRONMENT=staging docker-compose stop"
+    - ssh ubuntu@shopstop.xyz "cd staging; ENVIRONMENT=staging docker-compose rm -f"
+    - ssh ubuntu@shopstop.xyz "cd staging; ENVIRONMENT=staging docker-compose pull"
+    - ssh ubuntu@shopstop.xyz "cd staging; ENVIRONMENT=staging SHOPSTOP_SECRET_KEY=$SHOPSTOP_STAGING_SECRET_KEY DJANGO_SETTINGS_MODULE=shopstop_backend.settings-staging docker-compose up -d"
+  environment:
+    name: staging
+    url: https://staging.shopstop.xyz
+  only:
+  - develop
+
+deploy_production:
+  stage: deploy
+  before_script:
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+  script:
+    - scp docker-compose.yml ubuntu@shopstop.xyz:~/production
+    - ssh ubuntu@shopstop.xyz "cd production; ENVIRONMENT=production docker-compose stop"
+    - ssh ubuntu@shopstop.xyz "cd production; ENVIRONMENT=production docker-compose rm -f"
+    - ssh ubuntu@shopstop.xyz "cd production; ENVIRONMENT=production docker-compose pull"
+    - ssh ubuntu@shopstop.xyz "cd production; ENVIRONMENT=production SHOPSTOP_SECRET_KEY=$SHOPSTOP_PRODUCTION_SECRET_KEY DJANGO_SETTINGS_MODULE=shopstop_backend.settings-production docker-compose up -d"
+  environment:
+    name: production
+    url: https://shopstop.xyz
+  only:
+  - master
