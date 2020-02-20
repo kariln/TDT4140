@@ -12,7 +12,7 @@ lint-python:
     - pip install -r requirements.txt
   script:
     - flake8 shopstop
-    - isort -rc -c shopstop/
+    - isort -rc shopstop/
 
 test-django:
   stage: test
