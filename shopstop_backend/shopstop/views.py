@@ -1,8 +1,9 @@
 from rest_framework import viewsets
-from .serializers import ListSerializer
-from .models import List
-from rest_framework.response import Response
 from rest_framework.decorators import action
+from rest_framework.response import Response
+
+from .models import List, ListItem
+from .serializers import ListItemSerializer, ListSerializer
 
 
 class ListViewSet(viewsets.ModelViewSet):
@@ -23,3 +24,8 @@ class ListViewSet(viewsets.ModelViewSet):
         self.queryset = self.queryset.filter(group=group)
         serializer = self.get_serializer(self.queryset, many=True)
         return Response(serializer.data)
+
+
+class ListItemViewSet(viewsets.ModelViewSet):
+    queryset = ListItem.objects.all()
+    serializer_class = ListItemSerializer
