@@ -13,7 +13,6 @@ const styles = StyleSheet.create({
 });
 
 export interface ListInterface {
-    id: string;
     title: string;
 }
 
@@ -40,7 +39,6 @@ const List: React.FC<ListInterface> = props => {
     });
     return (
         <View style={styles.container}>
-            <Text>id: {props.id}</Text>
             <FlatList
                 data={DATA}
                 renderItem={({ item }) => <ListItem item={item.name} />}

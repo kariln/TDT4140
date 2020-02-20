@@ -26,19 +26,17 @@ const styles = StyleSheet.create({
 });
 
 export interface ListOverViewItemInterface {
-    id: string;
     title: string;
 }
 
 const Item: React.FC<ListOverViewItemInterface> = props => {
     const navigation = useNavigation(); // For navigating the stack, see ../navigation/stacknavigation for how the stack looks
     // when you press the list, it navigates to the list screen, with the id of the list selected as a prop, so we can do a query for items in that list.
-    const { id } = props;
     const { title } = props;
 
     return (
         <TouchableOpacity
-            onPress={() => navigation.navigate('list', { id, title })}
+            onPress={() => navigation.navigate('list', { title })}
             style={styles.listItem}
         >
             <Text style={styles.itemLeft}>{title}</Text>
