@@ -16,16 +16,11 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '7&_tj_fz7qmy4mgb8wm%=n08)6_6c6d*zf6d34uk_iuooa*blx'
+SECRET_KEY = os.environ.get('SHOPSTOP_SECRET_KEY')
 
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['www.shopstop.xyz', 'shopstop.xyz']
 
 
 # Application definition
@@ -37,8 +32,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework',
-    'shopstop'
+    'rest_framework'
 ]
 
 MIDDLEWARE = [
@@ -77,8 +71,11 @@ WSGI_APPLICATION = 'shopstop_backend.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'HOST': 'postgres-production',
+        'PORT': '5432'
     }
 }
 
@@ -120,6 +117,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = '/srv/app/static'
 
 
 REST_FRAMEWORK = {

@@ -12,12 +12,17 @@ web-build/
 web-report/
 yarn-error.log
 
+.coverage
+
 # macOS
 .DS_Store
 
 vscode.code-workspace
 
 venv/
+
+#idea
+.idea/
 
 # Django #
 *.log
