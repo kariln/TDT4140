@@ -6,7 +6,7 @@ const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
         backgroundColor: '#fff',
-        paddingTop: '20%',
+        paddingTop: '40%',
         flex: 1
     },
     divider: {

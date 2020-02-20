@@ -1,5 +1,6 @@
 import React from 'react';
-import { StyleSheet, View, FlatList, Text } from 'react-native';
+import { StyleSheet, View, FlatList, Button } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 const styles = StyleSheet.create({
     container: {
@@ -58,11 +59,20 @@ const GroupOverview = () => {
             title: 'Third List'
         }
     ];
+    const navigation = useNavigation();
+    const enterGroup = id => {
+        navigation.navigate('lists', { id });
+    };
     return (
         <View style={styles.container}>
             <FlatList
                 data={DATA}
-                renderItem={({ item }) => <Text>{item.title}</Text>}
+                renderItem={({ item }) => (
+                    <Button
+                        title={item.title}
+                        onPress={() => enterGroup(item.id)}
+                    />
+                )}
                 keyExtractor={item => item.id}
             />
         </View>

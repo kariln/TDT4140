@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, FlatList } from 'react-native';
-
+import { useRoute } from '@react-navigation/native';
 import ListsItem from './ListOverviewItem';
 
 const styles = StyleSheet.create({
@@ -60,6 +60,9 @@ const Lists = () => {
             title: 'Third List'
         }
     ];
+
+    const route = useRoute();
+    console.log(route);
     return (
         <View style={styles.container}>
             <FlatList
