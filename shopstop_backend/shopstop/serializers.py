@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import List
+
+from .models import List, ListItem
 
 
 class ListSerializer(serializers.ModelSerializer):
@@ -22,3 +23,9 @@ class ListSerializer(serializers.ModelSerializer):
         instance.modified_at = validated_data.get('modified_at', instance.modified_at)
         instance.save()
         return instance
+
+
+class ListItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ListItem
+        fields = ['id', 'name', 'quantity', 'bought', 'list']

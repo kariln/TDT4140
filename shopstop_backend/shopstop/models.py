@@ -26,10 +26,14 @@ class List(models.Model):
 class ListItem(models.Model):
     name = models.CharField(max_length=100, verbose_name="Name of the item")
     quantity = models.IntegerField(verbose_name="How many of the item to get", default=1)
+    time_added = models.DateField(editable=False)
     bought = models.BooleanField(verbose_name="Item has been bought", default=False)
     list = models.ForeignKey(List, on_delete=models.CASCADE)
 
     def save(self, *args, **kwargs):
+        if not self.id:
+            self.time_added = timezone.now()
+
         self.list.modified_at = timezone.now()
         self.list.save()
         return super(ListItem, self).save(*args, **kwargs)
