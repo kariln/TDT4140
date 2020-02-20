@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  db:
+    image: postgres:alpine
+    container_name: postgres-${ENVIRONMENT}
+    restart: always
+    expose:
+      - "5432"
+    volumes:
+      - "~/postgres/${ENVIRONMENT}/data:/var/lib/postgresql/data"
+
+  server:
+    image: registry.shopstop.xyz/shopstop-backend:${ENVIRONMENT}
+    container_name: shopstop-${ENVIRONMENT}
+    restart: always
+    volumes:
+      - ~/shopstop_backend_static/${ENVIRONMENT}:/srv/app/static
+      - /run/uwsgi/shopstop_backend:/run/uwsgi/shopstop_backend
+      - /var/log/uwsgi/shopstop_backend:/var/log/uwsgi/shopstop_backend
+    environment:
+      - DJANGO_SETTINGS_MODULE
+      - SHOPSTOP_SECRET_KEY
+      - ENVIRONMENT
+
+    depends_on:
+      - db
