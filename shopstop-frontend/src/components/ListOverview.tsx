@@ -62,7 +62,9 @@ const Lists = () => {
     ];
 
     const route = useRoute();
-    console.log(route);
+    fetch('https://staging.shopstop.xyz/lists/')
+        .then(result => result.json)
+        .then(data => console.log(data));
     return (
         <View style={styles.container}>
             <FlatList
