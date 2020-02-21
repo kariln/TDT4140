@@ -46,12 +46,25 @@ const List = () => {
         title: route.params.name
     });
 
+    // Posts the listitem object to the backend.
+    /* const addData = (data: ListItemType) => {
+        fetch(`https://staging.shopstop.xyz/listItems/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+            .then(response => response.json())
+            .then(json => console.log(json));
+    }; */
+
     if (isLoading) return <></>;
     return (
         <View style={styles.container}>
             <FlatList
                 data={listItems}
-                renderItem={({ item }) => <ListItem item={item.name} />}
+                renderItem={({ item }) => <ListItem item={item} />}
                 keyExtractor={item => item.id.toString()}
             />
         </View>
@@ -59,3 +72,20 @@ const List = () => {
 };
 
 export default List;
+
+// example of how you would call the addData function, with the appropriate argument
+/*
+
+<Button
+    title="add"
+    onPress={() =>
+        addData({
+            name: 'testvare',
+            quantity: 1,
+            bought: false,
+            list: 1
+        })
+    }
+/>
+
+*/
