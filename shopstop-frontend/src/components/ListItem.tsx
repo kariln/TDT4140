@@ -22,7 +22,6 @@ const ListItem: React.FC<ListItemInterface> = props => {
             .then(response => response.json())
             .then(json => console.log(json));
     }; */
-
     // Changes the resource, can also use PATCH, to only update changed data
     /* const changeData = (data: ListItemInterface) => {
         fetch(`https://staging.shopstop.xyz/listItems/${props.item.id}/`, {
