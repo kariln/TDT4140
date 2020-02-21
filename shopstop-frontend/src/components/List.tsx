@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, FlatList } from 'react-native';
+import React, { useEffect, useState, useContext } from 'react';
+import { StyleSheet, View, FlatList, Button } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
+import { Context } from '../store/Store';
+import { useGetData, useAddData } from '../hooks/fetchHooks';
 import ListItem from './ListItem';
 
 const styles = StyleSheet.create({
@@ -27,7 +29,7 @@ type ListItemType = {
 };
 
 const List = () => {
-    const [listItems, setListItems] = useState<ListItemType[]>([]);
+    const [state, dispatch] = useContext(Context);
     const [isLoading, setIsLoading] = useState(false);
     const navigation = useNavigation();
     const route = useRoute<ProfileScreenRouteProp>();
@@ -35,9 +37,14 @@ const List = () => {
     // This useEffect is called whenever the component mounts
     useEffect(() => {
         setIsLoading(true);
-        fetch(`https://staging.shopstop.xyz/listItems/`) // ${/*endre api-kall til en spesifikk liste her*/}
-            .then(result => result.json())
-            .then(data => setListItems(data))
+        useGetData({ path: 'list-items' })
+            .then(data =>
+                dispatch({
+                    type: 'SET_DATA',
+                    payload: data,
+                    onElement: 'listItems'
+                })
+            )
             .then(() => setIsLoading(false));
     }, []);
 
@@ -46,24 +53,11 @@ const List = () => {
         title: route.params.name
     });
 
-    // Posts the listitem object to the backend.
-    /* const addData = (data: ListItemType) => {
-        fetch(`https://staging.shopstop.xyz/listItems/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        })
-            .then(response => response.json())
-            .then(json => console.log(json));
-    }; */
-
     if (isLoading) return <></>;
     return (
         <View style={styles.container}>
             <FlatList
-                data={listItems}
+                data={state.listItems}
                 renderItem={({ item }) => <ListItem item={item} />}
                 keyExtractor={item => item.id.toString()}
             />
@@ -73,19 +67,24 @@ const List = () => {
 
 export default List;
 
-// example of how you would call the addData function, with the appropriate argument
+// Example function that both adds the new item to state and pusts it to the backend
 /*
-
-<Button
-    title="add"
-    onPress={() =>
-        addData({
-            name: 'testvare',
-            quantity: 1,
+const addItem = () => {
+    console.log('token ' + state.token);
+    useAddData({
+        path: 'list-items',
+        data: {
+            name: 'melk',
+            quantity: 10,
             bought: false,
             list: 1
-        })
-    }
-/>
-
+        },
+        token: 'Token ' + state.token
+    }).then(data => console.log(data));
+    dispatch({
+        type: 'ADD_DATA',
+        payload: { id: 3, name: 'melk' },
+        onElement: 'listItems'
+    });
+};
 */

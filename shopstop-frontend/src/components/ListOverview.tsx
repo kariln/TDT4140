@@ -1,6 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, FlatList } from 'react-native';
+import React, { useState, useEffect, useContext } from 'react';
+import { StyleSheet, View, FlatList, Button } from 'react-native';
+import { useToken, useGetData } from '../hooks/fetchHooks';
 import ListsItem from './ListOverviewItem';
+import { Context } from '../store/Store';
+
+import * as SecureStore from 'expo-secure-store';
 
 const styles = StyleSheet.create({
     container: {
@@ -19,23 +23,40 @@ type ListType = {
 };
 
 const Lists = () => {
-    const [lists, setLists] = useState<ListType[]>([]);
     const [isLoading, setIsLoading] = useState(false);
+    const [state, dispatch] = useContext(Context);
 
     // This useEffect is called whenever the component mounts
     useEffect(() => {
         setIsLoading(true);
-        fetch('https://staging.shopstop.xyz/lists/')
-            .then(result => result.json())
-            .then(data => setLists(data))
-            .then(() => setIsLoading(false));
+        // Custom hook which returns a token for authentication, should probably call this higher in the component structure, when the user has logged in, and not chain the requests, but i'm just doing it now to ensure that the token is ready before the ui is rendered
+        useToken({ username: 'havardp', password: 'alko1233' })
+            .then(token =>
+                dispatch({
+                    type: 'SET_DATA',
+                    payload: token,
+                    onElement: 'token'
+                })
+            )
+            .then(
+                useGetData({ path: 'lists' })
+                    .then(data =>
+                        dispatch({
+                            type: 'SET_DATA',
+                            payload: data,
+                            onElement: 'lists'
+                        })
+                    )
+                    .then(() => setIsLoading(false))
+                    .catch(e => console.log(e))
+            );
     }, []);
 
     if (isLoading) return <></>;
     return (
         <View style={styles.container}>
             <FlatList
-                data={lists}
+                data={state.lists}
                 renderItem={({ item }) => <ListsItem name={item.name} />}
                 keyExtractor={item => item.name}
             />
@@ -44,3 +65,24 @@ const Lists = () => {
 };
 
 export default Lists;
+
+/*
+
+// Example of how to add elements to the list state
+<Button
+    title="add"
+    onPress={() =>
+        dispatch({
+            type: 'ADD_DATA',
+            payload: {
+                name: 'testliste',
+                group: 1,
+                created_at: 'test',
+                modified_at: 'test'
+            },
+            onElement: 'lists'
+        })
+    }
+/>
+
+*/
