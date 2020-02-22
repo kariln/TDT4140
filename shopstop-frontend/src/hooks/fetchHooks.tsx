@@ -1,4 +1,3 @@
-import React from 'react';
 import getEnvVars from '../../environment.js';
 import * as SecureStore from 'expo-secure-store';
 

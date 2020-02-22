@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
 
 const Lists = () => {
     const [isLoading, setIsLoading] = useState(true);
-    const [{ lists, token }, dispatch] = useContext(Context);
+    const [{ lists }, dispatch] = useContext(Context);
 
     // This useEffect is called whenever the component mounts
     useEffect(() => {
