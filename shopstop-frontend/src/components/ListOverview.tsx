@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { StyleSheet, View, FlatList, Button } from 'react-native';
-import { useToken, useGetData } from '../hooks/fetchHooks';
+import { StyleSheet, View, FlatList } from 'react-native';
+import { GetToken } from '../utils/Utils';
 import ListsItem from './ListOverviewItem';
 import { Context } from '../store/Store';
 import { ListProps } from '../store/StoreTypes';
-
-import * as SecureStore from 'expo-secure-store';
+import getEnvVars from '../../environment';
 
 const styles = StyleSheet.create({
     container: {
@@ -18,38 +17,36 @@ const styles = StyleSheet.create({
 
 const Lists = () => {
     const [isLoading, setIsLoading] = useState(true);
-    const [{ lists }, dispatch] = useContext(Context);
+    const [state, dispatch] = useContext(Context);
+    if (!state.token)
+        GetToken({ username: 'havardp', password: 'alko1233' }).then(token =>
+            dispatch({
+                type: 'SET_TOKEN',
+                payload: token
+            })
+        );
 
     // This useEffect is called whenever the component mounts
     useEffect(() => {
         setIsLoading(true);
-        // Custom hook which returns a token for authentication, should probably call this higher in the component structure, when the user has logged in, and not chain the requests, but i'm just doing it now to ensure that the token is ready before the ui is rendered
 
-        //SecureStore.deleteItemAsync('authToken');
-        useToken({ username: 'havardp', password: 'alko1233' })
-            .then(token =>
+        fetch(`${getEnvVars.apiUrl}lists/`)
+            .then(result => result.json())
+            .then(data =>
                 dispatch({
-                    type: 'SET_TOKEN',
-                    payload: token
+                    type: 'SET_LISTS',
+                    payload: data
                 })
             )
-            .then(() =>
-                useGetData({ path: 'lists' })
-                    .then(data =>
-                        dispatch({
-                            type: 'SET_LISTS',
-                            payload: data
-                        })
-                    )
-                    .then(() => setIsLoading(false))
-                    .catch(e => console.log(e))
-            );
-    }, []);
+            .then(() => setIsLoading(false))
+            .catch(e => console.log(e));
+    }, [dispatch]);
+
     if (isLoading) return <></>;
     return (
         <View style={styles.container}>
             <FlatList
-                data={lists}
+                data={state.lists}
                 renderItem={({ item }: { item: ListProps }) => (
                     <ListsItem name={item.name} />
                 )}
@@ -63,21 +60,38 @@ export default Lists;
 
 /*
 
-// Example of how to add elements to the list state
+// Example of how to add elements to the list state and database
+// See reducer.tsx for list of actions on dispatch
 <Button
     title="add"
-    onPress={() =>
+    onPress={() => {
         dispatch({
-            type: 'ADD_DATA',
+            type: 'ADD_LIST',
             payload: {
                 name: 'testliste',
                 group: 1,
                 created_at: 'test',
                 modified_at: 'test'
+            }
+        });
+
+        //this doesn't work right now because it needs correct time strings, but that should probably be made on the backend anyway
+        fetch(getEnvVars.apiUrl + 'lists/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + state.token
             },
-            onElement: 'lists'
+            body: JSON.stringify({
+                name: 'testliste',
+                group: 1,
+                created_at: 'test',
+                modified_at: 'test'
+            })
         })
-    }
+            .then(response => response.json())
+            .then(json => console.log(json));
+    }}
 />
 
 */

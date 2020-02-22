@@ -12,9 +12,8 @@ const ENV = {
 const getEnvVars = (env = Constants.manifest.releaseChannel) => {
     if (__DEV__) {
         return ENV.dev;
-    } else {
-        return ENV.prod;
     }
+    return ENV.prod;
 };
 
 export default getEnvVars();

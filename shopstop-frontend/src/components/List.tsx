@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { StyleSheet, View, FlatList, Button } from 'react-native';
+import { StyleSheet, View, FlatList } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { Context } from '../store/Store';
-import { useGetData } from '../hooks/fetchHooks';
 import ListItem from './ListItem';
 import { ListItemProps } from '../store/StoreTypes';
+import getEnvVars from '../../environment';
 
 const styles = StyleSheet.create({
     container: {
@@ -22,7 +22,7 @@ type RootStackParamList = {
 type ProfileScreenRouteProp = RouteProp<RootStackParamList, 'list'>;
 
 const List = () => {
-    const [{ listItems }, dispatch] = useContext(Context);
+    const [state, dispatch] = useContext(Context);
     const [isLoading, setIsLoading] = useState(true);
     const navigation = useNavigation();
     const route = useRoute<ProfileScreenRouteProp>();
@@ -30,7 +30,8 @@ const List = () => {
     // This useEffect is called whenever the component mounts
     useEffect(() => {
         setIsLoading(true);
-        useGetData({ path: 'list-items' })
+        fetch(`${getEnvVars.apiUrl}list-items/`)
+            .then(result => result.json())
             .then(data =>
                 dispatch({
                     type: 'SET_LISTITEMS',
@@ -39,7 +40,7 @@ const List = () => {
                 })
             )
             .then(() => setIsLoading(false));
-    }, []);
+    }, [dispatch]);
 
     // Sets the title of the header to the name of the list
     navigation.setOptions({
@@ -50,11 +51,11 @@ const List = () => {
     return (
         <View style={styles.container}>
             <FlatList
-                data={listItems}
+                data={state.listItems}
                 renderItem={({ item }: { item: ListItemProps }) => (
                     <ListItem item={item} />
                 )}
-                keyExtractor={item => item.id.toString()}
+                keyExtractor={item => item.name}
             />
         </View>
     );
@@ -63,23 +64,37 @@ const List = () => {
 export default List;
 
 // Example function that both adds the new item to state and pusts it to the backend
+// See reducer.tsx for list of actions on dispatch
 /*
-const addItem = () => {
-    console.log('token ' + state.token);
-    useAddData({
-        path: 'list-items',
-        data: {
-            name: 'melk',
-            quantity: 10,
-            bought: false,
-            list: 1
-        },
-        token: 'Token ' + state.token
-    }).then(data => console.log(data));
-    dispatch({
-        type: 'ADD_DATA',
-        payload: { id: 3, name: 'melk' },
-        onElement: 'listItems'
-    });
-};
+<Button
+    title="add"
+    onPress={() => {
+        dispatch({
+            type: 'ADD_LISTITEM',
+            payload: {
+                name: 'egg',
+                quantity: 10,
+                bought: false,
+                list: 1
+            }
+        });
+
+        //this doesn't work right now because it needs correct time strings, but that should probably be made on the backend anyway
+        fetch(getEnvVars.apiUrl + 'list-items/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + state.token
+            },
+            body: JSON.stringify({
+                name: 'egg',
+                quantity: 10,
+                bought: false,
+                list: 1
+            })
+        })
+            .then(response => response.json())
+            .then(json => console.log(json));
+    }}
+/>
 */

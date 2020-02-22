@@ -2,6 +2,8 @@ export interface StateProps {
     lists: ListProps[];
     listItems: ListItemProps[];
     token: string | null;
+    [key: string]: any;
+    [Symbol.iterator](): IterableIterator<any>;
 }
 
 export type ListProps = {

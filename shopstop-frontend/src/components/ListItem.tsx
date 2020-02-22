@@ -14,7 +14,6 @@ interface ListItemProp {
 }
 
 const ListItem: React.FC<ListItemInterface> = props => {
-    console.log(props);
     return <Text>denne varen er {props.item.name}</Text>;
 };
 

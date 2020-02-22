@@ -1,11 +1,19 @@
 import React, { createContext, useReducer } from 'react';
-import reducers from '../reducers';
+import { reducers } from './reducer';
 import { StateProps } from './StoreTypes';
 
 const initialState: StateProps = {
     lists: [],
     listItems: [],
-    token: null
+    token: null,
+
+    // This is only here because typescript wanted it
+    *[Symbol.iterator]() {
+        let properties = Object.keys(this);
+        for (let i of properties) {
+            yield [i, this[i]];
+        }
+    }
 };
 
 type Props = {
@@ -15,7 +23,7 @@ type Props = {
 const Store = (props: Props) => {
     const [state, dispatch] = useReducer(reducers, initialState);
     return (
-        <Context.Provider value={[state, dispatch]}>
+        <Context.Provider value={[state, dispatch] as any}>
             {props.children}
         </Context.Provider>
     );
