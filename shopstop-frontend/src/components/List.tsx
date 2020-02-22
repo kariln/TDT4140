@@ -2,8 +2,9 @@ import React, { useEffect, useState, useContext } from 'react';
 import { StyleSheet, View, FlatList, Button } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { Context } from '../store/Store';
-import { useGetData, useAddData } from '../hooks/fetchHooks';
+import { useGetData } from '../hooks/fetchHooks';
 import ListItem from './ListItem';
+import { ListItemProps } from '../store/StoreTypes';
 
 const styles = StyleSheet.create({
     container: {
@@ -20,17 +21,9 @@ type RootStackParamList = {
 };
 type ProfileScreenRouteProp = RouteProp<RootStackParamList, 'list'>;
 
-type ListItemType = {
-    id: number;
-    name: string;
-    quantity: number;
-    bought: boolean;
-    list: number;
-};
-
 const List = () => {
-    const [state, dispatch] = useContext(Context);
-    const [isLoading, setIsLoading] = useState(false);
+    const [{ listItems }, dispatch] = useContext(Context);
+    const [isLoading, setIsLoading] = useState(true);
     const navigation = useNavigation();
     const route = useRoute<ProfileScreenRouteProp>();
 
@@ -40,7 +33,7 @@ const List = () => {
         useGetData({ path: 'list-items' })
             .then(data =>
                 dispatch({
-                    type: 'SET_DATA',
+                    type: 'SET_LISTITEMS',
                     payload: data,
                     onElement: 'listItems'
                 })
@@ -57,8 +50,10 @@ const List = () => {
     return (
         <View style={styles.container}>
             <FlatList
-                data={state.listItems}
-                renderItem={({ item }) => <ListItem item={item} />}
+                data={listItems}
+                renderItem={({ item }: { item: ListItemProps }) => (
+                    <ListItem item={item} />
+                )}
                 keyExtractor={item => item.id.toString()}
             />
         </View>

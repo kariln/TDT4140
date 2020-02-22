@@ -7,26 +7,27 @@ const useGetData = ({ path }: { path: string }) =>
     fetch(getEnvVars.apiUrl + path + '/').then(response => response.json());
 
 // Hook for adding data
-const useAddData = ({
+/*const useAddData = ({
     path,
     id,
-    token
+    token,
+    data
 }: {
     path: string;
     id: number;
     token: string;
+    data: object;
 }) => {
     let urlId = id ? id : '';
     return fetch(getEnvVars.apiUrl + path + '/' + urlId, {
         method: 'POST',
-        withCredentials: true,
-        credentials: 'include',
         headers: {
             Authorization: 'Token ' + token
         },
         body: JSON.stringify(data)
     }).then(response => response.json());
-};
+};*/
+
 /*
 // Hook for deleting items
 const useDeleteData = ({ path, id }: { path: string; id: number }) =>
@@ -55,24 +56,35 @@ const useChangeData = ({
         .then(json => console.log(json));
 };*/
 
-//async function that returns the token if it exists in securestorage, else makes the POST call to get the token, then sets it in securestorage, then returns it
-const useToken = async credentials => {
+// async function that returns the token if it exists in securestorage, else makes the POST call to get the token, then sets it in securestorage, then returns it
+const useToken = async ({
+    username,
+    password
+}: {
+    username: string;
+    password: string;
+}) => {
     try {
         const token = await SecureStore.getItemAsync('authToken');
         if (token) {
             return token;
         } else {
-            return useAddData({
-                path: 'token',
-                data: credentials
-            }).then(data => {
-                SecureStore.setItemAsync('authToken', data.token);
-                return data.token;
-            });
+            return fetch('https://staging.shopstop.xyz/token/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username: username, password: password })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    SecureStore.setItemAsync('authToken', data.token);
+                    return data.token;
+                });
         }
     } catch (e) {
         console.log(e);
     }
 };
 
-export { useDeleteData, useToken, useGetData, useAddData };
+export { useToken, useGetData };

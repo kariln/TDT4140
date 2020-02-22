@@ -1,18 +1,22 @@
 import React, { createContext, useReducer } from 'react';
-import Reducer from './Reducer';
+import reducers from '../reducers';
+import { StateProps } from './StoreTypes';
 
-const initialState = {
+const initialState: StateProps = {
     lists: [],
     listItems: [],
-    token: null,
-    error: null
+    token: null
 };
 
-const Store = ({ children }) => {
-    const [state, dispatch] = useReducer(Reducer, initialState);
+type Props = {
+    children: JSX.Element;
+};
+
+const Store = (props: Props) => {
+    const [state, dispatch] = useReducer(reducers, initialState);
     return (
         <Context.Provider value={[state, dispatch]}>
-            {children}
+            {props.children}
         </Context.Provider>
     );
 };
