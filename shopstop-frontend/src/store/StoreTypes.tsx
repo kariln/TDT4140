@@ -6,17 +6,17 @@ export interface StateProps {
     [Symbol.iterator](): IterableIterator<any>;
 }
 
-export type ListProps = {
+export interface ListProps {
     name: string;
     group: number;
     created_at: string;
     modified_at: string;
-};
+}
 
-export type ListItemProps = {
+export interface ListItemProps {
     id: number;
     name: string;
     quantity: number;
     bought: boolean;
     list: number;
-};
+}

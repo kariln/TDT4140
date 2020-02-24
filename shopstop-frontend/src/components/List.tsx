@@ -35,8 +35,7 @@ const List = () => {
             .then(data =>
                 dispatch({
                     type: 'SET_LISTITEMS',
-                    payload: data,
-                    onElement: 'listItems'
+                    payload: data
                 })
             )
             .then(() => setIsLoading(false));
@@ -62,39 +61,3 @@ const List = () => {
 };
 
 export default List;
-
-// Example function that both adds the new item to state and pusts it to the backend
-// See reducer.tsx for list of actions on dispatch
-/*
-<Button
-    title="add"
-    onPress={() => {
-        dispatch({
-            type: 'ADD_LISTITEM',
-            payload: {
-                name: 'egg',
-                quantity: 10,
-                bought: false,
-                list: 1
-            }
-        });
-
-        //this doesn't work right now because it needs correct time strings, but that should probably be made on the backend anyway
-        fetch(getEnvVars.apiUrl + 'list-items/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Token ' + state.token
-            },
-            body: JSON.stringify({
-                name: 'egg',
-                quantity: 10,
-                bought: false,
-                list: 1
-            })
-        })
-            .then(response => response.json())
-            .then(json => console.log(json));
-    }}
-/>
-*/

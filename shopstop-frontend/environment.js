@@ -4,15 +4,18 @@ const ENV = {
     dev: {
         apiUrl: 'https://staging.shopstop.xyz/'
     },
+    staging: {
+        apiUrl: 'https://staging.shopstop.xyz/'
+    },
     prod: {
-        apiUrl: 'production url here'
+        apiUrl: 'https://shopstop.xyz/'
     }
 };
 
 const getEnvVars = (env = Constants.manifest.releaseChannel) => {
-    if (__DEV__) {
-        return ENV.dev;
-    }
+    if (env === null || env === undefined || env === '') return ENV.dev;
+    if (env.indexOf('dev') !== -1) return ENV.dev;
+    if (env.indexOf('staging') !== -1) return ENV.staging;
     return ENV.prod;
 };
 

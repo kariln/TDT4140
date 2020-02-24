@@ -8,6 +8,7 @@ import {
     MenuOption,
     MenuTrigger
 } from 'react-native-popup-menu';
+import { ListProps } from '../store/StoreTypes';
 
 const styles = StyleSheet.create({
     itemLeft: {
@@ -25,15 +26,14 @@ const styles = StyleSheet.create({
     }
 });
 
-export interface ListOverViewItemInterface {
-    name: string;
+interface ListOverviewItemProp {
+    list: ListProps;
 }
 
-const Item: React.FC<ListOverViewItemInterface> = props => {
+const Item: React.FC<ListOverviewItemProp> = props => {
     const navigation = useNavigation(); // For navigating the stack, see ../navigation/stacknavigation for how the stack looks
     // when you press the list, it navigates to the list screen, with the id of the list selected as a prop, so we can do a query for items in that list.
-    const { name } = props;
-
+    const { name } = props.list;
     return (
         <TouchableOpacity
             onPress={() => navigation.navigate('list', { name })}
