@@ -2,7 +2,7 @@ import Constants from 'expo-constants';
 
 const ENV = {
     dev: {
-        apiUrl: 'https://staging.shopstop.xyz/'
+        apiUrl: 'http://localhost:8000'
     },
     staging: {
         apiUrl: 'https://staging.shopstop.xyz/'
