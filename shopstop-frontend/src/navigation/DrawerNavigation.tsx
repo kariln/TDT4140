@@ -1,10 +1,9 @@
 import React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import { NavigationContainer } from '@react-navigation/native';
 
 // imports of our own components
 import CustomDrawerContent from '../screens/CustomDrawerScreen';
-import MyStack from './StackNavigation';
+import SubStack from './SubStackNavigation';
 
 // Instance of the Drawer component that we use in our "Drawercomponent" component.
 const Drawer = createDrawerNavigator();
@@ -13,14 +12,9 @@ const Drawer = createDrawerNavigator();
 // we can add more drawer.screen, which lets us navigate to the screens from the drawer, can for example be a list of groups in the drawer menu etc.
 const DrawerComponent = () => {
     return (
-        <NavigationContainer>
-            <Drawer.Navigator
-                initialRouteName="Home"
-                drawerContent={CustomDrawerContent}
-            >
-                <Drawer.Screen name="Home" component={MyStack} />
-            </Drawer.Navigator>
-        </NavigationContainer>
+        <Drawer.Navigator drawerContent={CustomDrawerContent}>
+            <Drawer.Screen name="drawer" component={SubStack} />
+        </Drawer.Navigator>
     );
 };
 

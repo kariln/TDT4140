@@ -1,42 +1,56 @@
-import React from 'react';
-import { StyleSheet, View, FlatList, Text } from 'react-native';
-
+import React, { useState, useEffect, useContext } from 'react';
+import { StyleSheet, View, FlatList } from 'react-native';
+import { GetToken } from '../utils/Utils';
 import ListsItem from './ListOverviewItem';
+import { Context } from '../store/Store';
+import { ListProps } from '../store/StoreTypes';
+import getEnvVars from '../../environment';
 
 const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
         backgroundColor: '#fff',
         flex: 1,
-        paddingTop: '20%'
+        paddingTop: '10%'
     }
 });
 
 const Lists = () => {
-    // Mock data of the lists, with a name and an id
-    const DATA = [
-        {
-            id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-            title: 'First List'
-        },
-        {
-            id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-            title: 'Second List'
-        },
-        {
-            id: '58694a0f-3da1-471f-bd96-145571e29d72',
-            title: 'Third List'
-        }
-    ];
+    const [isLoading, setIsLoading] = useState(true);
+    const [state, dispatch] = useContext(Context);
+    if (!state.token)
+        GetToken({ username: 'havardp', password: 'alko1233' }).then(token =>
+            dispatch({
+                type: 'SET_TOKEN',
+                payload: token
+            })
+        );
+
+    // This useEffect is called whenever the component mounts
+    useEffect(() => {
+        setIsLoading(true);
+
+        fetch(`${getEnvVars.apiUrl}lists/`)
+            .then(result => result.json())
+            .then(data =>
+                dispatch({
+                    type: 'SET_LISTS',
+                    payload: data
+                })
+            )
+            .then(() => setIsLoading(false))
+            .catch(e => console.log(e));
+    }, [dispatch]);
+
+    if (isLoading) return <></>;
     return (
         <View style={styles.container}>
-            <Text>Her er listene, du kan trykke inn på dem</Text>
             <FlatList
-                data={DATA}
-                renderItem={({ item }) => (
-                    <ListsItem id={item.id} title={item.title} />
-                )}
-                keyExtractor={item => item.id}
+                data={state.lists}
+                renderItem={({ item }: { item: ListProps }) => {
+                    return <ListsItem list={item} />;
+                }}
+                keyExtractor={item => item.name}
             />
         </View>
     );
