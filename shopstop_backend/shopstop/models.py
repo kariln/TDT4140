@@ -14,6 +14,7 @@ class List(models.Model):
         # if the item does not exist set created_at time
         if not self.id:
             self.created_at = timezone.now()
+            self.modified_at = self.created_at
 
         # Update modified_at time
         self.modified_at = timezone.now()
