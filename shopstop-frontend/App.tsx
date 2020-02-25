@@ -1,10 +1,18 @@
 import React from 'react';
+import { MenuProvider } from 'react-native-popup-menu';
 
 // imports of our own components
-import DrawerComponent from './src/navigation/DrawerNavigation';
+import Store from './src/store/Store';
+import MainStack from './src/navigation/StackNavigation';
 
 const App = () => {
-    return <DrawerComponent />;
+    return (
+        <MenuProvider>
+            <Store>
+                <MainStack />
+            </Store>
+        </MenuProvider>
+    );
 };
 
 export default App;
