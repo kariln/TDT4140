@@ -10,17 +10,11 @@ class ListSerializer(serializers.ModelSerializer):
             'id',
             'name',
             'group',
-            'created_at',
-            'modified_at'
+            'created_at'
         ]
-
-
-class SaveListSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = List
-        fields = [
-            'name',
-            'group',
+        read_only_fields = [
+            'modified_at',
+            'created_at'
         ]
 
     def create(self, validated_data):

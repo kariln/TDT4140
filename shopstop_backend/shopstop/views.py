@@ -3,14 +3,11 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from .models import List, ListItem
-from .serializers import ListItemSerializer, ListSerializer, SaveListSerializer
+from .serializers import ListItemSerializer, ListSerializer
 
 
 class ListViewSet(viewsets.ModelViewSet):
-    def get_serializer_class(self):
-        if self.action == 'create':
-            return SaveListSerializer
-        return ListSerializer
+    serializer_class = ListSerializer
     queryset = List.objects.all()
     """
     Authentication_classes?
