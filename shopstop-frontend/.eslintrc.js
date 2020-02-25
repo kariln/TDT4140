@@ -55,6 +55,7 @@ module.exports = {
         ],
         'no-param-reassign': ['error', { props: false }],
         'no-restricted-globals': 0,
+        'no-restricted-syntax': 0,
         'no-unused-vars': 0,
         'no-use-before-define': 0,
         'no-underscore-dangle': 0,
@@ -78,14 +79,14 @@ module.exports = {
         ],
         'max-classes-per-file': 0,
         'import/prefer-default-export': 0,
-        "import/extensions": [
-            "error",
-            "ignorePackages",
+        'import/extensions': [
+            'error',
+            'ignorePackages',
             {
-                "js": "never",
-                "jsx": "never",
-                "ts": "never",
-                "tsx": "never"
+                js: 'never',
+                jsx: 'never',
+                ts: 'never',
+                tsx: 'never'
             }
         ],
         'react/prefer-stateless-function': 0,
