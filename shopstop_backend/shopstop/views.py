@@ -21,7 +21,8 @@ class ListViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'])
     def list_by_group(self, request):
         """
-        Endpoint needs a query parameter called group. It should have the id of the group you want to query in.\n
+        Endpoint needs a query parameter called group.
+        It should have the id of the group you want to query in.\n
         The endpoint return lists that are connected to the group
         """
         group = request.query_params.get('group', None)
@@ -35,6 +36,18 @@ class ListItemViewSet(viewsets.ModelViewSet):
     serializer_class = ListItemSerializer
     permission_classes = [DjangoModelPermissions, CustomObjectPermissions]
     filter_backends = [filters.ObjectPermissionsFilter]
+
+    @action(detail=False, methods=['get'])
+    def list_items_by_list(self, request):
+        """
+        Endpoint needs a query parameter called list.
+        It should have the id of the list you want to query in.\n
+        The endpoint return listsitems that are connected to the lists
+        """
+        list = request.query_params.get('list', None)
+        self.queryset = self.queryset.filter(list=list)
+        serializer = self.get_serializer(self.queryset, many=True)
+        return Response(serializer.data)
 
 
 class GroupViewSet(viewsets.ModelViewSet):

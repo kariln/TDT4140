@@ -10,8 +10,13 @@ class ListSerializer(serializers.ModelSerializer):
         model = List
         read_only_fields = ['created_at', 'modified_at']
         fields = [
+            'id',
             'name',
             'group',
+        ]
+        read_only_fields = [
+            'modified_at',
+            'created_at'
         ]
 
     def create(self, validated_data):

@@ -17,6 +17,7 @@ class List(models.Model):
         if not self.id:
             creation = True
             self.created_at = timezone.now()
+            self.modified_at = self.created_at
 
         # Update modified_at time
         self.modified_at = timezone.now()
