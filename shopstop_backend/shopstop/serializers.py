@@ -10,7 +10,8 @@ class ListSerializer(serializers.ModelSerializer):
             'id',
             'name',
             'group',
-            'created_at'
+            'created_at',
+            'modified_at'
         ]
         read_only_fields = [
             'modified_at',

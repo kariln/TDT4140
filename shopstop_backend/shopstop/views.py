@@ -32,7 +32,7 @@ class ListItemViewSet(viewsets.ModelViewSet):
     serializer_class = ListItemSerializer
 
     @action(detail=False, methods=['get'])
-    def listItems_by_list(self, request):
+    def list_items_by_list(self, request):
         """
         Endpoint needs a query parameter called list.
         It should have the id of the list you want to query in.\n
