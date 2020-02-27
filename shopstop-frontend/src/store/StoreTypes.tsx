@@ -9,8 +9,7 @@ export interface StateProps {
 export interface ListProps {
     name: string;
     group: number;
-    created_at: string;
-    modified_at: string;
+    id: number;
 }
 
 export interface ListItemProps {

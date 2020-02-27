@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Icon } from 'react-native-elements';
@@ -9,6 +9,8 @@ import {
     MenuTrigger
 } from 'react-native-popup-menu';
 import { ListProps } from '../store/StoreTypes';
+import { Context } from '../store/Store';
+import getEnvVars from '../../environment';
 
 const styles = StyleSheet.create({
     itemLeft: {
@@ -33,7 +35,26 @@ interface ListOverviewItemProp {
 const Item: React.FC<ListOverviewItemProp> = props => {
     const navigation = useNavigation(); // For navigating the stack, see ../navigation/stacknavigation for how the stack looks
     // when you press the list, it navigates to the list screen, with the id of the list selected as a prop, so we can do a query for items in that list.
-    const { name } = props.list;
+    const [state, dispatch] = useContext(Context);
+    const { name, id } = props.list;
+
+    const deleteListItem = () => {
+        dispatch({
+            type: 'REMOVE_LIST',
+            payload: {
+                id: id
+            }
+        });
+
+        fetch(getEnvVars.apiUrl + 'lists/' + id + '/', {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + state.token
+            }
+        });
+    };
+
     return (
         <TouchableOpacity
             onPress={() => navigation.navigate('list', { name })}
@@ -48,10 +69,12 @@ const Item: React.FC<ListOverviewItemProp> = props => {
                     <MenuOption
                         onSelect={() => console.log(`Edit`)}
                         text="Edit"
+                        customStyles={{ optionWrapper: { padding: 20 } }}
                     />
                     <MenuOption
-                        onSelect={() => console.log(`Delete`)}
+                        onSelect={deleteListItem}
                         text="Delete"
+                        customStyles={{ optionWrapper: { padding: 20 } }}
                     />
                 </MenuOptions>
             </Menu>

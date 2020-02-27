@@ -26,9 +26,7 @@ export const reducers = (state: StateProps, action: Action) => {
         case 'REMOVE_LIST':
             return {
                 ...state,
-                lists: state.lists.filter(
-                    data => data.name !== action.payload.name
-                )
+                lists: state.lists.filter(data => data.id !== action.payload.id)
             }; // should change this to filter on id when we have id on lists
         case 'SET_TOKEN':
             return { ...state, token: action.payload };

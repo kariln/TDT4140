@@ -19,29 +19,34 @@ const Lists = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [state, dispatch] = useContext(Context);
     if (!state.token)
-        GetToken({ username: 'havardp', password: 'alko1233' }).then(token =>
+        GetToken({ username: 'havardp', password: 'alko1233' }).then(token => {
             dispatch({
                 type: 'SET_TOKEN',
                 payload: token
-            })
-        );
+            });
+        });
 
     // This useEffect is called whenever the component mounts
     useEffect(() => {
         setIsLoading(true);
-
-        fetch(`${getEnvVars.apiUrl}lists/`)
-            .then(result => result.json())
-            .then(data =>
-                dispatch({
-                    type: 'SET_LISTS',
-                    payload: data
-                })
-            )
-            .then(() => setIsLoading(false))
-            .catch(e => console.log(e));
-    }, [dispatch]);
-
+        if (state.token)
+            fetch(`${getEnvVars.apiUrl}lists/`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Token ' + state.token
+                }
+            })
+                .then(result => result.json())
+                .then(data =>
+                    dispatch({
+                        type: 'SET_LISTS',
+                        payload: data
+                    })
+                )
+                .then(() => setIsLoading(false))
+                .catch(e => console.log(e));
+    }, [dispatch, state.token]);
     if (isLoading) return <></>;
     return (
         <View style={styles.container}>

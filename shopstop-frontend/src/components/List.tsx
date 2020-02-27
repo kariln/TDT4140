@@ -30,7 +30,13 @@ const List = () => {
     // This useEffect is called whenever the component mounts
     useEffect(() => {
         setIsLoading(true);
-        fetch(`${getEnvVars.apiUrl}list-items/`)
+        fetch(`${getEnvVars.apiUrl}list-items/`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + state.token
+            }
+        })
             .then(result => result.json())
             .then(data =>
                 dispatch({
