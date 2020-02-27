@@ -42,22 +42,28 @@ const Item: React.FC<ListOverviewItemProp> = props => {
         dispatch({
             type: 'REMOVE_LIST',
             payload: {
-                id: id
+                id
             }
         });
 
-        fetch(getEnvVars.apiUrl + 'lists/' + id + '/', {
+        fetch(`${getEnvVars.apiUrl}lists/${id}/`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: 'Token ' + state.token
+                Authorization: `Token ${state.token}`
             }
         });
     };
 
     return (
         <TouchableOpacity
-            onPress={() => navigation.navigate('list', { name })}
+            onPress={() => {
+                dispatch({
+                    type: 'SET_SELECTEDLIST',
+                    payload: id
+                });
+                navigation.navigate('list', { name });
+            }}
             style={styles.listItem}
         >
             <Text style={styles.itemLeft}>{name}</Text>
@@ -67,7 +73,16 @@ const Item: React.FC<ListOverviewItemProp> = props => {
                 </MenuTrigger>
                 <MenuOptions optionsContainerStyle={{ marginTop: 30 }}>
                     <MenuOption
-                        onSelect={() => console.log(`Edit`)}
+                        onSelect={() =>
+                            dispatch({
+                                type: 'TOGGLE_LISTOVERLAY',
+                                payload: {
+                                    visible: true,
+                                    type: 'change',
+                                    id
+                                }
+                            })
+                        }
                         text="Edit"
                         customStyles={{ optionWrapper: { padding: 20 } }}
                     />
