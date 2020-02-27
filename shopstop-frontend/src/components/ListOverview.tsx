@@ -1,5 +1,12 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { StyleSheet, View, FlatList } from 'react-native';
+import {
+    StyleSheet,
+    View,
+    FlatList,
+    TouchableOpacity,
+    Button
+} from 'react-native';
+import { Icon, Input, Overlay } from 'react-native-elements';
 import { GetToken } from '../utils/Utils';
 import ListsItem from './ListOverviewItem';
 import { Context } from '../store/Store';
@@ -18,6 +25,8 @@ const styles = StyleSheet.create({
 const Lists = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [state, dispatch] = useContext(Context);
+    const [isVisible, setIsVisible] = useState(false);
+    const [newList, setNewList] = useState('');
     if (!state.token)
         GetToken({ username: 'havardp', password: 'alko1233' }).then(token => {
             dispatch({
@@ -26,6 +35,24 @@ const Lists = () => {
             });
         });
 
+    const addList = () => {
+        dispatch({
+            type: 'ADD_LIST',
+            payload: { group: 1, name: newList }
+        });
+        fetch(getEnvVars.apiUrl + 'lists/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Token ' + state.token
+            },
+            body: JSON.stringify({
+                name: newList,
+                group: 1
+            })
+        });
+        setIsVisible(false);
+    };
     // This useEffect is called whenever the component mounts
     useEffect(() => {
         setIsLoading(true);
@@ -57,6 +84,40 @@ const Lists = () => {
                 }}
                 keyExtractor={item => item.name}
             />
+            <TouchableOpacity
+                style={{
+                    borderWidth: 1,
+                    borderColor: 'rgba(0,0,0,0.2)',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginLeft: '50%',
+                    width: 70,
+                    height: 70,
+                    backgroundColor: '#fff',
+                    borderRadius: 140
+                }}
+                onPress={() => setIsVisible(true)}
+            >
+                <Icon
+                    name={'add'}
+                    type={'material'}
+                    raised
+                    size={35}
+                    color="#01a699"
+                />
+            </TouchableOpacity>
+            <Overlay
+                isVisible={isVisible}
+                onBackdropPress={() => setIsVisible(false)}
+                height={200}
+            >
+                <Input
+                    label="navn på liste"
+                    placeholder="navn"
+                    onChangeText={text => setNewList(text)}
+                />
+                <Button title="legg til liste" onPress={addList} />
+            </Overlay>
         </View>
     );
 };
