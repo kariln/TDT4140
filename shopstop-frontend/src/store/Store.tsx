@@ -2,10 +2,19 @@ import React, { createContext, useReducer } from 'react';
 import { reducers } from './reducer';
 import { StateProps } from './StoreTypes';
 
+export const initialOverlayState = {
+    visible: false,
+    type: '',
+    id: null
+};
+
 const initialState: StateProps = {
     lists: [],
     listItems: [],
     token: null,
+    listOverlay: initialOverlayState,
+    selectedList: null,
+    selectedGroup: 1,
 
     // This is only here because typescript wanted it
     *[Symbol.iterator]() {
