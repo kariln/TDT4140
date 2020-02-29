@@ -47,7 +47,6 @@ const List = () => {
                     type: 'SET_LISTITEMS',
                     payload: data
                 });
-                console.log(data);
             })
             .then(() => setIsLoading(false));
     }, [dispatch, state.selectedList, state.token]);

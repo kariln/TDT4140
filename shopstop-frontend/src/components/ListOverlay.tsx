@@ -36,7 +36,6 @@ const ListOverlay = () => {
     };
 
     const changeList = () => {
-        // this probably works now
         dispatch({
             type: 'EDIT_LIST',
             payload: { group: 1, name: newList, id: state.listOverlay.id }
