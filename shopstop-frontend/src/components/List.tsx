@@ -1,10 +1,11 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { StyleSheet, View, FlatList, Text } from 'react-native';
+import { StyleSheet, View, FlatList, Text, TouchableOpacity } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { Context } from '../store/Store';
 import ListItem from './ListItem';
 import { ListItemProps } from '../store/StoreTypes';
 import getEnvVars from '../../environment';
+import ListEditOverlay from './ListEditOverlay';
 
 const styles = StyleSheet.create({
     container: {
@@ -26,6 +27,20 @@ const List = () => {
     const [isLoading, setIsLoading] = useState(true);
     const navigation = useNavigation();
     const route = useRoute<ProfileScreenRouteProp>();
+
+    const [modalState, setModalState] = useState(false);
+    const [selectedName, setSelectedName] = useState("");
+    const [selectedId, setSelectedId] = useState("");
+    const [selectedQuantity, setSelectedQuantity] = useState("0");
+
+    function openEditModal(editItem) {
+        setSelectedName(editItem.name)
+        setSelectedId(editItem.id)
+        setSelectedQuantity(String(editItem.quantity))
+        setModalState(true)
+    }
+
+
 
     // This useEffect is called whenever the component mounts
     useEffect(() => {
@@ -64,11 +79,15 @@ const List = () => {
             </View>
         );
     return (
+
         <View style={styles.container}>
+            {modalState && <ListEditOverlay modalState={modalState} setModalState={setModalState} itemName={selectedName} setSelectedName={setSelectedName} itemId={selectedId} itemQuantity={selectedQuantity} setSelectedQuantity={setSelectedQuantity}/>}
             <FlatList
                 data={state.listItems}
                 renderItem={({ item }: { item: ListItemProps }) => (
-                    <ListItem item={item} />
+                    <TouchableOpacity onLongPress={() => openEditModal(item)}>
+                        <ListItem item={item} />
+                    </TouchableOpacity>
                 )}
                 keyExtractor={item => item.name}
             />
