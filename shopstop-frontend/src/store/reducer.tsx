@@ -14,7 +14,6 @@ export const reducers = (state: StateProps, action: Action) => {
                 ...state,
                 listItems: state.listItems.concat(action.payload)
             };
-
         case 'REMOVE_LISTITEM':
             return {
                 ...state,
