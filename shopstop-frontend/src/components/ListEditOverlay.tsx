@@ -1,147 +1,158 @@
-import React, {useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { View, Text, TextInput, Button, TouchableOpacity } from 'react-native';
-import { Overlay, Icon }from 'react-native-elements';
-import PropTypes from 'prop-types';
+import { Overlay, Icon } from 'react-native-elements';
+import { ListItemProps } from '../store/StoreTypes';
 
 export interface ListEditItemReq {
-    itemId: string;
-    itemName: string;
-    itemQuantity: string;
+    item: ListItemProps;
+    modalState: boolean;
+    setModalState: (argModalState: boolean) => void;
+    deleteListItem?: (argDelete: ListItemProps) => void;
+    changeListItem: (argEdit: ListItemProps) => void;
 }
 
-
-const ListEditOverlay: React.FC<ListEditItemReq> = (props)  => {
+const ListEditOverlay: React.FC<ListEditItemReq> = props => {
     const [hasChanged, setHasChanged] = useState(false);
-    const [initialItemName] = useState(props.itemName);
-    const [initialItemQuantity] = useState(props.itemQuantity);
+    const [initialItem] = useState(props.item);
+    const [item, updateItem] = useState(props.item);
 
-    //this function decides if the textboxes has changed, and if it has then the "save" button can be displayed
-    function checkForChange(initialValue, value) {
-        if (initialValue != value){
-            setHasChanged(true)
-            console.log("Cond1:", "-"+initialValue, "-"+value)
+    // this function decides if the textboxes has changed, and if it has then the "save" button can be displayed
+    function checkForChange(initialValue: any, value: any) {
+        if (initialValue !== value) {
+            setHasChanged(true);
         } else {
-            setHasChanged(false)
-            console.log("Cond2:", "-"+initialValue, "-"+value)
+            setHasChanged(false);
         }
     }
 
-    //This function handles the change of the name
-    function onChangeText(newName) {
-        //console.log("initialItemName:",initialItemName,"newName:",newName, " props.itemName:", props.itemName)
-        checkForChange(initialItemName, newName)
-        props.setSelectedName(newName)
+    // This function handles the change of the name
+    function onChangeText(newName: string) {
+        checkForChange(initialItem.name, newName);
+        updateItem({ ...item, name: newName });
     }
 
-    //This function handles the input of a new abount of an item
-    function onChangeQuantity(newQuantity) {
-        //console.log("initialItemQuantity:",initialItemQuantity,"newQuantity:",newQuantity, " props.itemQuantity:", props.itemQuantity)
-        newQuantity = Number(newQuantity.replace(/\D/g, ""))
-        if (newQuantity > 1000000){
-            newQuantity = 1000000
-        } else if (newQuantity < 0){
-            newQuantity = 0
+    // This function handles the input of a new abount of an item
+    function onChangeQuantity(newQuantityString: string) {
+        console.log('NQS-', newQuantityString, '-');
+        let newQuantity = 0;
+        if (newQuantityString !== undefined && newQuantityString !== '') {
+            newQuantity = Number(newQuantityString.replace(/\D/g, ''));
         }
-        checkForChange(initialItemQuantity, newQuantity)
-        props.setSelectedQuantity(String(newQuantity))
+        if (newQuantity > 1000000) {
+            newQuantity = 1000000;
+        } else if (newQuantity < 0) {
+            newQuantity = 0;
+        }
+        checkForChange(initialItem.quantity, newQuantity);
+        updateItem({ ...item, quantity: newQuantity });
     }
 
     function closeModal() {
-        setHasChanged(false)
-        //console.log("Modal closed")
-        props.setModalState(false)
+        props.setModalState(false);
     }
 
     function closeModalAndConfirm() {
-        setHasChanged(false)
-        //console.log("Modal closed, and changes has been confirmed")
-
-        //TODO
-        //ADD THE DATABASE CHANGES HERE
-        props.setModalState(false)
+        props.changeListItem(item);
+        closeModal();
     }
-
 
     function closeModalAndDelete() {
-        setHasChanged(false)
-        //console.log("Modal closed, and changes has been confirmed")
-
-        //TODO
-        //ADD THE DATABASE CHANGES HERE
-        props.setModalState(false)
+        if (props.deleteListItem !== undefined) {
+            props.deleteListItem(item);
+        }
+        closeModal();
     }
-
 
     return (
         <Overlay
             isVisible={props.modalState}
-            onPress={() => closeModal()}
-            //onBackdropPress={() => closeModal()}
+            onBackdropPress={() => closeModal()}
             height={150}
         >
-            <View style={{flex: 1, flexDirection: 'column', alignItems: 'stretch'}}>
-                <View style={{flexDirection: 'row', alignItems: 'stretch'}}>
-                    <Text style={{flex: 1, justifyContent:'center', fontSize: 20}}>Edit item #{props.itemId}</Text>
-                    <TouchableOpacity style={{flex: 1, justifyContent:'flex-start', alignItems: 'flex-end'}} onPress={() => closeModal()}>
-                        <Icon
-                            name='cancel'
-                            type='material'
-                            color='#000000'
-                        />
+            <View
+                style={{
+                    flex: 1,
+                    flexDirection: 'column',
+                    alignItems: 'stretch'
+                }}
+            >
+                <View style={{ flexDirection: 'row', alignItems: 'stretch' }}>
+                    <Text
+                        style={{
+                            flex: 1,
+                            justifyContent: 'center',
+                            fontSize: 20
+                        }}
+                    >
+                        Edit item #{item.id}
+                    </Text>
+                    <TouchableOpacity
+                        style={{
+                            flex: 1,
+                            justifyContent: 'flex-start',
+                            alignItems: 'flex-end'
+                        }}
+                        onPress={() => closeModal()}
+                    >
+                        <Icon name="cancel" type="material" color="#000000" />
                     </TouchableOpacity>
                 </View>
-                <View style={{flexDirection: 'row', alignItems: 'stretch'}}>
-                    <View style={{flex: 1, justifyContent:'center'}}>
+                <View style={{ flexDirection: 'row', alignItems: 'stretch' }}>
+                    <View style={{ flex: 1, justifyContent: 'center' }}>
                         <Text>Name: </Text>
                     </View>
-                    <View style={{flex: 4, justifyContent:'center'}}>
+                    <View style={{ flex: 4, justifyContent: 'center' }}>
                         <TextInput
-                            type="text"
-                            keyboardType='default'
+                            keyboardType="default"
                             placeholder="Name of item"
-                            value={props.itemName}
-                            onChangeText={text => onChangeText(text)}></TextInput>
+                            value={item.name}
+                            onChangeText={(text: string) => onChangeText(text)}
+                        />
                     </View>
                 </View>
-                {props.itemQuantity &&
-                    <View style={{flexDirection: 'row',alignItems: 'stretch'}}>
-                        <View style={{flex: 1, justifyContent:'center'}}>
-                            <Text>Amount: </Text>
+                {typeof props.item.quantity !== 'undefined' && (
+                    <View
+                        style={{ flexDirection: 'row', alignItems: 'stretch' }}
+                    >
+                        <View style={{ flex: 1, justifyContent: 'center' }}>
+                            <Text>Quantity: </Text>
                         </View>
-                        <View style={{flex: 4, justifyContent:'center'}}>
+                        <View style={{ flex: 4, justifyContent: 'center' }}>
                             <TextInput
-                                type="number"
-                                keyboardType='numeric'
+                                keyboardType="numeric"
                                 placeholder="Amount of items"
-                                value={props.itemQuantity}
-                                onChangeText={text => onChangeQuantity(text)}>
-                            </TextInput>
+                                value={String(item.quantity)}
+                                onChangeText={(text: string) =>
+                                    onChangeQuantity(text)
+                                }
+                            />
                         </View>
                     </View>
-                }
-                <View style={{flexDirection: 'row', alignItems: 'space-between'}}>
-                    {typeof deleteFunction === 'undefined' &&
-                    <View style={{flex: 8, justifyContent:'center'}}>
+                )}
+                <View style={{ flexDirection: 'row', alignItems: 'stretch' }}>
+                    {typeof props.deleteListItem === 'function' && (
+                        <View style={{ flex: 8, justifyContent: 'center' }}>
+                            <Button
+                                title="Delete"
+                                color="#f22"
+                                onPress={() => closeModalAndDelete()}
+                            />
+                        </View>
+                    )}
+                    <View style={{ flex: 1 }} />
+                    <View style={{ flex: 8, justifyContent: 'center' }}>
                         <Button
-                            title="Delete"
-                            color="#f22"
-                            onPress={() => closeModalAndDelete()}
-                        />
-                    </View>}
-                    <View style={{flex: 1}}/>
-                    <View style={{flex: 8, justifyContent:'center'}}>
-                        <Button
-                            title = "Cancel"
+                            title="Cancel"
                             color="#000"
                             onPress={() => closeModal()}
                         />
                     </View>
-                    <View style={{flex: 1}}/>
-                    <View style={{flex: 8, justifyContent:'center'}}>
+                    <View style={{ flex: 1 }} />
+                    <View style={{ flex: 8, justifyContent: 'center' }}>
                         <Button
-                            title = "Save"
+                            title="Save"
                             disabled={!hasChanged}
-                            //color="#0cc"
+                            // color="#0cc"
                             onPress={() => closeModalAndConfirm()}
                         />
                     </View>
@@ -149,16 +160,5 @@ const ListEditOverlay: React.FC<ListEditItemReq> = (props)  => {
             </View>
         </Overlay>
     );
-}
-export default ListEditOverlay;
-
-ListEditOverlay.propTypes = {
-    itemName:               PropTypes.string.isRequired,
-    itemId:                 PropTypes.number.isRequired,
-    itemQuantity:           PropTypes.string,
-    modalState:             PropTypes.bool.isRequired,
-    setModalState:          PropTypes.func.isRequired,
-    setSelectedName:        PropTypes.func.isRequired,
-    setSelectedQuantity:    PropTypes.func.isRequired,
-    deleteFunction:         PropTypes.func,//Not required, but if you add it then you can handle deletes
 };
+export default ListEditOverlay;
