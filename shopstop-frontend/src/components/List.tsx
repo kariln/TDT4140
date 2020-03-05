@@ -128,7 +128,14 @@ const List = () => {
     });
 
     if (isLoading)
-        return <Icon size={80} name="hourglass-empty" type="material" color="#4880b7" />; // can have a loading icon or something here if we want.
+        return (
+            <Icon
+                size={80}
+                name="hourglass-empty"
+                type="material"
+                color="#4880b7"
+            />
+        ); // can have a loading icon or something here if we want.
     if (state.listItems.length === 0)
         return (
             <View style={styles.container}>
