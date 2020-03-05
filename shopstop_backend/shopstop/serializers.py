@@ -63,3 +63,17 @@ class GroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = Group
         fields = ['id', 'name']
+
+
+class UserSerializer(serializers.ModelSerializer):
+    email = serializer.EmailField(required=True, validators=[UniqueValidator(queryset=User.objects.all())])
+    username = serializers.CharField(validators=[UniqueValidator(queryset=User.objects.all())])
+    password = serializers.CharField(min_length=7)
+    
+    def create(self, validated_data):
+        user = User.objects.create_user(validated_data['username'],validated_data['email'], validated_data['password'])
+        return user
+        
+        class Meta:
+            model = User
+            fields = ('id', 'username', 'email', 'password')

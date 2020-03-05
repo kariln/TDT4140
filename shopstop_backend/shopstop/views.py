@@ -9,7 +9,7 @@ from rest_framework_guardian import filters
 
 from .models import List, ListItem
 from .permissions import CustomObjectPermissions
-from .serializers import GroupSerializer, ListItemSerializer, ListSerializer
+from .serializers import GroupSerializer, ListItemSerializer, ListSerializer, UserSerializer
 
 
 class ListViewSet(viewsets.ModelViewSet):
@@ -94,3 +94,21 @@ class GroupViewSet(viewsets.ModelViewSet):
         if not user.has_perm('add _group', group):
             assign_perm('add_group', user, group)
         return Response({'status': 'User invited'})
+
+
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    
+    @action(detail=True, methods=['post'])
+    def set_password(self, request, pk=None):
+        user = self.get_object()
+        serializer = UserSerializer(data=request.data)
+        if serializer.is_valid():
+            user.set_password(serializer.data['password'])
+            user.save()
+            return Response({'status': 'password set'})
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            
+        
