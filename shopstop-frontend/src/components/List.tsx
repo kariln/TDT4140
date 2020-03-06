@@ -27,29 +27,29 @@ const List = () => {
     const navigation = useNavigation();
     const route = useRoute<ProfileScreenRouteProp>();
 
-    // This useEffect is called whenever the component mounts
     useEffect(() => {
         setIsLoading(true);
 
-        fetch(
-            `${getEnvVars.apiUrl}list-items/list_items_by_list/?list=${state.selectedList}`,
-            {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Token ${state.token}`
+        if (state.authentication.token)
+            fetch(
+                `${getEnvVars.apiUrl}list-items/list_items_by_list/?list=${state.selectedList}`,
+                {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Token ${state.authentication.token}`
+                    }
                 }
-            }
-        )
-            .then(result => result.json())
-            .then(data => {
-                dispatch({
-                    type: 'SET_LISTITEMS',
-                    payload: data
-                });
-            })
-            .then(() => setIsLoading(false));
-    }, [dispatch, state.selectedList, state.token]);
+            )
+                .then(result => result.json())
+                .then(data => {
+                    dispatch({
+                        type: 'SET_LISTITEMS',
+                        payload: data
+                    });
+                })
+                .then(() => setIsLoading(false));
+    }, [dispatch, state.authentication.token, state.selectedList]);
 
     // Sets the title of the header to the name of the list
     navigation.setOptions({
