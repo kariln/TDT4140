@@ -89,7 +89,7 @@ const SignIn = () => {
     return (
         <View style={styles.container}>
             <Image
-                source={require('../images/ShopStop.png')}
+                source={require('../../assets/Shopstop.png')}
                 style={styles.image}
             />
             <TextInput

@@ -12,8 +12,8 @@ const Splash = () => {
             }}
         >
             <Image
-                source={require('../images/ShopStop.png')}
-                style={{ width: '50%', height: '25%', resizeMode: 'stretch' }}
+                source={require('../../assets/splash.png')}
+                style={{ width: '100%', height: '100%', resizeMode: 'cover' }}
             />
         </View>
     );

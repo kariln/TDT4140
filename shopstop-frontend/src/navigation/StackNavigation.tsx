@@ -44,7 +44,13 @@ const MainStack = () => {
                         <Stack.Screen
                             name="signin"
                             component={SignIn}
-                            options={{ headerShown: false }}
+                            options={{
+                                headerShown: false,
+                                animationTypeForReplace: state.authentication
+                                    .isSignOut
+                                    ? 'pop'
+                                    : 'push'
+                            }}
                         />
                         <Stack.Screen name="signup" component={SignUp} />
                     </>

@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
     }
 });
 
-const CustomDrawerContent = () => {
+const DrawerContent = () => {
     const [, dispatch] = useContext(Context);
 
     const signOut = () => {
@@ -36,4 +36,4 @@ const CustomDrawerContent = () => {
     );
 };
 
-export default CustomDrawerContent;
+export default DrawerContent;
