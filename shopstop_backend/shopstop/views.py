@@ -1,23 +1,28 @@
+from django.contrib.auth.models import Group, User
+from django.shortcuts import get_object_or_404
+from guardian.shortcuts import assign_perm
 from rest_framework import viewsets
 from rest_framework.decorators import action
+from rest_framework.permissions import DjangoModelPermissions
 from rest_framework.response import Response
+from rest_framework_guardian import filters
 
 from .models import List, ListItem
-from .serializers import ListItemSerializer, ListSerializer
+from .permissions import CustomObjectPermissions
+from .serializers import GroupSerializer, ListItemSerializer, ListSerializer
 
 
 class ListViewSet(viewsets.ModelViewSet):
     serializer_class = ListSerializer
     queryset = List.objects.all()
-    """
-    Authentication_classes?
-    permission_classes?
-    pagination_class?
-    """
+    permission_classes = [DjangoModelPermissions, CustomObjectPermissions]
+    filter_backends = [filters.ObjectPermissionsFilter]
+
     @action(detail=False, methods=['get'])
     def list_by_group(self, request):
         """
-        Endpoint needs a query parameter called group. It should have the id of the group you want to query in.\n
+        Endpoint needs a query parameter called group.
+        It should have the id of the group you want to query in.\n
         The endpoint return lists that are connected to the group
         """
         group = request.query_params.get('group', None)
@@ -29,3 +34,63 @@ class ListViewSet(viewsets.ModelViewSet):
 class ListItemViewSet(viewsets.ModelViewSet):
     queryset = ListItem.objects.all()
     serializer_class = ListItemSerializer
+    permission_classes = [DjangoModelPermissions, CustomObjectPermissions]
+    filter_backends = [filters.ObjectPermissionsFilter]
+
+    @action(detail=False, methods=['get'])
+    def list_items_by_list(self, request):
+        """
+        Endpoint needs a query parameter called list.
+        It should have the id of the list you want to query in.\n
+        The endpoint return listsitems that are connected to the lists
+        """
+        list = request.query_params.get('list', None)
+        self.queryset = self.queryset.filter(list=list)
+        serializer = self.get_serializer(self.queryset, many=True)
+        return Response(serializer.data)
+
+
+class GroupViewSet(viewsets.ModelViewSet):
+    queryset = Group.objects.all()
+    serializer_class = GroupSerializer
+    permission_classes = [DjangoModelPermissions]
+    filter_backends = [filters.ObjectPermissionsFilter]
+
+    def get_serializer_context(self):
+        return {'user': self.request.user}
+
+    @action(detail=False, methods=['get'])
+    def current_user_groups(self, request):
+        """
+            List all the groups of the currently logged in user.
+        """
+        return Response(self.get_serializer(request.user.groups, many=True).data)
+
+    @action(detail=True, methods=['post'])
+    def add_current_user_to_group(self, request, pk):
+        """
+        Join the group. The joining user needs to be invited by someone already in the group.
+        """
+        group = self.get_object()
+        user = request.user
+        user.groups.add(group)
+        user.save()
+        return Response({'status': 'Added to group'})
+
+    @action(detail=True, methods=['post'])
+    def invite_user_to_group(self, request, pk):
+        """
+        Invite a user to the group. The user's username needs to be posted.
+        """
+        user = get_object_or_404(User, username=request.data.get('username'))
+        group = self.get_object()
+
+        if not user.has_perm('view_group', group):
+            assign_perm('view_group', user, group)
+        if not user.has_perm('change_group', group):
+            assign_perm('change_group', user, group)
+        if not user.has_perm('delete_group', group):
+            assign_perm('delete_group', user, group)
+        if not user.has_perm('add _group', group):
+            assign_perm('add_group', user, group)
+        return Response({'status': 'User invited'})

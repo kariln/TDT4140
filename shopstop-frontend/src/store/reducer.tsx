@@ -29,7 +29,6 @@ export const reducers = (state: StateProps, action: Action) => {
                 ...state,
                 lists: state.lists.concat(action.payload)
             };
-        // this might need rework but i think it should work now
         case 'EDIT_LIST':
             return {
                 ...state,
@@ -42,7 +41,7 @@ export const reducers = (state: StateProps, action: Action) => {
             return {
                 ...state,
                 lists: state.lists.filter(data => data.id !== action.payload.id)
-            }; // should change this to filter on id when we have id on lists
+            };
         case 'SET_SELECTEDLIST':
             return { ...state, selectedList: action.payload };
         case 'TOGGLE_LISTOVERLAY':

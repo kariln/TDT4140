@@ -20,7 +20,6 @@ const Lists = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [state, dispatch] = useContext(Context);
 
-    // This useEffect is called whenever the component mounts
     useEffect(() => {
         setIsLoading(true);
         if (state.authentication.token)
