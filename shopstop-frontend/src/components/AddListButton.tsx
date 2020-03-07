@@ -18,7 +18,7 @@ const AddListButton = () => {
                     width: 70,
                     height: 70,
                     backgroundColor: '#fff',
-                    borderRadius: 140
+                    borderRadius: 35
                 }}
                 onPress={() =>
                     dispatch({

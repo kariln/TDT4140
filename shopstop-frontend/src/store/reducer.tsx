@@ -2,7 +2,8 @@ import {
     ListItemProps,
     ListProps,
     StateProps,
-    ListOverlayProps
+    ListOverlayProps,
+    GroupProps
 } from './StoreTypes';
 
 export const reducers = (state: StateProps, action: Action) => {
@@ -42,8 +43,12 @@ export const reducers = (state: StateProps, action: Action) => {
                 ...state,
                 lists: state.lists.filter(data => data.id !== action.payload.id)
             };
+        case 'SET_GROUPS':
+            return { ...state, groups: action.payload };
         case 'SET_SELECTEDLIST':
             return { ...state, selectedList: action.payload };
+        case 'SET_SELECTEDGROUP':
+            return { ...state, selectedGroup: action.payload };
         case 'TOGGLE_LISTOVERLAY':
             return {
                 ...state,
@@ -93,4 +98,6 @@ type Action =
     | { type: 'TOGGLE_LISTOVERLAY'; payload: ListOverlayProps }
     | { type: 'SET_USER'; payload: string }
     | { type: 'SIGN_IN' | 'RESTORE_TOKEN'; payload: string }
-    | { type: 'SIGN_OUT'; payload: null };
+    | { type: 'SIGN_OUT'; payload: null }
+    | { type: 'SET_GROUPS'; payload: GroupProps[] }
+    | { type: 'SET_SELECTEDGROUP'; payload: number };

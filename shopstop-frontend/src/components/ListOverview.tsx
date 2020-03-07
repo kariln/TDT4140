@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { StyleSheet, View, FlatList } from 'react-native';
+import { StyleSheet, View, FlatList, Text } from 'react-native';
 import { Context } from '../store/Store';
 import { ListProps } from '../store/StoreTypes';
 import ListsItem from './ListOverviewItem';
@@ -8,6 +8,10 @@ import ListOverlay from './ListOverlay';
 import AddListButton from './AddListButton';
 
 const styles = StyleSheet.create({
+    addButtonContainer: {
+        flex: 1,
+        justifyContent: 'flex-end'
+    },
     container: {
         alignItems: 'center',
         backgroundColor: '#fff',
@@ -22,14 +26,17 @@ const Lists = () => {
 
     useEffect(() => {
         setIsLoading(true);
-        if (state.authentication.token)
-            fetch(`${getEnvVars.apiUrl}lists/`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Token ${state.authentication.token}`
+        if (state.authentication.token && state.selectedGroup)
+            fetch(
+                `${getEnvVars.apiUrl}lists/list_by_group/?group=${state.selectedGroup}`,
+                {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Token ${state.authentication.token}`
+                    }
                 }
-            })
+            )
                 .then(result => result.json())
                 .then(data => {
                     dispatch({
@@ -39,9 +46,20 @@ const Lists = () => {
                 })
                 .then(() => setIsLoading(false))
                 .catch(e => console.log(e));
-    }, [dispatch, state.authentication.token]);
+    }, [dispatch, state.authentication.token, state.selectedGroup]);
 
     if (isLoading) return <></>;
+
+    if (state.lists.length === 0)
+        return (
+            <View style={styles.container}>
+                <Text>Det finnes ingen handlelister i denne gruppen</Text>
+                <View style={styles.addButtonContainer}>
+                    <AddListButton />
+                </View>
+                {state.listOverlay.visible && <ListOverlay />}
+            </View>
+        );
 
     return (
         <View style={styles.container}>

@@ -17,11 +17,12 @@ export const initialAuthenticationState = {
 const initialState: StateProps = {
     lists: [],
     listItems: [],
+    groups: [],
     authentication: initialAuthenticationState,
     listOverlay: initialOverlayState,
     username: null,
     selectedList: null,
-    selectedGroup: 1,
+    selectedGroup: null,
 
     // This is only here because typescript wanted it
     *[Symbol.iterator]() {

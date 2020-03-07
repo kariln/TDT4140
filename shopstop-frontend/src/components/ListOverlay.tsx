@@ -19,16 +19,17 @@ const ListOverlay = () => {
             },
             body: JSON.stringify({
                 name: newList,
-                group: 1
+                group: state.selectedGroup
             })
         })
             .then(response => response.json())
-            .then(data =>
+            .then(data => {
+                console.log(data);
                 dispatch({
                     type: 'ADD_LIST',
                     payload: data
-                })
-            );
+                });
+            });
         dispatch({
             type: 'TOGGLE_LISTOVERLAY',
             payload: initialOverlayState
@@ -38,7 +39,11 @@ const ListOverlay = () => {
     const changeList = () => {
         dispatch({
             type: 'EDIT_LIST',
-            payload: { group: 1, name: newList, id: state.listOverlay.id }
+            payload: {
+                group: state.selectedGroup,
+                name: newList,
+                id: state.listOverlay.id
+            }
         });
         fetch(`${getEnvVars.apiUrl}lists/${state.listOverlay.id}/`, {
             method: 'PATCH',

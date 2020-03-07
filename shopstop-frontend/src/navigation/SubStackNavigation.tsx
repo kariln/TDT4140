@@ -3,6 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 // imports of our own components
 import ListOverview from '../components/ListOverview';
+import HamburgerButton from '../components/HamburgerButton';
 
 const Stack = createStackNavigator();
 
@@ -13,7 +14,10 @@ const SubStack = () => {
             <Stack.Screen
                 name="lists"
                 component={ListOverview}
-                options={{ title: 'Handlelistene mine' }}
+                options={{
+                    headerTitle: 'Handlelistene mine',
+                    headerLeft: () => <HamburgerButton />
+                }}
             />
         </Stack.Navigator>
     );

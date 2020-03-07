@@ -1,6 +1,7 @@
 export interface StateProps {
     lists: ListProps[];
     listItems: ListItemProps[];
+    groups: GroupProps[];
     authentication: AuthenticationProps;
     selectedGroup: number | null;
     selectedList: number | null;
@@ -8,6 +9,11 @@ export interface StateProps {
     listOverlay: ListOverlayProps;
     [key: string]: any;
     [Symbol.iterator](): IterableIterator<any>;
+}
+
+export interface GroupProps {
+    name: string;
+    id: number;
 }
 
 export interface AuthenticationProps {
