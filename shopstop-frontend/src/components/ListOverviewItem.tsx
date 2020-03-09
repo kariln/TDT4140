@@ -50,7 +50,7 @@ const Item: React.FC<ListOverviewItemProp> = props => {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Token ${state.token}`
+                Authorization: `Token ${state.authentication.token}`
             }
         });
     };
