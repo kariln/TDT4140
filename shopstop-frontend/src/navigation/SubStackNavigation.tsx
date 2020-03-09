@@ -2,7 +2,7 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 
 // imports of our own components
-import ListOverview from '../screens/ListOverviewScreen';
+import ListOverview from '../components/ListOverview';
 
 const Stack = createStackNavigator();
 

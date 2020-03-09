@@ -29,7 +29,6 @@ export const reducers = (state: StateProps, action: Action) => {
                 ...state,
                 lists: state.lists.concat(action.payload)
             };
-        // this might need rework but i think it should work now
         case 'EDIT_LIST':
             return {
                 ...state,
@@ -42,15 +41,43 @@ export const reducers = (state: StateProps, action: Action) => {
             return {
                 ...state,
                 lists: state.lists.filter(data => data.id !== action.payload.id)
-            }; // should change this to filter on id when we have id on lists
-        case 'SET_TOKEN':
-            return { ...state, token: action.payload };
+            };
         case 'SET_SELECTEDLIST':
             return { ...state, selectedList: action.payload };
         case 'TOGGLE_LISTOVERLAY':
             return {
                 ...state,
                 listOverlay: action.payload
+            };
+        case 'SET_USER':
+            return { ...state, username: action.payload };
+        case 'RESTORE_TOKEN':
+            return {
+                ...state,
+                authentication: {
+                    ...state.authentication,
+                    token: action.payload,
+                    isLoading: false
+                }
+            };
+        case 'SIGN_IN':
+            return {
+                ...state,
+                authentication: {
+                    ...state.authentication,
+                    token: action.payload,
+                    isSignOut: false
+                }
+            };
+        case 'SIGN_OUT':
+            return {
+                ...state,
+                authentication: {
+                    ...state.authentication,
+                    isSignOut: true,
+                    token: null,
+                    isLoading: false
+                }
             };
         default:
             return state;
@@ -62,6 +89,8 @@ type Action =
     | { type: 'ADD_LISTITEM' | 'REMOVE_LISTITEM'; payload: ListItemProps }
     | { type: 'SET_LISTS'; payload: ListProps[] }
     | { type: 'ADD_LIST' | 'REMOVE_LIST' | 'EDIT_LIST'; payload: ListProps }
-    | { type: 'SET_TOKEN'; payload: string }
     | { type: 'SET_SELECTEDLIST'; payload: number }
-    | { type: 'TOGGLE_LISTOVERLAY'; payload: ListOverlayProps };
+    | { type: 'TOGGLE_LISTOVERLAY'; payload: ListOverlayProps }
+    | { type: 'SET_USER'; payload: string }
+    | { type: 'SIGN_IN' | 'RESTORE_TOKEN'; payload: string }
+    | { type: 'SIGN_OUT'; payload: null };

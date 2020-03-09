@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { StyleSheet, View, FlatList } from 'react-native';
-import { GetToken } from '../utils/Utils';
 import { Context } from '../store/Store';
 import { ListProps } from '../store/StoreTypes';
 import ListsItem from './ListOverviewItem';
@@ -21,36 +20,29 @@ const Lists = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [state, dispatch] = useContext(Context);
 
-    if (!state.token)
-        GetToken({ username: 'havardp', password: 'alko1233' }).then(token => {
-            dispatch({
-                type: 'SET_TOKEN',
-                payload: token
-            });
-        });
-
-    // This useEffect is called whenever the component mounts
     useEffect(() => {
         setIsLoading(true);
-        if (state.token)
+        if (state.authentication.token)
             fetch(`${getEnvVars.apiUrl}lists/`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: `Token ${state.token}`
+                    Authorization: `Token ${state.authentication.token}`
                 }
             })
                 .then(result => result.json())
-                .then(data =>
+                .then(data => {
                     dispatch({
                         type: 'SET_LISTS',
                         payload: data
-                    })
-                )
+                    });
+                })
                 .then(() => setIsLoading(false))
                 .catch(e => console.log(e));
-    }, [dispatch, state.token]);
+    }, [dispatch, state.authentication.token]);
+
     if (isLoading) return <></>;
+
     return (
         <View style={styles.container}>
             <FlatList
