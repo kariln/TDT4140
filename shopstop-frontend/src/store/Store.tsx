@@ -8,11 +8,18 @@ export const initialOverlayState = {
     id: null
 };
 
+export const initialAuthenticationState = {
+    isLoading: true,
+    isSignout: false,
+    token: null
+};
+
 const initialState: StateProps = {
     lists: [],
     listItems: [],
-    token: null,
+    authentication: initialAuthenticationState,
     listOverlay: initialOverlayState,
+    username: null,
     selectedList: null,
     selectedGroup: 1,
 
