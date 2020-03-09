@@ -6,6 +6,7 @@ import { NavigationContainer } from '@react-navigation/native';
 // imports of our own components
 import SingleList from '../screens/SingleListScreen';
 import MyDrawer from './DrawerNavigation';
+import RegUser from '../screens/RegisterScreen';
 
 const Stack = createStackNavigator();
 
@@ -19,6 +20,7 @@ const MainStack = () => {
                     options={{ headerShown: false }}
                 />
                 <Stack.Screen name="list" component={SingleList} />
+                <Stack.Screen name="Registrer bruker" component={RegUser} />
             </Stack.Navigator>
         </NavigationContainer>
     );

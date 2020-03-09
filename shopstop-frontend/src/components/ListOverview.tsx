@@ -7,6 +7,7 @@ import ListsItem from './ListOverviewItem';
 import getEnvVars from '../../environment';
 import ListOverlay from './ListOverlay';
 import AddListButton from './AddListButton';
+import RegisterUser from './RegisterButton';
 
 const styles = StyleSheet.create({
     container: {
@@ -62,6 +63,7 @@ const Lists = () => {
             />
             <AddListButton />
             {state.listOverlay.visible && <ListOverlay />}
+            <RegisterUser />
         </View>
     );
 };
