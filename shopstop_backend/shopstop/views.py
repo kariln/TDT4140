@@ -3,9 +3,10 @@ from django.shortcuts import get_object_or_404
 from guardian.shortcuts import assign_perm
 from rest_framework import viewsets
 from rest_framework.decorators import action
-from rest_framework.permissions import DjangoModelPermissions
+from rest_framework.permissions import DjangoModelPermissions, AllowAny, IsAdminUser
 from rest_framework.response import Response
 from rest_framework_guardian import filters
+from django.db.models import Q
 
 from .models import List, ListItem
 from .permissions import CustomObjectPermissions
@@ -100,15 +101,11 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     
-    @action(detail=True, methods=['post'])
-    def set_password(self, request, pk=None):
-        user = self.get_object()
-        serializer = UserSerializer(data=request.data)
-        if serializer.is_valid():
-            user.set_password(serializer.data['password'])
-            user.save()
-            return Response({'status': 'password set'})
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-            
-        
+    
+    def get_permissions(self):
+            permission_classes = []
+            if self.action == 'create':
+                permission_classes = [AllowAny]
+            else:
+                permission_classes = [IsAdminUser]
+            return [permission() for permission in permission_classes]
