@@ -20,7 +20,7 @@ yarn-error.log
 vscode.code-workspace
 
 venv/
-
+matrix/
 #idea
 .idea/
 
