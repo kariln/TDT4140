@@ -44,28 +44,28 @@ const List = () => {
     });
 
     // function to change/update the value of an item in a list
-    const changeListItem = (item: ListItemProps) => {
+    const changeListItem = (editedItem: ListItemProps) => {
         dispatch({
             type: 'EDIT_LISTITEM',
             payload: {
-                id: item.id,
-                name: item.name,
-                quantity: item.quantity,
-                bought: item.bought,
-                list: item.list
+                id: editedItem.id,
+                quantity: editedItem.quantity,
+                name: editedItem.name,
+                bought: editedItem.bought,
+                list: editedItem.list
             }
         });
-        fetch(`${getEnvVars.apiUrl}list-items/${item.id}/`, {
+        fetch(`${getEnvVars.apiUrl}list-items/${editedItem.id}/`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Token ${state.authentication.token}`
             },
             body: JSON.stringify({
-                name: item.name,
-                quantity: item.quantity,
-                bought: item.bought,
-                list: item.list
+                name: editedItem.name,
+                quantity: editedItem.quantity,
+                bought: editedItem.bought,
+                list: editedItem.list
             })
         });
     };

@@ -33,7 +33,6 @@ const ListEditOverlay: React.FC<ListEditItemReq> = props => {
 
     // This function handles the input of a new abount of an item
     function onChangeQuantity(newQuantityString: string) {
-        console.log('NQS-', newQuantityString, '-');
         let newQuantity = 0;
         if (newQuantityString !== undefined && newQuantityString !== '') {
             newQuantity = Number(newQuantityString.replace(/\D/g, ''));
@@ -84,7 +83,7 @@ const ListEditOverlay: React.FC<ListEditItemReq> = props => {
                             fontSize: 20
                         }}
                     >
-                        Edit item #{item.id}
+                        Change Item:
                     </Text>
                     <TouchableOpacity
                         style={{
