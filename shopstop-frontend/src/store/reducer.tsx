@@ -14,7 +14,15 @@ export const reducers = (state: StateProps, action: Action) => {
                 ...state,
                 listItems: state.listItems.concat(action.payload)
             };
-
+        case 'EDIT_LISTITEM':
+            return {
+                ...state,
+                listItems: state.listItems.map(listItem => {
+                    if (listItem.id === action.payload.id)
+                        return action.payload;
+                    return listItem;
+                })
+            };
         case 'REMOVE_LISTITEM':
             return {
                 ...state,
@@ -86,7 +94,10 @@ export const reducers = (state: StateProps, action: Action) => {
 
 type Action =
     | { type: 'SET_LISTITEMS'; payload: ListItemProps[] }
-    | { type: 'ADD_LISTITEM' | 'REMOVE_LISTITEM'; payload: ListItemProps }
+    | {
+          type: 'ADD_LISTITEM' | 'REMOVE_LISTITEM' | 'EDIT_LISTITEM';
+          payload: ListItemProps;
+      }
     | { type: 'SET_LISTS'; payload: ListProps[] }
     | { type: 'ADD_LIST' | 'REMOVE_LIST' | 'EDIT_LIST'; payload: ListProps }
     | { type: 'SET_SELECTEDLIST'; payload: number }
