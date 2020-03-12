@@ -1,10 +1,17 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { StyleSheet, View, FlatList, Text } from 'react-native';
+import {
+    StyleSheet,
+    View,
+    FlatList,
+    Text,
+    KeyboardAvoidingView
+} from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { Context } from '../store/Store';
 import ListItem from './ListItem';
 import { ListItemProps } from '../store/StoreTypes';
 import getEnvVars from '../../environment';
+import TextField from './TextField';
 
 const styles = StyleSheet.create({
     container: {
@@ -61,10 +68,11 @@ const List = () => {
         return (
             <View style={styles.container}>
                 <Text>Du har ingen varer i handlelisten din</Text>
+                <TextField />
             </View>
         );
     return (
-        <View style={styles.container}>
+        <KeyboardAvoidingView style={styles.container} behavior="padding">
             <FlatList
                 data={state.listItems}
                 renderItem={({ item }: { item: ListItemProps }) => (
@@ -72,7 +80,8 @@ const List = () => {
                 )}
                 keyExtractor={item => item.name}
             />
-        </View>
+            <TextField />
+        </KeyboardAvoidingView>
     );
 };
 
