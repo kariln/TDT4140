@@ -2,7 +2,8 @@ import {
     ListItemProps,
     ListProps,
     StateProps,
-    ListOverlayProps
+    OverlayProps,
+    GroupProps
 } from './StoreTypes';
 
 export const reducers = (state: StateProps, action: Action) => {
@@ -42,12 +43,28 @@ export const reducers = (state: StateProps, action: Action) => {
                 ...state,
                 lists: state.lists.filter(data => data.id !== action.payload.id)
             };
-        case 'SET_SELECTEDLIST':
-            return { ...state, selectedList: action.payload };
-        case 'TOGGLE_LISTOVERLAY':
+        case 'SET_GROUPS':
+            return { ...state, groups: action.payload };
+        case 'ADD_GROUP':
             return {
                 ...state,
-                listOverlay: action.payload
+                groups: state.groups.concat(action.payload)
+            };
+        case 'REMOVE_GROUP':
+            return {
+                ...state,
+                groups: state.groups.filter(
+                    data => data.id !== action.payload.id
+                )
+            };
+        case 'SET_SELECTEDLIST':
+            return { ...state, selectedList: action.payload };
+        case 'SET_SELECTEDGROUP':
+            return { ...state, selectedGroup: action.payload };
+        case 'TOGGLE_OVERLAY':
+            return {
+                ...state,
+                overlay: action.payload
             };
         case 'SET_USER':
             return { ...state, username: action.payload };
@@ -90,7 +107,11 @@ type Action =
     | { type: 'SET_LISTS'; payload: ListProps[] }
     | { type: 'ADD_LIST' | 'REMOVE_LIST' | 'EDIT_LIST'; payload: ListProps }
     | { type: 'SET_SELECTEDLIST'; payload: number }
-    | { type: 'TOGGLE_LISTOVERLAY'; payload: ListOverlayProps }
+    | { type: 'TOGGLE_OVERLAY'; payload: OverlayProps }
     | { type: 'SET_USER'; payload: string }
     | { type: 'SIGN_IN' | 'RESTORE_TOKEN'; payload: string }
-    | { type: 'SIGN_OUT'; payload: null };
+    | { type: 'SIGN_OUT'; payload: null }
+    | { type: 'SET_GROUPS'; payload: GroupProps[] }
+    | { type: 'ADD_GROUP'; payload: GroupProps }
+    | { type: 'REMOVE_GROUP'; payload: GroupProps }
+    | { type: 'SET_SELECTEDGROUP'; payload: number };
