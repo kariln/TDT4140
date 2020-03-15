@@ -1,9 +1,11 @@
 from django.contrib.auth.models import Group, User, Permission
+from django.db.models import Q
 from guardian.shortcuts import assign_perm
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 
 from .models import List, ListItem
+from django.contrib.contenttypes.models import ContentType
 
 
 class ListSerializer(serializers.ModelSerializer):
@@ -70,13 +72,21 @@ class UserSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(required=True, validators=[UniqueValidator(queryset=User.objects.all())])
     username = serializers.CharField(validators=[UniqueValidator(queryset=User.objects.all())])
     password = serializers.CharField(min_length=7)
-    
+
     def create(self, validated_data):
-        user = User.objects.create_user(validated_data['username'],validated_data['email'], validated_data['password'])
-        permissions = Permission.objects.filter(Q(codename__contains=list) | Q(codename__contains=listitem))
-        user.user_permissions.add(permissions)
+        user = User.objects.create_user(validated_data['username'],
+                                        validated_data['email'], validated_data['password'])
+
+        permissions = Permission.objects.filter(
+            Q(content_type=ContentType.objects.get_for_model(List)) |
+            Q(content_type=ContentType.objects.get_for_model(ListItem)) |
+            Q(content_type=ContentType.objects.get_for_model(Group)))
+
+        for perm in permissions:
+            user.user_permissions.add(perm)
+        user.save()
         return user
-        
+
     class Meta:
-            model = User
-            fields = ('id', 'username', 'email', 'password')
+        model = User
+        fields = ('id', 'username', 'email', 'password')
