@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { TouchableOpacity } from 'react-native';
 import { Icon } from 'react-native-elements';
-import { Context } from '../store/Store';
+import { Context } from '../../store/Store';
 
 const AddListButton = () => {
     const [, dispatch] = useContext(Context);
@@ -22,10 +22,10 @@ const AddListButton = () => {
                 }}
                 onPress={() =>
                     dispatch({
-                        type: 'TOGGLE_LISTOVERLAY',
+                        type: 'TOGGLE_OVERLAY',
                         payload: {
                             visible: true,
-                            type: 'add',
+                            type: 'ADD_LIST',
                             id: null
                         }
                     })

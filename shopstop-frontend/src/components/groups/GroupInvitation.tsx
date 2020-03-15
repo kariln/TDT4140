@@ -1,8 +1,8 @@
 import React, { useState, useContext } from 'react';
 import { View, StyleSheet, TextInput, Text, Button } from 'react-native';
-import getEnvVars from '../../environment';
-import { Context } from '../store/Store';
-import { GroupProps } from '../store/StoreTypes';
+import getEnvVars from '../../../environment';
+import { Context } from '../../store/Store';
+import { GroupProps } from '../../store/StoreTypes';
 
 const styles = StyleSheet.create({
     alert: {

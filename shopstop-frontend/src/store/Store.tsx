@@ -19,7 +19,7 @@ const initialState: StateProps = {
     listItems: [],
     groups: [],
     authentication: initialAuthenticationState,
-    listOverlay: initialOverlayState,
+    overlay: initialOverlayState,
     username: null,
     selectedList: null,
     selectedGroup: null,

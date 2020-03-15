@@ -2,11 +2,11 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 
 // imports of our own components
-import ListOverview from '../components/ListOverview';
+import ListOverview from '../components/listOverview/ListOverview';
 import HamburgerButton from '../components/HamburgerButton';
 
-import GroupOptions from '../components/GroupOptions';
-import GroupInvitation from '../components/GroupInvitation';
+import GroupOptions from '../components/groups/GroupOptions';
+import GroupInvitation from '../components/groups/GroupInvitation';
 
 const Stack = createStackNavigator();
 

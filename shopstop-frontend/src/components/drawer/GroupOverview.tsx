@@ -1,26 +1,15 @@
 import React, { useEffect, useContext, useState } from 'react';
-import { StyleSheet, View, FlatList } from 'react-native';
-import getEnvVars from '../../environment';
-import { Context } from '../store/Store';
-import { GroupProps } from '../store/StoreTypes';
+import { FlatList } from 'react-native';
+import getEnvVars from '../../../environment';
+import { Context } from '../../store/Store';
+import { GroupProps } from '../../store/StoreTypes';
 import GroupOverviewItem from './GroupOverviewItem';
-
-const styles = StyleSheet.create({
-    container: {
-        alignItems: 'stretch',
-        backgroundColor: '#fff',
-        flex: 1,
-        marginTop: '10%',
-        width: '100%'
-    }
-});
 
 const GroupOverview = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [state, dispatch] = useContext(Context);
 
     useEffect(() => {
-        setIsLoading(true);
         if (state.authentication.token)
             fetch(`${getEnvVars.apiUrl}groups/current_user_groups/`, {
                 method: 'GET',
@@ -49,15 +38,13 @@ const GroupOverview = () => {
     if (isLoading) return <></>;
 
     return (
-        <View style={styles.container}>
-            <FlatList
-                data={state.groups}
-                renderItem={({ item }: { item: GroupProps }) => (
-                    <GroupOverviewItem item={item} />
-                )}
-                keyExtractor={item => item.name}
-            />
-        </View>
+        <FlatList
+            data={state.groups}
+            renderItem={({ item }: { item: GroupProps }) => (
+                <GroupOverviewItem item={item} />
+            )}
+            keyExtractor={item => item.name}
+        />
     );
 };
 

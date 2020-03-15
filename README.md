@@ -1,18 +1,21 @@
 # ShopStop
-Shop stop is a shared shopping list. 
 
-Our application is divided into to main parts, a React Native frontend and a Django backend. 
+Shop stop is a shared shopping list.
+
+Our application is divided into to main parts, a React Native frontend and a Django backend.
 
 # How to run for local development
 
 ## Frontend
 
 Install [expo-cli](https://expo.io/) with:
+
 ```console
 npm install -g expo-cli
 ```
 
 Navigate to the **frontend** folder and install the node dependencies:
+
 ```console
 yarn
 ```
@@ -40,5 +43,5 @@ python manage.py migrate
 And finally run the server with:
 
 ```console
-python manage.py runserver
+python manage.py runserver YOURIPADRESS HERE:8000 (also change environment.js to same ip adress)
 ```

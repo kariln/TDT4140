@@ -6,7 +6,7 @@ export interface StateProps {
     selectedGroup: number | null;
     selectedList: number | null;
     username: string | null;
-    listOverlay: ListOverlayProps;
+    overlay: OverlayProps;
     [key: string]: any;
     [Symbol.iterator](): IterableIterator<any>;
 }
@@ -22,10 +22,10 @@ export interface AuthenticationProps {
     token: null | string;
 }
 
-export interface ListOverlayProps {
+export interface OverlayProps {
     visible: boolean;
     type: string;
-    id: number | null;
+    id?: number | null;
 }
 
 export interface ListProps {

@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { StyleSheet, View, FlatList, Text } from 'react-native';
-import { Context } from '../store/Store';
-import { ListProps } from '../store/StoreTypes';
+import { useNavigation } from '@react-navigation/native';
+import { Context } from '../../store/Store';
+import { ListProps } from '../../store/StoreTypes';
 import ListsItem from './ListOverviewItem';
-import getEnvVars from '../../environment';
-import ListOverlay from './ListOverlay';
+import getEnvVars from '../../../environment';
 import AddListButton from './AddListButton';
 
 const styles = StyleSheet.create({
@@ -23,10 +23,21 @@ const styles = StyleSheet.create({
 const Lists = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [state, dispatch] = useContext(Context);
+    const navigation = useNavigation();
 
     useEffect(() => {
-        setIsLoading(true);
-        if (state.authentication.token && state.selectedGroup)
+        // Sets the title in the navbar to the name of the group the user has selected
+        const setTitle = async () => {
+            const thisGroup = await state.groups.find(
+                (groups: ListProps) => groups.id === state.selectedGroup
+            );
+            navigation.setOptions({
+                title: thisGroup.name
+            });
+        };
+
+        if (state.selectedGroup) {
+            setTitle();
             fetch(
                 `${getEnvVars.apiUrl}lists/list_by_group/?group=${state.selectedGroup}`,
                 {
@@ -46,7 +57,14 @@ const Lists = () => {
                 })
                 .then(() => setIsLoading(false))
                 .catch(e => console.log(e));
-    }, [dispatch, state.authentication.token, state.selectedGroup]);
+        }
+    }, [
+        dispatch,
+        navigation,
+        state.authentication.token,
+        state.groups,
+        state.selectedGroup
+    ]);
 
     if (isLoading) return <></>;
 
@@ -57,7 +75,6 @@ const Lists = () => {
                 <View style={styles.addButtonContainer}>
                     <AddListButton />
                 </View>
-                {state.listOverlay.visible && <ListOverlay />}
             </View>
         );
 
@@ -68,10 +85,9 @@ const Lists = () => {
                 renderItem={({ item }: { item: ListProps }) => (
                     <ListsItem list={item} />
                 )}
-                keyExtractor={item => item.name}
+                keyExtractor={item => item.id.toString()}
             />
             <AddListButton />
-            {state.listOverlay.visible && <ListOverlay />}
         </View>
     );
 };
