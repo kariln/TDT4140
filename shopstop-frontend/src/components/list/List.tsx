@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { StyleSheet, View, FlatList, Text } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
-import { Context } from '../store/Store';
+import { Context } from '../../store/Store';
 import ListItem from './ListItem';
-import { ListItemProps } from '../store/StoreTypes';
-import getEnvVars from '../../environment';
+import { ListItemProps } from '../../store/StoreTypes';
+import getEnvVars from '../../../environment';
 
 const styles = StyleSheet.create({
     container: {
@@ -28,9 +28,7 @@ const List = () => {
     const route = useRoute<ProfileScreenRouteProp>();
 
     useEffect(() => {
-        setIsLoading(true);
-
-        if (state.authentication.token)
+        if (state.selectedList)
             fetch(
                 `${getEnvVars.apiUrl}list-items/list_items_by_list/?list=${state.selectedList}`,
                 {
@@ -70,7 +68,7 @@ const List = () => {
                 renderItem={({ item }: { item: ListItemProps }) => (
                     <ListItem item={item} />
                 )}
-                keyExtractor={item => item.name}
+                keyExtractor={item => item.id.toString()}
             />
         </View>
     );

@@ -78,6 +78,17 @@ class GroupViewSet(viewsets.ModelViewSet):
         return Response({'status': 'Added to group'})
 
     @action(detail=True, methods=['post'])
+    def remove_current_user_from_group(self, request, pk):
+        """
+        Leave group. The currrently logged in user is removed from the group.
+        """
+        group = self.get_object()
+        user = request.user
+        user.groups.remove(group)
+        user.save()
+        return Response({'status': 'Removed from group'})
+
+    @action(detail=True, methods=['post'])
     def invite_user_to_group(self, request, pk):
         """
         Invite a user to the group. The user's username needs to be posted.
