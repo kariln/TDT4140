@@ -5,6 +5,9 @@ import { createStackNavigator } from '@react-navigation/stack';
 import ListOverview from '../components/listOverview/ListOverview';
 import HamburgerButton from '../components/HamburgerButton';
 
+import GroupOptions from '../components/groups/GroupOptions';
+import GroupInvitation from '../components/groups/GroupInvitation';
+
 const Stack = createStackNavigator();
 
 // if we want to hide the header from the stack navigator, use this as prop in stack.navigator ------>   headerMode="none"
@@ -15,7 +18,15 @@ const SubStack = () => {
                 name="lists"
                 component={ListOverview}
                 options={{
-                    headerLeft: () => <HamburgerButton />
+                    headerLeft: () => <HamburgerButton />,
+                    headerRight: () => <GroupOptions />
+                }}
+            />
+            <Stack.Screen
+                name="invite"
+                component={GroupInvitation}
+                options={{
+                    headerTitle: 'Invite user'
                 }}
             />
         </Stack.Navigator>
