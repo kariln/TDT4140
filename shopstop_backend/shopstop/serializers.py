@@ -36,7 +36,9 @@ class ListItemSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         instance.name = validated_data.get('name', instance.name)
-        instance.group = validated_data.get('quantity', instance.quantity)
+        instance.quantity = validated_data.get('quantity', instance.quantity)
+        instance.bought = validated_data.get('bought', instance.bought)
+        instance.list = validated_data.get('list', instance.list)
         instance.save()
         return instance
 
