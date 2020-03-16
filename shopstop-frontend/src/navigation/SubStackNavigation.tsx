@@ -18,7 +18,6 @@ const SubStack = () => {
                 name="lists"
                 component={ListOverview}
                 options={{
-                    headerTitle: 'Handlelistene mine',
                     headerLeft: () => <HamburgerButton />,
                     headerRight: () => <GroupOptions />
                 }}
