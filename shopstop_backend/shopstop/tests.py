@@ -157,10 +157,3 @@ class GroupViewSetTest(TestCase):
         self.assertTrue(self.user2.has_perm("auth.change_group", self.user_group2))
         self.assertTrue(self.user2.has_perm("auth.add_group", self.user_group2))
         self.assertTrue(self.user2.has_perm("auth.delete_group", self.user_group2))
-
-    def test_user_permissions(self):
-        self.user = User.objects.create_user(
-            username="test", email="test@shopstop.xyz", password="test1234"
-        )
-        force_authenticate(request, self.user)
-        self.assertFalse(user.has_perm("shopstop.can_view_list_item"))
