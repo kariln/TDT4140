@@ -1,6 +1,6 @@
 from django.contrib.auth.models import Group, User
 from django.shortcuts import get_object_or_404
-from guardian.shortcuts import assign_perm
+from guardian.shortcuts import assign_perm, remove_perm
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import DjangoModelPermissions
@@ -66,10 +66,44 @@ class GroupViewSet(viewsets.ModelViewSet):
         """
         return Response(self.get_serializer(request.user.groups, many=True).data)
 
+    @action(detail=False, methods=['get'])
+    def current_invited_user_groups(self, request):
+        """
+            List all the groups the currently invited user has been invited to.
+        """
+        groups = Group.objects.exclude(id__in=request.user.groups.all().values_list('id', flat=True))
+        result = []
+        user = request.user
+        # Not the best practice, but it works
+        for group in groups.all():
+            if user.has_perm('view_group', group):
+                result.append(group)
+
+        return Response(self.get_serializer(result, many=True).data)
+
+    @action(detail=True, methods=['post'])
+    def decline_group_invitation(self, request, pk):
+        """
+            Decline the invitation to selected group
+        """
+        user = request.user
+        group = self.get_object()
+
+        if user.has_perm('view_group', group):
+            remove_perm('view_group', user, group)
+        if user.has_perm('change_group', group):
+            remove_perm('change_group', user, group)
+        if user.has_perm('delete_group', group):
+            remove_perm('delete_group', user, group)
+        if user.has_perm('add _group', group):
+            remove_perm('add_group', user, group)
+        user.save()
+        return Response({'status': 'Invitation declined'})
+
     @action(detail=True, methods=['post'])
     def add_current_user_to_group(self, request, pk):
         """
-        Join the group. The joining user needs to be invited by someone already in the group.
+            Join the group. The joining user needs to be invited by someone already in the group.
         """
         group = self.get_object()
         user = request.user
