@@ -6,7 +6,6 @@ from rest_framework.decorators import action
 from rest_framework.permissions import DjangoModelPermissions, AllowAny, IsAdminUser
 from rest_framework.response import Response
 from rest_framework_guardian import filters
-from django.db.models import Q
 
 from .models import List, ListItem
 from .permissions import CustomObjectPermissions
@@ -100,12 +99,12 @@ class GroupViewSet(viewsets.ModelViewSet):
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    
-    
+
     def get_permissions(self):
-            permission_classes = []
-            if self.action == 'create':
-                permission_classes = [AllowAny]
-            else:
-                permission_classes = [IsAdminUser]
-            return [permission() for permission in permission_classes]
+                permission_classes = []
+                if self.action == 'create':
+                    permission_classes = [AllowAny]
+                else:
+                    permission_classes = [IsAdminUser]
+                return [permission() for permission in permission_classes]
+
