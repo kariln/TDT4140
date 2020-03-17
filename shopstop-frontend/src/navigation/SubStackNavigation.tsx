@@ -2,7 +2,11 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 
 // imports of our own components
-import ListOverview from '../screens/ListOverviewScreen';
+import ListOverview from '../components/listOverview/ListOverview';
+import HamburgerButton from '../components/HamburgerButton';
+
+import GroupOptions from '../components/groups/GroupOptions';
+import GroupInvitation from '../components/groups/GroupInvitation';
 
 const Stack = createStackNavigator();
 
@@ -13,7 +17,17 @@ const SubStack = () => {
             <Stack.Screen
                 name="lists"
                 component={ListOverview}
-                options={{ title: 'Handlelistene mine' }}
+                options={{
+                    headerLeft: () => <HamburgerButton />,
+                    headerRight: () => <GroupOptions />
+                }}
+            />
+            <Stack.Screen
+                name="invite"
+                component={GroupInvitation}
+                options={{
+                    headerTitle: 'Invite user'
+                }}
             />
         </Stack.Navigator>
     );

@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Icon } from 'react-native-elements';
 import {
@@ -8,9 +8,9 @@ import {
     MenuOption,
     MenuTrigger
 } from 'react-native-popup-menu';
-import { ListProps } from '../store/StoreTypes';
-import { Context } from '../store/Store';
-import getEnvVars from '../../environment';
+import { ListProps } from '../../store/StoreTypes';
+import { Context } from '../../store/Store';
+import getEnvVars from '../../../environment';
 
 const styles = StyleSheet.create({
     itemLeft: {
@@ -24,7 +24,9 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         marginVertical: 8,
-        padding: 20
+        padding: 10,
+        paddingLeft: 20,
+        alignItems: 'center'
     }
 });
 
@@ -50,9 +52,24 @@ const Item: React.FC<ListOverviewItemProp> = props => {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Token ${state.token}`
+                Authorization: `Token ${state.authentication.token}`
             }
         });
+    };
+
+    const confirmationAlert = () => {
+        Alert.alert(
+            'Are you sure you want to delete the shopping list?',
+            'It will be deleted for all users, and the items will be gone forever',
+            [
+                {
+                    text: 'Cancel',
+                    style: 'cancel'
+                },
+                { text: 'OK', onPress: deleteListItem }
+            ],
+            { cancelable: true }
+        );
     };
 
     return (
@@ -69,16 +86,18 @@ const Item: React.FC<ListOverviewItemProp> = props => {
             <Text style={styles.itemLeft}>{name}</Text>
             <Menu>
                 <MenuTrigger>
-                    <Icon name="more-vert" type="material" />
+                    <View style={{ padding: 15 }}>
+                        <Icon name="more-vert" type="material" />
+                    </View>
                 </MenuTrigger>
                 <MenuOptions optionsContainerStyle={{ marginTop: 30 }}>
                     <MenuOption
                         onSelect={() =>
                             dispatch({
-                                type: 'TOGGLE_LISTOVERLAY',
+                                type: 'TOGGLE_OVERLAY',
                                 payload: {
                                     visible: true,
-                                    type: 'change',
+                                    type: 'EDIT_LIST',
                                     id
                                 }
                             })
@@ -87,7 +106,7 @@ const Item: React.FC<ListOverviewItemProp> = props => {
                         customStyles={{ optionWrapper: { padding: 20 } }}
                     />
                     <MenuOption
-                        onSelect={deleteListItem}
+                        onSelect={confirmationAlert}
                         text="Delete"
                         customStyles={{ optionWrapper: { padding: 20 } }}
                     />

@@ -12,6 +12,8 @@ web-build/
 web-report/
 yarn-error.log
 
+package-lock.json
+
 .coverage
 
 # macOS
@@ -31,4 +33,3 @@ venv/
 __pycache__
 db.sqlite3
 media
-
