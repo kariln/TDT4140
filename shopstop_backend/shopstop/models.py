@@ -30,15 +30,17 @@ class List(models.Model):
         return self.name
 
     def setup_group_permissions(self):
-        assign_perm('view_list', self.group, self)
-        assign_perm('change_list', self.group, self)
-        assign_perm('add_list', self.group, self)
-        assign_perm('delete_list', self.group, self)
+        assign_perm("view_list", self.group, self)
+        assign_perm("change_list", self.group, self)
+        assign_perm("add_list", self.group, self)
+        assign_perm("delete_list", self.group, self)
 
 
 class ListItem(models.Model):
     name = models.CharField(max_length=100, verbose_name="Name of the item")
-    quantity = models.IntegerField(verbose_name="How many of the item to get", default=1)
+    quantity = models.IntegerField(
+        verbose_name="How many of the item to get", default=1
+    )
     time_added = models.DateField(editable=False)
     bought = models.BooleanField(verbose_name="Item has been bought", default=False)
     list = models.ForeignKey(List, on_delete=models.CASCADE)
@@ -60,7 +62,7 @@ class ListItem(models.Model):
         return self.name
 
     def setup_group_permissions(self):
-        assign_perm('view_listitem', self.list.group, self)
-        assign_perm('change_listitem', self.list.group, self)
-        assign_perm('add_listitem', self.list.group, self)
-        assign_perm('delete_listitem', self.list.group, self)
+        assign_perm("view_listitem", self.list.group, self)
+        assign_perm("change_listitem", self.list.group, self)
+        assign_perm("add_listitem", self.list.group, self)
+        assign_perm("delete_listitem", self.list.group, self)
