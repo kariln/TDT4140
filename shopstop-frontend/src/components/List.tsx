@@ -1,11 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import {
-    StyleSheet,
-    View,
-    FlatList,
-    Text,
-    KeyboardAvoidingView
-} from 'react-native';
+import { StyleSheet, FlatList, Text, KeyboardAvoidingView } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { Context } from '../store/Store';
 import ListItem from './ListItem';
@@ -18,7 +12,13 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#fff',
         flex: 1,
+        justifyContent: 'flex-end',
+        marginBottom: '-9%',
         paddingTop: '20%'
+    },
+    text: {
+        flex: 1,
+        marginTop: 1
     }
 });
 
@@ -66,13 +66,23 @@ const List = () => {
     if (isLoading) return <></>; // can have a loading icon or something here if we want.
     if (state.listItems.length === 0)
         return (
-            <View style={styles.container}>
-                <Text>Du har ingen varer i handlelisten din</Text>
+            <KeyboardAvoidingView
+                style={styles.container}
+                behavior="padding"
+                keyboardVerticalOffset={50}
+            >
+                <Text style={styles.text}>
+                    Du har ingen varer i handlelisten din
+                </Text>
                 <TextField />
-            </View>
+            </KeyboardAvoidingView>
         );
     return (
-        <KeyboardAvoidingView style={styles.container} behavior="padding">
+        <KeyboardAvoidingView
+            style={styles.container}
+            behavior="padding"
+            keyboardVerticalOffset={50}
+        >
             <FlatList
                 data={state.listItems}
                 renderItem={({ item }: { item: ListItemProps }) => (

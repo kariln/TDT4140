@@ -14,11 +14,11 @@ const styles = StyleSheet.create({
     input: {
         alignSelf: 'center',
         backgroundColor: '#ffffff',
-        borderColor: '#4F97A3',
+        borderColor: 'lightblue',
         borderRadius: 6,
         borderWidth: 3,
         color: '#555555',
-        height: '95%',
+        height: '80%',
         paddingLeft: 10,
         paddingRight: 10,
         paddingTop: 3,
@@ -26,10 +26,10 @@ const styles = StyleSheet.create({
     },
     inputContainer: {
         alignItems: 'center',
-        backgroundColor: '#4F97A3',
+        backgroundColor: 'lightblue',
         flexDirection: 'row',
-        height: 50,
-        justifyContent: 'space-around'
+        height: 75,
+        justifyContent: 'center'
     },
 
     sendContainer: {
@@ -42,7 +42,8 @@ const styles = StyleSheet.create({
     },
     textContainer: {
         flex: 1,
-        justifyContent: 'center'
+        justifyContent: 'flex-start',
+        top: 3
     }
 });
 
@@ -59,7 +60,7 @@ const TextField = () => {
             },
             body: JSON.stringify({
                 name: saveData,
-                quantity: 2,
+                quantity: 1,
                 bougth: false,
                 list: state.selectedList
             })
@@ -70,7 +71,7 @@ const TextField = () => {
                     type: 'ADD_LISTITEM',
                     payload: {
                         name: saveData,
-                        quantity: 2,
+                        quantity: 1,
                         bougth: false,
                         list: state.selectedList
                     }
@@ -80,27 +81,25 @@ const TextField = () => {
     };
 
     return (
-        <>
-            <View style={styles.inputContainer}>
-                <View style={styles.textContainer}>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Type here"
-                        onChangeText={text => setSaveData(text)}
-                        clearButtonMode="always"
-                        value={saveData}
-                    />
-                </View>
-                <View style={styles.sendContainer}>
-                    <TouchableHighlight
-                        underlayColor="#4e4273"
-                        onPress={() => addListItem()}
-                    >
-                        <Text style={styles.sendLabel}>Add</Text>
-                    </TouchableHighlight>
-                </View>
+        <View style={styles.inputContainer}>
+            <View style={styles.textContainer}>
+                <TextInput
+                    style={styles.input}
+                    placeholder="Type here"
+                    onChangeText={text => setSaveData(text)}
+                    clearButtonMode="always"
+                    value={saveData}
+                />
             </View>
-        </>
+            <View style={styles.sendContainer}>
+                <TouchableHighlight
+                    underlayColor="#4e4273"
+                    onPress={() => addListItem()}
+                >
+                    <Text style={styles.sendLabel}>Add</Text>
+                </TouchableHighlight>
+            </View>
+        </View>
     );
 };
 
