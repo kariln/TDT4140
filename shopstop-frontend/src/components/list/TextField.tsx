@@ -7,8 +7,8 @@ import {
     TouchableHighlight,
     Dimensions
 } from 'react-native';
-import getEnvVars from '../../environment';
-import { Context } from '../store/Store';
+import getEnvVars from '../../../environment';
+import { Context } from '../../store/Store';
 
 const styles = StyleSheet.create({
     input: {

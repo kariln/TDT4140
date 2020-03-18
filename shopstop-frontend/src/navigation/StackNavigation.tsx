@@ -5,11 +5,11 @@ import * as SecureStore from 'expo-secure-store';
 import { Context } from '../store/Store';
 
 // imports of our own components
-import List from '../components/List';
+import List from '../components/list/List';
 import MyDrawer from './DrawerNavigation';
 import Splash from '../components/SplashScreen';
-import SignIn from '../components/SignIn';
-import SignUp from '../components/Signup';
+import SignIn from '../components/login/SignIn';
+import SignUp from '../components/login/Signup';
 
 const Stack = createStackNavigator();
 

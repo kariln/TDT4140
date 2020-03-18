@@ -6,6 +6,7 @@ import { MenuProvider } from 'react-native-popup-menu';
 // imports of our own components
 import Store from './src/store/Store';
 import MainStack from './src/navigation/StackNavigation';
+import Overlay from './src/components/overlay';
 
 const App = () => {
     // The code below lets us preload the images while still having the splash screen, so we don't have white screens etc while images are loading.
@@ -32,7 +33,10 @@ const App = () => {
     return (
         <MenuProvider>
             <Store>
-                <MainStack />
+                <>
+                    <MainStack />
+                    <Overlay />
+                </>
             </Store>
         </MenuProvider>
     );
