@@ -56,7 +56,7 @@ const TextField = () => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Token ${state.token}`
+                Authorization: `Token ${state.authentication.token}`
             },
             body: JSON.stringify({
                 name: saveData,
