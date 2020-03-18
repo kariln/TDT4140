@@ -1,55 +1,97 @@
 import React from 'react';
-import { StyleSheet, View, FlatList, Text, Button, TextInput } from 'react-native';
+import { StyleSheet, Image, View, FlatList, Text, Button, TextInput } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import PropTypes from 'prop-types';
+import getEnvVars from '../../environment';
+
 
 const styles = StyleSheet.create({
-    listContainer: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        paddingTop: '20%'
-    },
-    regContainer: {
-        flex: 1,
-        backgroundColor: '#CC0066',
-        alignItems: 'center',
-        paddingTop: '20%',
-        height: 20,
-        width: "80%"
-    },
-    textInputContainer: {
+  container: {
+      alignItems: 'center',
+      backgroundColor: 'white',
       flex: 1,
-      height: 20,
-      borderColor: 'gray',
-      borderWidth: 1,
-      width: "80%",
-      paddingTop: '20%',
-      paddingBottom: '20%'
-    }
+      paddingTop: '18%'
+  },
+    image: {
+        height: '30%',
+        marginBottom: 20,
+        resizeMode: 'stretch',
+        width: '50%'
+    },
+    input: {
+        backgroundColor: '#fafafa',
+        borderColor: 'gray',
+        borderRadius: 4,
+        borderWidth: 0.1,
+        height: 40,
+        marginTop: 10,
+        paddingLeft: 10,
+        width: '80%'
+    },
+    registerError: {
+        padding: 10
+    },
 });
 
 const RegUser = () => {
-  const [value, onChangeText] = React.useState('Brukernavn:');
+  const [username, setUsername] = React.useState();
+  const [password, setPassword] = React.useState();
+  const [password2,checkPassword] = React.useState();
+  const [registerError,setRegisterError] = React.useState('');
+
+  const register = () => {
+      fetch(`${getEnvVars.apiUrl}users/`,
+        {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          data: {username: username, password: password}
+        })
+        .then(response => console.log(response.status))
+        .catch(e => console.log(e));
+  }
+
     return (
-      <View style={styles.listContainer}>
+      <View style={styles.container}>
+      <Image
+          source={require('../../assets/Shopstop.png')}
+          style={styles.image}
+      />
       <TextInput
-        style={styles.textInputContainer}
-        onChangeText={text => onChangeText(text)}
-        value={value}
+        style={styles.input}
+        onChangeText={text => setUsername(text)}
+        placeholder="username"
+        value={username}
         />
-        <View style = {styles.regContainer}>
+        <TextInput
+          style={styles.input}
+          onChangeText={text => setPassword(text)}
+          placeholder="password"
+          value={password}
+          secureTextEntry
+          />
+          <TextInput
+            style={styles.input}
+            onChangeText={text => checkPassword(text)}
+            placeholder="password2"
+            value={password2}
+            secureTextEntry
+            />
+            <View style={styles.registerError}>
+                <Text style={{ color: 'red' }}>{registerError}</Text>
+            </View>
           <Button
-          onPress={() => {
-            alert('Bruker opprettet!');
-          }}
+          onPress={register}
           title="Opprett bruker"
-          color = "white"
+          disabled={username === '' || password === '' || password != password2 || password2 === ''}
+          buttonStyle={{
+              padding: 10,
+              paddingLeft: '35%',
+              paddingRight: '35%'
+          }}
           />
         </View>
-
-      </View>
-
 
     );
   }

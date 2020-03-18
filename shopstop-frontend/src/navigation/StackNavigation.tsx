@@ -11,6 +11,7 @@ import RegUser from '../screens/RegisterScreen';
 import Splash from '../components/SplashScreen';
 import SignIn from '../components/SignIn';
 import SignUp from '../components/Signup';
+import RegisterOverview from '../components/RegisterOverview';
 
 
 const Stack = createStackNavigator();
@@ -41,13 +42,6 @@ const MainStack = () => {
     return (
         <NavigationContainer>
             <Stack.Navigator headerMode="screen">
-                <Stack.Screen
-                    name="drawer"
-                    component={MyDrawer}
-                    options={{ headerShown: false }}
-                />
-                <Stack.Screen name="list" component={SingleList} />
-                <Stack.Screen name="Registrer bruker" component={RegUser} />
                 {state.authentication.token === null ? (
                     <>
                         <Stack.Screen
@@ -61,7 +55,13 @@ const MainStack = () => {
                                     : 'push'
                             }}
                         />
-                        <Stack.Screen name="signup" component={SignUp} />
+                        <Stack.Screen
+                        name="register"
+                        component={RegUser}
+                        options={{
+                            headerShown: false
+                        }}
+                        />
                     </>
                 ) : (
                     <>

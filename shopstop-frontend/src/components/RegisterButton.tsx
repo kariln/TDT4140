@@ -20,7 +20,7 @@ const RegisterUser = () => {
   return(
     <View style = {styles.regContainer}>
       <Button
-      onPress={() => navigation.navigate('Registrer bruker')
+      onPress={() => navigation.navigate('register')
       }
       title= "Opprett bruker"
       color = "black"

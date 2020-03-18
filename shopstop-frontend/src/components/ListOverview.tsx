@@ -55,7 +55,6 @@ const Lists = () => {
             />
             <AddListButton />
             {state.listOverlay.visible && <ListOverlay />}
-            <RegisterUser />
         </View>
     );
 };
