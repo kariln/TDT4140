@@ -4,7 +4,8 @@ import {
     View,
     FlatList,
     Text,
-    KeyboardAvoidingView
+    KeyboardAvoidingView,
+    Platform
 } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
@@ -14,19 +15,17 @@ import { ListItemProps } from '../../store/StoreTypes';
 import ListItem from './ListItem';
 import ListEditOverlay from '../overlay/ListEditOverlay';
 import TextField from './TextField';
+import { useHeaderHeight } from '@react-navigation/stack';
 
 const styles = StyleSheet.create({
     container: {
-        alignItems: 'center',
         backgroundColor: '#fff',
         flex: 1,
-        justifyContent: 'flex-end',
-        marginBottom: '-9%',
-        paddingTop: '5%'
+        justifyContent: 'space-between'
     },
     text: {
-        flex: 1,
-        marginTop: 1
+        alignSelf: 'center',
+        paddingTop: '5%'
     }
 });
 
@@ -41,6 +40,7 @@ const List = () => {
     const [isLoading, setIsLoading] = useState(true);
     const navigation = useNavigation();
     const route = useRoute<ProfileScreenRouteProp>();
+    const headerHeight = useHeaderHeight();
 
     // variable to open or close the modal
     const [modalState, setModalState] = useState(false);
@@ -157,11 +157,11 @@ const List = () => {
         return (
             <KeyboardAvoidingView
                 style={styles.container}
-                behavior="padding"
-                keyboardVerticalOffset={50}
+                behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
+                keyboardVerticalOffset={headerHeight}
             >
                 <Text style={styles.text}>
-                    Du har ingen varer i handlelisten din
+                    There are no items in the shopping list.
                 </Text>
                 <TextField />
             </KeyboardAvoidingView>
@@ -169,8 +169,8 @@ const List = () => {
     return (
         <KeyboardAvoidingView
             style={styles.container}
-            behavior="padding"
-            keyboardVerticalOffset={50}
+            behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
+            keyboardVerticalOffset={headerHeight}
         >
             <View
                 style={{

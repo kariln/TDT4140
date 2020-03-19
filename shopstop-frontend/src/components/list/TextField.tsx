@@ -16,24 +16,18 @@ const styles = StyleSheet.create({
         backgroundColor: '#ffffff',
         borderColor: 'lightblue',
         borderRadius: 6,
-        borderWidth: 3,
+        paddingLeft: 8,
         color: '#555555',
         height: '80%',
-        paddingLeft: 10,
-        paddingRight: 10,
-        paddingTop: 3,
         width: Dimensions.get('window').width - 70
     },
     inputContainer: {
         alignItems: 'center',
         backgroundColor: 'lightblue',
         flexDirection: 'row',
-        height: 75,
-        justifyContent: 'center'
+        height: 75
     },
-
     sendContainer: {
-        justifyContent: 'flex-end',
         paddingRight: 10
     },
     sendLabel: {
@@ -41,9 +35,7 @@ const styles = StyleSheet.create({
         fontSize: 15
     },
     textContainer: {
-        flex: 1,
-        justifyContent: 'flex-start',
-        top: 3
+        flex: 1
     }
 });
 
@@ -69,12 +61,7 @@ const TextField = () => {
             .then(data =>
                 dispatch({
                     type: 'ADD_LISTITEM',
-                    payload: {
-                        name: saveData,
-                        quantity: 1,
-                        bougth: false,
-                        list: state.selectedList
-                    }
+                    payload: data
                 })
             );
         setSaveData('');
@@ -85,7 +72,7 @@ const TextField = () => {
             <View style={styles.textContainer}>
                 <TextInput
                     style={styles.input}
-                    placeholder="Type here"
+                    placeholder="Milk..."
                     onChangeText={text => setSaveData(text)}
                     clearButtonMode="always"
                     value={saveData}
