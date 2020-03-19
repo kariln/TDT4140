@@ -1,6 +1,6 @@
 from django.contrib.auth.models import Group, User
 from django.shortcuts import get_object_or_404
-from guardian.shortcuts import assign_perm, remove_perm
+from guardian.shortcuts import assign_perm
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import DjangoModelPermissions, AllowAny, IsAdminUser
