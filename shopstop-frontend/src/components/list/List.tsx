@@ -9,13 +9,13 @@ import {
 } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
+import { useHeaderHeight } from '@react-navigation/stack';
 import getEnvVars from '../../../environment';
 import { Context } from '../../store/Store';
 import { ListItemProps } from '../../store/StoreTypes';
 import ListItem from './ListItem';
 import ListEditOverlay from '../overlay/ListEditOverlay';
 import TextField from './TextField';
-import { useHeaderHeight } from '@react-navigation/stack';
 
 const styles = StyleSheet.create({
     container: {
@@ -157,7 +157,7 @@ const List = () => {
         return (
             <KeyboardAvoidingView
                 style={styles.container}
-                behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
+                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
                 keyboardVerticalOffset={headerHeight}
             >
                 <Text style={styles.text}>
@@ -169,7 +169,7 @@ const List = () => {
     return (
         <KeyboardAvoidingView
             style={styles.container}
-            behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             keyboardVerticalOffset={headerHeight}
         >
             <View

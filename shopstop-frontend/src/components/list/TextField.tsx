@@ -16,9 +16,9 @@ const styles = StyleSheet.create({
         backgroundColor: '#ffffff',
         borderColor: 'lightblue',
         borderRadius: 6,
-        paddingLeft: 8,
         color: '#555555',
         height: '80%',
+        paddingLeft: 8,
         width: Dimensions.get('window').width - 70
     },
     inputContainer: {
