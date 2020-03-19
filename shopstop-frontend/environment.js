@@ -2,7 +2,7 @@ import Constants from 'expo-constants';
 
 const ENV = {
     dev: {
-        apiUrl: 'https://staging.shopstop.xyz/'
+        apiUrl: 'http://192.168.10.167:8000/' // change this to the ip of your machine, and run python manage.py ipofyourmachine:8000, or use staging
     },
     staging: {
         apiUrl: 'https://staging.shopstop.xyz/'

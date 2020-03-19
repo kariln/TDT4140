@@ -1,6 +1,6 @@
 from django.contrib.auth.models import Group, User
 from django.shortcuts import get_object_or_404
-from guardian.shortcuts import assign_perm
+from guardian.shortcuts import assign_perm, remove_perm
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import DjangoModelPermissions, AllowAny, IsAdminUser
@@ -74,7 +74,7 @@ class GroupViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=["post"])
     def add_current_user_to_group(self, request, pk):
         """
-        Join the group. The joining user needs to be invited by someone already in the group.
+            Join the group. The joining user needs to be invited by someone already in the group.
         """
         group = self.get_object()
         user = request.user

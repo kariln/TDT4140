@@ -1,18 +1,31 @@
 export interface StateProps {
     lists: ListProps[];
     listItems: ListItemProps[];
-    token: string | null;
+    groups: GroupProps[];
+    authentication: AuthenticationProps;
     selectedGroup: number | null;
     selectedList: number | null;
-    listOverlay: ListOverlayProps;
+    username: string | null;
+    overlay: OverlayProps;
     [key: string]: any;
     [Symbol.iterator](): IterableIterator<any>;
 }
 
-export interface ListOverlayProps {
+export interface GroupProps {
+    name: string;
+    id: number;
+}
+
+export interface AuthenticationProps {
+    isLoading: boolean;
+    isSignout: boolean;
+    token: null | string;
+}
+
+export interface OverlayProps {
     visible: boolean;
     type: string;
-    id: number | null;
+    id?: number | null;
 }
 
 export interface ListProps {

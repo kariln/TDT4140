@@ -8,13 +8,21 @@ export const initialOverlayState = {
     id: null
 };
 
+export const initialAuthenticationState = {
+    isLoading: true,
+    isSignout: false,
+    token: null
+};
+
 const initialState: StateProps = {
     lists: [],
     listItems: [],
-    token: null,
-    listOverlay: initialOverlayState,
+    groups: [],
+    authentication: initialAuthenticationState,
+    overlay: initialOverlayState,
+    username: null,
     selectedList: null,
-    selectedGroup: 1,
+    selectedGroup: null,
 
     // This is only here because typescript wanted it
     *[Symbol.iterator]() {
