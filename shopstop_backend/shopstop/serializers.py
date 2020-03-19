@@ -1,69 +1,95 @@
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import Group, User, Permission
+from django.db.models import Q
 from guardian.shortcuts import assign_perm
 from rest_framework import serializers
+from rest_framework.validators import UniqueValidator
 
 from .models import List, ListItem
+from django.contrib.contenttypes.models import ContentType
 
 
 class ListSerializer(serializers.ModelSerializer):
     class Meta:
         model = List
-        read_only_fields = ['created_at', 'modified_at']
+        read_only_fields = ["created_at", "modified_at"]
         fields = [
-            'id',
-            'name',
-            'group',
+            "id",
+            "name",
+            "group",
         ]
-        read_only_fields = [
-            'modified_at',
-            'created_at'
-        ]
+        read_only_fields = ["modified_at", "created_at"]
 
     def create(self, validated_data):
         return List.objects.create(**validated_data)
 
     def update(self, instance, validated_data):
-        instance.name = validated_data.get('name', instance.name)
-        instance.group = validated_data.get('group', instance.group)
+        instance.name = validated_data.get("name", instance.name)
+        instance.group = validated_data.get("group", instance.group)
         instance.save()
         return instance
 
 
 class ListItemSerializer(serializers.ModelSerializer):
-
     def create(self, validated_data):
         return ListItem.objects.create(**validated_data)
 
     def update(self, instance, validated_data):
-        instance.name = validated_data.get('name', instance.name)
-        instance.quantity = validated_data.get('quantity', instance.quantity)
-        instance.bought = validated_data.get('bought', instance.bought)
-        instance.list = validated_data.get('list', instance.list)
+        instance.name = validated_data.get("name", instance.name)
+        instance.group = validated_data.get("quantity", instance.quantity)
         instance.save()
         return instance
 
     class Meta:
         model = ListItem
-        fields = ['id', 'name', 'quantity', 'bought', 'list']
+        fields = ["id", "name", "quantity", "bought", "list"]
 
 
 class GroupSerializer(serializers.ModelSerializer):
-
     def create(self, validated_data):
         group = Group.objects.create(**validated_data)
-        assign_perm('view_group', self.context['user'], group)
-        assign_perm('change_group', self.context['user'], group)
-        assign_perm('add_group', self.context['user'], group)
-        assign_perm('delete_group', self.context['user'], group)
-        self.context['user'].groups.add(group)
-        self.context['user'].save()
+        assign_perm("view_group", self.context["user"], group)
+        assign_perm("change_group", self.context["user"], group)
+        assign_perm("add_group", self.context["user"], group)
+        assign_perm("delete_group", self.context["user"], group)
         return group
 
     def update(self, instance, validated_data):
-        instance.name = validated_data.get('name', instance.name)
+        instance.name = validated_data.get("name", instance.name)
         instance.save()
         return instance
 
     class Meta:
         model = Group
-        fields = ['id', 'name']
+        fields = ["id", "name"]
+
+
+class UserSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(
+        required=True, validators=[UniqueValidator(queryset=User.objects.all())]
+    )
+    username = serializers.CharField(
+        validators=[UniqueValidator(queryset=User.objects.all())]
+    )
+    password = serializers.CharField(min_length=7)
+
+    def create(self, validated_data):
+        user = User.objects.create_user(
+            validated_data["username"],
+            validated_data["email"],
+            validated_data["password"],
+        )
+
+        permissions = Permission.objects.filter(
+            Q(content_type=ContentType.objects.get_for_model(List))
+            | Q(content_type=ContentType.objects.get_for_model(ListItem))
+            | Q(content_type=ContentType.objects.get_for_model(Group))
+        )
+
+        for perm in permissions:
+            user.user_permissions.add(perm)
+        user.save()
+        return user
+
+    class Meta:
+        model = User
+        fields = ("id", "username", "email", "password")
