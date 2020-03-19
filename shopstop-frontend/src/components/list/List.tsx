@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { StyleSheet, View, FlatList, Text } from 'react-native';
+import { StyleSheet, View, FlatList, Text, TouchableOpacity } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import getEnvVars from '../../../environment';
@@ -7,6 +7,7 @@ import { Context } from '../../store/Store';
 import { ListItemProps } from '../../store/StoreTypes';
 import ListItem from './ListItem';
 import ListEditOverlay from '../overlay/ListEditOverlay';
+import ConfirmDeleteItem from '../overlay/ConfirmDeleteItem';
 
 const styles = StyleSheet.create({
     container: {
@@ -30,7 +31,11 @@ const List = () => {
     const route = useRoute<ProfileScreenRouteProp>();
 
     // variable to open or close the modal
-    const [modalState, setModalState] = useState(false);
+    const [editModalState, setEditModalState] = useState(false);
+    const [deleteModalState, setDeleteModalState] = useState(false);
+
+    const [markedForDelete, setMarkedForDelete] = useState([]);
+    const [deleteMode, setDeleteMode] = useState(false)
 
     // variable to hold the selected item
     const [selectedItem, updateSelectedItem] = useState({
@@ -41,8 +46,12 @@ const List = () => {
         list: 0
     });
 
+
+
     // function to change/update the value of an item in a list
     const changeListItem = (editedItem: ListItemProps) => {
+        console.log("Editing item")
+        console.log(editedItem)
         dispatch({
             type: 'EDIT_LISTITEM',
             payload: {
@@ -71,15 +80,15 @@ const List = () => {
     };
 
     // Function to delete an item in a list
-    const deleteListItem = (item: ListItemProps) => {
+    const deleteListItem = (id: Number) => {
         dispatch({
             type: 'REMOVE_LISTITEM',
             payload: {
-                id: item.id
+                id: id
             }
         });
 
-        fetch(`${getEnvVars.apiUrl}list-items/${item.id}/`, {
+        fetch(`${getEnvVars.apiUrl}list-items/${id}/`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -91,14 +100,49 @@ const List = () => {
     function openEditModal(item: ListItemProps) {
         if (item !== undefined) {
             updateSelectedItem(item);
-            setModalState(true);
+            setEditModalState(true);
         } else {
             console.log('Attempted to open an item that does not exist');
         }
     }
 
     function closeEditModal() {
-        setModalState(false);
+        setEditModalState(false);
+    }
+
+    function closeDeleteModal() {
+        console.log("Delete closed")
+        setDeleteModalState(false);
+        setDeleteMode(false)
+    }
+
+    function closeDeleteModalAndDelete() {
+        console.log("Delete all")
+        setDeleteModalState(false);
+        setDeleteMode(false)
+    }
+
+    function selectForDelete( id: Number ){
+        if (markedForDelete.indexOf(id) > -1){ // If the item is in the markedForDelete
+            setMarkedForDelete(markedForDelete.filter(function(value, index, arr){ return value !== id}))
+        } else {
+            setMarkedForDelete([...markedForDelete, id]);
+        }
+    }
+
+    function toggleDeleteMode() {
+        if (deleteMode == true) {
+            if ( markedForDelete.length >= 1){
+                setDeleteModalState(true)
+                console.log("opening modal for deleting items")
+            } else {
+                console.log("Attempted to open modal for deleting items witn 0 items")
+                setDeleteMode(false)
+            }
+        } else {
+            setDeleteMode(true)
+            console.log("Entering delete mode")
+        }
     }
 
     // This useEffect is called whenever the component mounts
@@ -153,6 +197,11 @@ const List = () => {
                     justifyContent: 'center'
                 }}
             >
+                {/*<View style={{ flex: 2 }} />
+                <Text style={{ flex: 10, fontSize: 20, paddingRight: 10 }}>
+                    Select the items to delete
+                </Text>
+                <View style={{ flex: 2 , paddingRight: 10  }} />*/}
                 <View style={{ flex: 2 }} />
                 <Text style={{ flex: 8, fontSize: 20, paddingRight: 10 }}>
                     Item
@@ -160,7 +209,14 @@ const List = () => {
                 <Text style={{ flex: 2, fontSize: 20, paddingLeft: 10 }}>
                     Qty.
                 </Text>
-                <View style={{ flex: 2 }} />
+                <View style={{ flex: 2 }}>
+                    <TouchableOpacity onPress={() => toggleDeleteMode()}>
+                        <Icon
+                            name={deleteMode === true ? 'done' : 'delete'}
+                            size={30}
+                        />
+                    </TouchableOpacity>
+                </View>
             </View>
             <FlatList
                 style={{ width: '100%', height: '100%' }}
@@ -177,16 +233,26 @@ const List = () => {
                         openEditModal={openEditModal}
                         changeListItem={changeListItem}
                         index={index}
+                        selectForDelete={selectForDelete}
+                        deleteMode={deleteMode}
+                        markedForDelete={markedForDelete.indexOf(item.id) > -1}
                     />
                 )}
                 keyExtractor={item => item.id.toString()}
             />
-            {modalState && (
+            {editModalState && (
                 <ListEditOverlay
                     closeModal={closeEditModal}
                     item={selectedItem}
                     deleteListItem={deleteListItem}
                     changeListItem={changeListItem}
+                />
+            )}
+            {deleteModalState && (
+                <ConfirmDeleteItem
+                    closeModal={closeDeleteModal}
+                    closeDeleteModalAndDelete={closeDeleteModalAndDelete}
+                    n_ids={markedForDelete.length}
                 />
             )}
         </View>

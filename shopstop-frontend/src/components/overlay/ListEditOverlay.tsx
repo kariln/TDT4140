@@ -6,7 +6,7 @@ import { ListItemProps } from '../../store/StoreTypes';
 export interface ListEditItemReq {
     item: ListItemProps;
     closeModal: (argModalState: void) => void;
-    deleteListItem?: (argDelete: ListItemProps) => void;
+    deleteListItem?: (argDelete: Number) => void;
     changeListItem: (argEdit: ListItemProps) => void;
 }
 
@@ -56,7 +56,7 @@ const ListEditOverlay: React.FC<ListEditItemReq> = props => {
 
     function closeModalAndDelete() {
         if (props.deleteListItem !== undefined) {
-            props.deleteListItem(item);
+            props.deleteListItem(item.id);
         }
         props.closeModal();
     }
