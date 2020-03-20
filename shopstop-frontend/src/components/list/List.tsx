@@ -78,9 +78,7 @@ const List = () => {
                 bought: editedItem.bought,
                 list: editedItem.list
             })
-        })
-            .then(res => res.json())
-            .then(data => console.log(data));
+        });
     };
 
     // Function to delete an item in a list
@@ -152,7 +150,8 @@ const List = () => {
                 type="material"
                 color="#4880b7"
             />
-        ); // can have a loading icon or something here if we want.
+        );
+
     if (state.listItems.length === 0)
         return (
             <KeyboardAvoidingView
@@ -166,6 +165,7 @@ const List = () => {
                 <TextField />
             </KeyboardAvoidingView>
         );
+
     return (
         <KeyboardAvoidingView
             style={styles.container}

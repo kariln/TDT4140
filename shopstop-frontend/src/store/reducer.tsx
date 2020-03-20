@@ -49,7 +49,10 @@ export const reducers = (state: StateProps, action: Action) => {
         case 'REMOVE_LIST':
             return {
                 ...state,
-                lists: state.lists.filter(data => data.id !== action.payload.id)
+                lists: state.lists.filter(
+                    data => data.id !== action.payload.id
+                ),
+                listItems: []
             };
         case 'SET_GROUPS':
             return { ...state, groups: action.payload };
@@ -63,7 +66,13 @@ export const reducers = (state: StateProps, action: Action) => {
                 ...state,
                 groups: state.groups.filter(
                     data => data.id !== action.payload.id
-                )
+                ),
+                lists: [],
+                selectedGroup: state.groups[1]
+                    ? state.groups[0].id === action.payload.id
+                        ? state.groups[1].id
+                        : state.groups[0].id
+                    : null
             };
         case 'SET_SELECTEDLIST':
             return { ...state, selectedList: action.payload };

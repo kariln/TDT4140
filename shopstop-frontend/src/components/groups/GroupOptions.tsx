@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Icon } from 'react-native-elements';
@@ -8,19 +8,20 @@ import {
     MenuOption,
     MenuTrigger
 } from 'react-native-popup-menu';
+import { Context } from '../../store/Store';
 
 const GroupOptions: React.FC = () => {
     const navigation = useNavigation();
-
+    const [state] = useContext(Context);
     const goToInviteUser = () => {
         navigation.navigate('invite');
     };
-
+    if (!state.selectedGroup) return <></>;
     return (
-        <TouchableOpacity>
+        <TouchableOpacity style={{ paddingRight: 20 }}>
             <Menu>
                 <MenuTrigger>
-                    <Icon name="more-vert" type="material" />
+                    <Icon name="person-add" type="material" />
                 </MenuTrigger>
                 <MenuOptions optionsContainerStyle={{ marginTop: 30 }}>
                     <MenuOption
