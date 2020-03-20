@@ -3,7 +3,8 @@ import {
     ListProps,
     StateProps,
     OverlayProps,
-    GroupProps
+    GroupProps,
+    ListItemTutorial
 } from './StoreTypes';
 
 export const reducers = (state: StateProps, action: Action) => {
@@ -104,6 +105,11 @@ export const reducers = (state: StateProps, action: Action) => {
                     isLoading: false
                 }
             };
+        case 'SET_TUTORIAL_LIST':
+            return {
+                ...state,
+                tutorial: action.payload
+            };
         default:
             return state;
     }
@@ -125,4 +131,5 @@ type Action =
     | { type: 'SET_GROUPS'; payload: GroupProps[] }
     | { type: 'ADD_GROUP'; payload: GroupProps }
     | { type: 'REMOVE_GROUP'; payload: GroupProps }
-    | { type: 'SET_SELECTEDGROUP'; payload: number };
+    | { type: 'SET_SELECTEDGROUP'; payload: number }
+    | { type: 'SET_TUTORIAL_LIST'; payload: ListItemTutorial };

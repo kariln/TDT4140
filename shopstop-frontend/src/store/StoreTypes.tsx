@@ -41,3 +41,10 @@ export interface ListItemProps {
     bought: boolean;
     list: number;
 }
+
+export interface ListItemTutorial {
+    deleteMode: boolean;
+    viewBoughtMode: boolean;
+    editMode: boolean;
+    toggleBought: boolean;
+}

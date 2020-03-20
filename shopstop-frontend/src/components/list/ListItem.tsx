@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { Icon } from 'react-native-elements';
+import { Icon, Tooltip } from 'react-native-elements';
 import { ListItemProps } from '../../store/StoreTypes';
+import { Context } from '../../store/Store';
 
 export interface ListItemInterface {
     item: ListItemProps;
@@ -13,6 +14,7 @@ export interface ListItemInterface {
 }
 
 const ListItemNormal: React.FC<ListItemInterface> = props => {
+    const [state, dispatch] = useContext(Context);
     function handleCheck() {
         props.changeListItem({ ...props.item, bought: !props.item.bought });
     }
@@ -32,22 +34,60 @@ const ListItemNormal: React.FC<ListItemInterface> = props => {
         >
             <View style={styles.iconStyle}>
                 <TouchableOpacity onPress={() => handleEdit()}>
-                    <Icon color="#000" name="edit" size={30} />
+                    <Tooltip
+                        backgroundColor="#00d"
+                        toggleOnPress={!state.tutorial.editMode}
+                        popover={
+                            <Text style={{color:"#fff"}}>
+                                Tap here to edit an item
+                            </Text>
+                        }
+                        onClose={
+                            () => {
+                                dispatch({
+                                    type: 'SET_TUTORIAL_LIST',
+                                    payload: {...state.tutorial, editMode:true}
+                                });
+                                handleEdit();
+                            }
+                        }
+                    >
+                        <Icon color="#000" name="edit" size={30} />
+                    </Tooltip>
                 </TouchableOpacity>
             </View>
-            <Text style={styles.textStyleName}>{props.item.name}</Text>
-            <Text style={styles.textStyleQuantity}>{props.item.quantity}</Text>
+            <Text style={ props.item.bought ? styles.textStyleNameFaded : styles.textStyleName } >{props.item.name}</Text>
+            <Text style={ props.item.bought ? styles.textStyleQuantityFaded : styles.textStyleQuantity } >{props.item.quantity}</Text>
             <View style={styles.iconStyle}>
                 <TouchableOpacity onPress={() => handleCheck()}>
-                    <Icon
-                        color="#000"
-                        name={
-                            props.item.bought
-                                ? 'check-box'
-                                : 'check-box-outline-blank'
+                    <Tooltip
+                        backgroundColor="#00d"
+                        toggleOnPress={!state.tutorial.toggleBought}
+                        popover={
+                            <Text style={{color:"#fff"}}>
+                                Tap here to mark an item as bought
+                            </Text>
                         }
-                        size={30}
-                    />
+                        onClose={
+                            () => {
+                                dispatch({
+                                    type: 'SET_TUTORIAL_LIST',
+                                    payload: {...state.tutorial, toggleBought:true}
+                                });
+                                handleCheck();
+                            }
+                        }
+                    >
+                        <Icon
+                            color="#000"
+                            name={
+                                props.item.bought
+                                    ? 'check-box'
+                                    : 'check-box-outline-blank'
+                            }
+                            size={30}
+                        />
+                    </Tooltip>
                 </TouchableOpacity>
             </View>
         </View>
@@ -68,13 +108,6 @@ const ListItemDelete: React.FC<ListItemInterface> = props => {
                     : { backgroundColor: '#f8f8f8' } // Alternating backgroundColor
             ]}
         >
-            <View style={styles.iconStyle} />
-            <Text style={props.markedForDelete ? styles.textStyleNameDelete : styles.textStyleName }>
-                {props.item.name} {props.deleteSelected ? "Delete" : ""}
-            </Text>
-            <Text style={props.markedForDelete ? styles.textStyleQuantityDelete : styles.textStyleQuantity } >
-                {props.item.quantity}
-            </Text>
             <View style={styles.iconStyle}>
                 <TouchableOpacity onPress={() => handleDelete()}>
                     <Icon
@@ -83,6 +116,23 @@ const ListItemDelete: React.FC<ListItemInterface> = props => {
                         size={30}
                     />
                 </TouchableOpacity>
+            </View>
+            <Text style={ props.markedForDelete ? styles.textStyleNameFaded : styles.textStyleName } >
+                {props.item.name} {props.deleteSelected ? "Delete" : ""}
+            </Text>
+            <Text style={ props.markedForDelete ? styles.textStyleQuantityFaded : styles.textStyleQuantity } >
+                {props.item.quantity}
+            </Text>
+            <View style={styles.iconStyle}>
+                <Icon
+                    color='#DDDDDD'
+                    name={
+                        props.item.bought
+                            ? 'check-box'
+                            : 'check-box-outline-blank'
+                    }
+                    size={30}
+                />
             </View>
         </View>
     );
@@ -112,7 +162,7 @@ const styles = StyleSheet.create({
         paddingRight: 10,
         color: "#000000"
     },
-    textStyleNameDelete: {
+    textStyleNameFaded: {
         alignSelf: 'center',
         flex: 8,
         paddingRight: 10,
@@ -124,7 +174,7 @@ const styles = StyleSheet.create({
         paddingLeft: 10,
         color: "#000000"
     },
-    textStyleQuantityDelete: {
+    textStyleQuantityFaded: {
         alignSelf: 'center',
         flex: 2,
         paddingLeft: 10,

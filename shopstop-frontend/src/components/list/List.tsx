@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { StyleSheet, View, FlatList, Text, TouchableOpacity } from 'react-native';
-import { Icon } from 'react-native-elements';
+import { Icon, Tooltip } from 'react-native-elements';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import getEnvVars from '../../../environment';
 import { Context } from '../../store/Store';
@@ -8,6 +8,9 @@ import { ListItemProps } from '../../store/StoreTypes';
 import ListItem from './ListItem';
 import ListEditOverlay from '../overlay/ListEditOverlay';
 import ConfirmDeleteItem from '../overlay/ConfirmDeleteItem';
+
+
+import { sortBy, filter } from 'lodash';
 
 const styles = StyleSheet.create({
     container: {
@@ -36,6 +39,7 @@ const List = () => {
 
     const [markedForDelete, setMarkedForDelete] = useState([]);
     const [deleteMode, setDeleteMode] = useState(false)
+    const [hideBoughtMode, setHideBoughtMode] = useState(false)
 
     // variable to hold the selected item
     const [selectedItem, updateSelectedItem] = useState({
@@ -50,8 +54,6 @@ const List = () => {
 
     // function to change/update the value of an item in a list
     const changeListItem = (editedItem: ListItemProps) => {
-        console.log("Editing item")
-        console.log(editedItem)
         dispatch({
             type: 'EDIT_LISTITEM',
             payload: {
@@ -76,7 +78,6 @@ const List = () => {
             })
         })
             .then(res => res.json())
-            .then(data => console.log(data));
     };
 
     // Function to delete an item in a list
@@ -101,8 +102,6 @@ const List = () => {
         if (item !== undefined) {
             updateSelectedItem(item);
             setEditModalState(true);
-        } else {
-            console.log('Attempted to open an item that does not exist');
         }
     }
 
@@ -111,13 +110,16 @@ const List = () => {
     }
 
     function closeDeleteModal() {
-        console.log("Delete closed")
+        setMarkedForDelete([])
         setDeleteModalState(false);
         setDeleteMode(false)
     }
 
     function closeDeleteModalAndDelete() {
-        console.log("Delete all")
+        for (let id of markedForDelete) {
+            deleteListItem(id)
+        }
+        setMarkedForDelete([])
         setDeleteModalState(false);
         setDeleteMode(false)
     }
@@ -134,14 +136,11 @@ const List = () => {
         if (deleteMode == true) {
             if ( markedForDelete.length >= 1){
                 setDeleteModalState(true)
-                console.log("opening modal for deleting items")
             } else {
-                console.log("Attempted to open modal for deleting items witn 0 items")
                 setDeleteMode(false)
             }
         } else {
             setDeleteMode(true)
-            console.log("Entering delete mode")
         }
     }
 
@@ -167,7 +166,6 @@ const List = () => {
                 })
                 .then(() => setIsLoading(false));
     }, [dispatch, state.authentication.token, state.selectedList]);
-
     // Sets the title of the header to the name of the list
     navigation.setOptions({
         title: route.params.name
@@ -177,9 +175,9 @@ const List = () => {
         return (
             <Icon
                 size={80}
-                name="hourglass-empty"
+                name="access-time"
                 type="material"
-                color="#4880b7"
+                color="#00d"
             />
         ); // can have a loading icon or something here if we want.
     if (state.listItems.length === 0)
@@ -197,12 +195,34 @@ const List = () => {
                     justifyContent: 'center'
                 }}
             >
-                {/*<View style={{ flex: 2 }} />
-                <Text style={{ flex: 10, fontSize: 20, paddingRight: 10 }}>
-                    Select the items to delete
-                </Text>
-                <View style={{ flex: 2 , paddingRight: 10  }} />*/}
-                <View style={{ flex: 2 }} />
+                <View style={{ flex: 2 }}>
+
+                    <TouchableOpacity onPress={() => toggleDeleteMode()}>
+                        <Tooltip
+                            backgroundColor="#d00"
+                            toggleOnPress={!state.tutorial.deleteMode}
+                            popover={
+                                <Text style={{color:"#fff"}}>
+                                    Tap here to enter/exit delete mode
+                                </Text>
+                            }
+                            onClose={
+                                () => {
+                                    dispatch({
+                                        type: 'SET_TUTORIAL_LIST',
+                                        payload: {...state.tutorial, deleteMode:true}
+                                    });
+                                    toggleDeleteMode();
+                                }
+                            }
+                        >
+                            <Icon
+                                name={deleteMode === true ? 'done' : 'delete'}
+                                size={30}
+                            />
+                        </Tooltip>
+                    </TouchableOpacity>
+                </View>
                 <Text style={{ flex: 8, fontSize: 20, paddingRight: 10 }}>
                     Item
                 </Text>
@@ -210,17 +230,39 @@ const List = () => {
                     Qty.
                 </Text>
                 <View style={{ flex: 2 }}>
-                    <TouchableOpacity onPress={() => toggleDeleteMode()}>
-                        <Icon
-                            name={deleteMode === true ? 'done' : 'delete'}
-                            size={30}
-                        />
+                    <TouchableOpacity onPress={() => setHideBoughtMode(!hideBoughtMode)}>
+                        <Tooltip
+                            backgroundColor="#00d"
+                            toggleOnPress={!state.tutorial.viewBoughtMode}
+                            popover={
+                                <Text style={{color:"#fff"}}>
+                                    Tap here to hide or show bought items
+                                </Text>
+                            }
+                            onClose={
+                                () => {
+                                    dispatch({
+                                        type: 'SET_TUTORIAL_LIST',
+                                        payload: {...state.tutorial, viewBoughtMode:true}
+                                    });
+                                    setHideBoughtMode(!hideBoughtMode);
+                                }
+                            }
+                        >
+                            <Icon
+                                size={30}
+                                name={hideBoughtMode == true ? "eye-off" : "eye"} // hides the bought items
+                                type="material-community"
+                            />
+                        </Tooltip>
                     </TouchableOpacity>
                 </View>
             </View>
+            <View style={{ height: 2, width: "100%", backgroundColor: "#000"}}/>
             <FlatList
                 style={{ width: '100%', height: '100%' }}
-                data={state.listItems}
+                data={hideBoughtMode ? filter(sortBy(state.listItems, ["id"]), ["bought", false]) : sortBy(state.listItems, ["id"]) }
+                //data={sortBy(state.listItems, ["id"])}
                 renderItem={({
                     item,
                     index
