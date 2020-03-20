@@ -1,11 +1,11 @@
-from django.contrib.auth.models import Group, User, Permission
+from django.contrib.auth.models import Group, Permission, User
+from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
 from guardian.shortcuts import assign_perm
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 
 from .models import List, ListItem
-from django.contrib.contenttypes.models import ContentType
 
 
 class ListSerializer(serializers.ModelSerializer):
