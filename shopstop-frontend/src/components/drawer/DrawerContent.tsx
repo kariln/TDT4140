@@ -3,6 +3,7 @@ import { Text, View, StyleSheet, Button } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
 import { Context } from '../../store/Store';
 import GroupOverview from './GroupOverview';
+import InvitedGroupOverview from './InvitedGroupOverview';
 import AddGroupButton from './AddGroupButton';
 
 const styles = StyleSheet.create({
@@ -14,7 +15,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: 'white',
         flex: 1,
-        paddingTop: '30%'
+        paddingTop: '20%'
     },
 
     divider: {
@@ -24,9 +25,12 @@ const styles = StyleSheet.create({
         margin: 10
     },
     groupContainer: {
-        backgroundColor: '#fff',
-        flex: 7,
+        flex: 8,
         marginTop: '10%',
+        width: '100%'
+    },
+    invitedGroupContainer: {
+        flex: 2,
         width: '100%'
     },
     usernameText: {
@@ -55,6 +59,15 @@ const DrawerContent = () => {
             <View style={styles.groupContainer}>
                 <GroupOverview />
             </View>
+            <View style={styles.divider} />
+            {state.invitedGroups.length !== 0 && (
+                <>
+                    <Text style={styles.usernameText}>Groups you can join</Text>
+                    <View style={styles.invitedGroupContainer}>
+                        <InvitedGroupOverview />
+                    </View>
+                </>
+            )}
             <View style={styles.addGroupContainer}>
                 <AddGroupButton />
             </View>

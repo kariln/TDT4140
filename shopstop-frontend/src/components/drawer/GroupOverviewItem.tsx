@@ -45,6 +45,10 @@ const ListItem: React.FC<GroupItemInterface> = props => {
             type: 'REMOVE_GROUP',
             payload: props.item
         });
+        dispatch({
+            type: 'ADD_INVITEDGROUP',
+            payload: props.item
+        });
     };
 
     const confirmationAlert = () => {
