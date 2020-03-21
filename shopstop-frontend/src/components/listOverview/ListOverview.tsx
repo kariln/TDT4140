@@ -25,7 +25,7 @@ const Lists = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [state, dispatch] = useContext(Context);
     const navigation = useNavigation();
-    console.log(state.selectedGroup);
+
     useEffect(() => {
         // Sets the title in the navbar to the name of the group the user has selected
         const setTitle = async () => {
