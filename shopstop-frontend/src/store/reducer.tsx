@@ -2,7 +2,8 @@ import {
     ListItemProps,
     ListProps,
     StateProps,
-    ListOverlayProps
+    OverlayProps,
+    GroupProps
 } from './StoreTypes';
 
 export const reducers = (state: StateProps, action: Action) => {
@@ -13,6 +14,15 @@ export const reducers = (state: StateProps, action: Action) => {
             return {
                 ...state,
                 listItems: state.listItems.concat(action.payload)
+            };
+        case 'EDIT_LISTITEM':
+            return {
+                ...state,
+                listItems: state.listItems.map(listItem => {
+                    if (listItem.id === action.payload.id)
+                        return action.payload;
+                    return listItem;
+                })
             };
         case 'REMOVE_LISTITEM':
             return {
@@ -39,14 +49,39 @@ export const reducers = (state: StateProps, action: Action) => {
         case 'REMOVE_LIST':
             return {
                 ...state,
-                lists: state.lists.filter(data => data.id !== action.payload.id)
+                lists: state.lists.filter(
+                    data => data.id !== action.payload.id
+                ),
+                listItems: []
+            };
+        case 'SET_GROUPS':
+            return { ...state, groups: action.payload };
+        case 'ADD_GROUP':
+            return {
+                ...state,
+                groups: state.groups.concat(action.payload)
+            };
+        case 'REMOVE_GROUP':
+            return {
+                ...state,
+                groups: state.groups.filter(
+                    data => data.id !== action.payload.id
+                ),
+                lists: [],
+                selectedGroup: state.groups[1]
+                    ? state.groups[0].id === action.payload.id
+                        ? state.groups[1].id
+                        : state.groups[0].id
+                    : null
             };
         case 'SET_SELECTEDLIST':
             return { ...state, selectedList: action.payload };
-        case 'TOGGLE_LISTOVERLAY':
+        case 'SET_SELECTEDGROUP':
+            return { ...state, selectedGroup: action.payload };
+        case 'TOGGLE_OVERLAY':
             return {
                 ...state,
-                listOverlay: action.payload
+                overlay: action.payload
             };
         case 'SET_USER':
             return { ...state, username: action.payload };
@@ -85,11 +120,18 @@ export const reducers = (state: StateProps, action: Action) => {
 
 type Action =
     | { type: 'SET_LISTITEMS'; payload: ListItemProps[] }
-    | { type: 'ADD_LISTITEM' | 'REMOVE_LISTITEM'; payload: ListItemProps }
+    | {
+          type: 'ADD_LISTITEM' | 'REMOVE_LISTITEM' | 'EDIT_LISTITEM';
+          payload: ListItemProps;
+      }
     | { type: 'SET_LISTS'; payload: ListProps[] }
     | { type: 'ADD_LIST' | 'REMOVE_LIST' | 'EDIT_LIST'; payload: ListProps }
     | { type: 'SET_SELECTEDLIST'; payload: number }
-    | { type: 'TOGGLE_LISTOVERLAY'; payload: ListOverlayProps }
+    | { type: 'TOGGLE_OVERLAY'; payload: OverlayProps }
     | { type: 'SET_USER'; payload: string }
     | { type: 'SIGN_IN' | 'RESTORE_TOKEN'; payload: string }
-    | { type: 'SIGN_OUT'; payload: null };
+    | { type: 'SIGN_OUT'; payload: null }
+    | { type: 'SET_GROUPS'; payload: GroupProps[] }
+    | { type: 'ADD_GROUP'; payload: GroupProps }
+    | { type: 'REMOVE_GROUP'; payload: GroupProps }
+    | { type: 'SET_SELECTEDGROUP'; payload: number };

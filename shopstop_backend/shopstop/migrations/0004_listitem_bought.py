@@ -6,13 +6,15 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('shopstop', '0003_listitem'),
+        ("shopstop", "0003_listitem"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='listitem',
-            name='bought',
-            field=models.BooleanField(default=False, verbose_name='Item has been bought'),
+            model_name="listitem",
+            name="bought",
+            field=models.BooleanField(
+                default=False, verbose_name="Item has been bought"
+            ),
         ),
     ]

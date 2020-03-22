@@ -10,8 +10,8 @@ import {
 import { Button } from 'react-native-elements';
 import * as SecureStore from 'expo-secure-store';
 import { useNavigation } from '@react-navigation/native';
-import getEnvVars from '../../environment';
-import { Context } from '../store/Store';
+import getEnvVars from '../../../environment';
+import { Context } from '../../store/Store';
 
 const styles = StyleSheet.create({
     container: {
@@ -89,7 +89,7 @@ const SignIn = () => {
     return (
         <View style={styles.container}>
             <Image
-                source={require('../../assets/Shopstop.png')}
+                source={require('../../../assets/Shopstop.png')}
                 style={styles.image}
             />
             <TextInput

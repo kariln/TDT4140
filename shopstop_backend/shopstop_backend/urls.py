@@ -19,7 +19,7 @@ from django.urls import path
 from rest_framework.authtoken import views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    url(r'token/', views.obtain_auth_token),
-    url(r'^', include('shopstop.urls'))
+    path("admin/", admin.site.urls),
+    url(r"token/", views.obtain_auth_token),
+    url(r"^", include("shopstop.urls")),
 ]

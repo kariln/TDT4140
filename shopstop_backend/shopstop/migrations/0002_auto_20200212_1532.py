@@ -7,19 +7,21 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('shopstop', '0001_initial'),
+        ("shopstop", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='list',
-            name='created_at',
-            field=models.DateTimeField(default=django.utils.timezone.now, editable=False),
+            model_name="list",
+            name="created_at",
+            field=models.DateTimeField(
+                default=django.utils.timezone.now, editable=False
+            ),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='list',
-            name='modified_at',
+            model_name="list",
+            name="modified_at",
             field=models.DateTimeField(default=django.utils.timezone.now),
             preserve_default=False,
         ),
