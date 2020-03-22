@@ -1,12 +1,12 @@
 import React, { useState, useContext } from 'react';
 import {
+    Alert,
     StyleSheet,
     View,
-    Text,
     TextInput,
-    TouchableHighlight,
-    Dimensions
+    TouchableHighlight
 } from 'react-native';
+import { Icon } from 'react-native-elements';
 import getEnvVars from '../../../environment';
 import { Context } from '../../store/Store';
 
@@ -17,73 +17,100 @@ const styles = StyleSheet.create({
         borderColor: 'lightblue',
         borderRadius: 6,
         color: '#555555',
+        fontSize: 20,
         height: '80%',
         paddingLeft: 8,
-        width: Dimensions.get('window').width - 70
+        width: '100%'
     },
     inputContainer: {
         alignItems: 'center',
+        alignSelf: 'center',
         backgroundColor: 'lightblue',
         flexDirection: 'row',
-        height: 75
+        height: 50,
+        justifyContent: 'center'
     },
-    sendContainer: {
-        paddingRight: 10
+    nameContainer: {
+        flex: 9,
+        paddingLeft: 10,
+        width: '100%'
     },
-    sendLabel: {
-        color: '#ffffff',
-        fontSize: 15
-    },
-    textContainer: {
-        flex: 1
+    quantityContainer: {
+        flex: 3,
+        paddingLeft: 10,
+        width: '100%'
     }
 });
 
 const TextField = () => {
     const [saveData, setSaveData] = useState('');
+    const [saveQuantity, setSaveQuantity] = useState(1);
     const [state, dispatch] = useContext(Context);
 
     const addListItem = () => {
-        fetch(`${getEnvVars.apiUrl}list-items/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Token ${state.authentication.token}`
-            },
-            body: JSON.stringify({
-                name: saveData,
-                quantity: 1,
-                bougth: false,
-                list: state.selectedList
-            })
-        })
-            .then(response => response.json())
-            .then(data =>
-                dispatch({
-                    type: 'ADD_LISTITEM',
-                    payload: data
+        if (
+            saveData !== '' &&
+            saveData !== undefined &&
+            !isNaN(Number(saveQuantity))
+        ) {
+            fetch(`${getEnvVars.apiUrl}list-items/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Token ${state.authentication.token}`
+                },
+                body: JSON.stringify({
+                    name: saveData,
+                    quantity: saveQuantity,
+                    bougth: false,
+                    list: state.selectedList
                 })
+            })
+                .then(response => response.json())
+                .then(data =>
+                    dispatch({
+                        type: 'ADD_LISTITEM',
+                        payload: data
+                    })
+                );
+            setSaveData('');
+            setSaveQuantity(1);
+        } else {
+            Alert.alert(
+                'Whops!',
+                'You forgot to enter the name of the item!',
+                [{ text: 'OK' }],
+                { cancelable: false }
             );
-        setSaveData('');
+        }
     };
-
     return (
         <View style={styles.inputContainer}>
-            <View style={styles.textContainer}>
+            <View style={styles.nameContainer}>
                 <TextInput
                     style={styles.input}
-                    placeholder="Milk..."
+                    placeholder="Item..."
                     onChangeText={text => setSaveData(text)}
-                    clearButtonMode="always"
                     value={saveData}
                 />
             </View>
-            <View style={styles.sendContainer}>
+            <View style={styles.quantityContainer}>
+                <TextInput
+                    keyboardType="numeric"
+                    style={styles.input}
+                    placeholder="1..."
+                    onChangeText={text =>
+                        setSaveQuantity(Number(text.replace(/[^0-9]/g, '')))
+                    }
+                    value={String(saveQuantity)}
+                />
+            </View>
+            <View style={{ flex: 2 }}>
                 <TouchableHighlight
                     underlayColor="#4e4273"
                     onPress={() => addListItem()}
                 >
-                    <Text style={styles.sendLabel}>Add</Text>
+                    <Icon size={40} name="add-circle" color="#ffffff" />
                 </TouchableHighlight>
             </View>
         </View>
