@@ -47,9 +47,7 @@ const DrawerContent = () => {
     return (
         <View style={styles.container}>
             <View>
-                <Text style={styles.usernameText}>
-                    Your username is {state.username}
-                </Text>
+                <Text>Your username is {state.username}</Text>
                 <Button title="Sign out" onPress={signOut} />
             </View>
             <View style={styles.divider} />
