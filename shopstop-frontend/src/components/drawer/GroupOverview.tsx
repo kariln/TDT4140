@@ -44,7 +44,6 @@ const GroupOverview = () => {
                 <GroupOverviewItem item={item} />
             )}
             keyExtractor={item => item.name}
-            persistentScrollbar={true}
         />
     );
 };

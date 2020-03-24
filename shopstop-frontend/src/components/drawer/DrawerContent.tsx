@@ -7,10 +7,6 @@ import InvitedGroupOverview from './InvitedGroupOverview';
 import AddGroupButton from './AddGroupButton';
 
 const styles = StyleSheet.create({
-    newGroupContainer: {
-        flex: 1,
-        justifyContent: 'flex-end'
-    },
     container: {
         alignItems: 'center',
         backgroundColor: 'white',
@@ -30,6 +26,10 @@ const styles = StyleSheet.create({
     invitedGroupContainer: {
         flex: 2,
         width: '100%'
+    },
+    newGroupContainer: {
+        flex: 1,
+        justifyContent: 'flex-end'
     }
 });
 
@@ -44,7 +44,7 @@ const DrawerContent = () => {
 
     return (
         <View style={styles.container}>
-            <View style={{width:"80%"}}>
+            <View style={{ width: '80%' }}>
                 <Text>
                     Signed in as:{' '}
                     <Text style={{ fontWeight: 'bold' }}>{state.username}</Text>
