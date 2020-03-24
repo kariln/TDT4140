@@ -34,7 +34,7 @@ const InvitedGroupOverview = () => {
     return (
         <>
             <Text style={{ paddingBottom: 10, alignSelf: 'center' }}>
-                Groups you can join
+                Groups you can join:
             </Text>
             <FlatList
                 data={state.invitedGroups}
