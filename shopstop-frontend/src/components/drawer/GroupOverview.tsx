@@ -25,7 +25,7 @@ const GroupOverview = () => {
                         payload: data
                     });
                     // Sets the first group to the selected group on app load
-                    if (data[0])
+                    if (data[0] && !state.selectedGroup)
                         dispatch({
                             type: 'SET_SELECTEDGROUP',
                             payload: data[0].id
@@ -33,7 +33,7 @@ const GroupOverview = () => {
                 })
                 .then(() => setIsLoading(false))
                 .catch(e => console.log(e));
-    }, [dispatch, state.authentication.token]);
+    }, [dispatch, state.authentication.token, state.selectedGroup]);
 
     if (isLoading) return <></>;
 

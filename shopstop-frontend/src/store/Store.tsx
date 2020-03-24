@@ -14,7 +14,7 @@ export const initialAuthenticationState = {
     token: null
 };
 
-const initialState: StateProps = {
+export const initialState: StateProps = {
     lists: [],
     listItems: [],
     groups: [],
