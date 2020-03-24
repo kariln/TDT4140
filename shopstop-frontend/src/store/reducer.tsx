@@ -68,11 +68,31 @@ export const reducers = (state: StateProps, action: Action) => {
                     data => data.id !== action.payload.id
                 ),
                 lists: [],
-                selectedGroup: state.groups[1]
-                    ? state.groups[0].id === action.payload.id
-                        ? state.groups[1].id
-                        : state.groups[0].id
-                    : null
+                selectedGroup:
+                    state.selectedGroup === action.payload.id
+                        ? state.groups[1]
+                            ? state.groups[0].id === action.payload.id
+                                ? state.groups[1].id
+                                : state.groups[0].id
+                            : null
+                        : state.selectedGroup
+            };
+        case 'ADD_INVITEDGROUP':
+            return {
+                ...state,
+                invitedGroups: state.invitedGroups.concat(action.payload),
+                selectedGroup: state.groups[0]
+                    ? state.selectedGroups
+                    : action.payload.id
+            };
+        case 'SET_INVITEDGROUPS':
+            return { ...state, invitedGroups: action.payload };
+        case 'REMOVE_INVITEDGROUP':
+            return {
+                ...state,
+                invitedGroups: state.invitedGroups.filter(
+                    data => data.id !== action.payload.id
+                )
             };
         case 'SET_SELECTEDLIST':
             return { ...state, selectedList: action.payload };
@@ -131,7 +151,13 @@ type Action =
     | { type: 'SET_USER'; payload: string }
     | { type: 'SIGN_IN' | 'RESTORE_TOKEN'; payload: string }
     | { type: 'SIGN_OUT'; payload: null }
-    | { type: 'SET_GROUPS'; payload: GroupProps[] }
-    | { type: 'ADD_GROUP'; payload: GroupProps }
-    | { type: 'REMOVE_GROUP'; payload: GroupProps }
+    | { type: 'SET_GROUPS' | 'SET_INVITEDGROUPS'; payload: GroupProps[] }
+    | {
+          type:
+              | 'REMOVE_GROUP'
+              | 'REMOVE_INVITEDGROUP'
+              | 'ADD_GROUP'
+              | 'ADD_INVITEDGROUP';
+          payload: GroupProps;
+      }
     | { type: 'SET_SELECTEDGROUP'; payload: number };

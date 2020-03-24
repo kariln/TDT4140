@@ -3,20 +3,16 @@ import { Text, View, StyleSheet, Button } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
 import { Context } from '../../store/Store';
 import GroupOverview from './GroupOverview';
+import InvitedGroupOverview from './InvitedGroupOverview';
 import AddGroupButton from './AddGroupButton';
 
 const styles = StyleSheet.create({
-    addGroupContainer: {
-        flex: 1,
-        justifyContent: 'flex-end'
-    },
     container: {
         alignItems: 'center',
         backgroundColor: 'white',
         flex: 1,
-        paddingTop: '30%'
+        paddingTop: '15%'
     },
-
     divider: {
         alignSelf: 'stretch',
         borderBottomColor: 'black',
@@ -24,13 +20,17 @@ const styles = StyleSheet.create({
         margin: 10
     },
     groupContainer: {
-        backgroundColor: '#fff',
-        flex: 7,
-        marginTop: '10%',
+        flex: 8,
         width: '100%'
     },
-    usernameText: {
-        paddingBottom: 20
+    invitedGroupContainer: {
+        flex: 2,
+        width: '100%'
+    },
+    newGroupContainer: {
+        flex: 1,
+        justifyContent: 'flex-end',
+        width: '80%'
     }
 });
 
@@ -45,9 +45,10 @@ const DrawerContent = () => {
 
     return (
         <View style={styles.container}>
-            <View>
-                <Text style={styles.usernameText}>
-                    Your username is {state.username}
+            <View style={{ width: '80%' }}>
+                <Text>
+                    Signed in as:{' '}
+                    <Text style={{ fontWeight: 'bold' }}>{state.username}</Text>
                 </Text>
                 <Button title="Sign out" onPress={signOut} />
             </View>
@@ -55,7 +56,11 @@ const DrawerContent = () => {
             <View style={styles.groupContainer}>
                 <GroupOverview />
             </View>
-            <View style={styles.addGroupContainer}>
+            <View style={styles.divider} />
+            <View style={styles.invitedGroupContainer}>
+                <InvitedGroupOverview />
+            </View>
+            <View style={styles.newGroupContainer}>
                 <AddGroupButton />
             </View>
         </View>

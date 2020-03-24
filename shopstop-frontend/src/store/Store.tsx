@@ -18,6 +18,7 @@ export const initialState: StateProps = {
     lists: [],
     listItems: [],
     groups: [],
+    invitedGroups: [],
     authentication: initialAuthenticationState,
     overlay: initialOverlayState,
     username: null,
