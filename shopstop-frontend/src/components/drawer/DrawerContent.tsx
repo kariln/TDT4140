@@ -29,8 +29,8 @@ const styles = StyleSheet.create({
     },
     newGroupContainer: {
         flex: 1,
-        width: '80%',
-        justifyContent: 'flex-end'
+        justifyContent: 'flex-end',
+        width: '80%'
     }
 });
 
