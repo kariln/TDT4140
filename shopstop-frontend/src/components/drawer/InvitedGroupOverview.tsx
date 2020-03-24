@@ -1,11 +1,11 @@
 import React, { useEffect, useContext, useState } from 'react';
-import { FlatList } from 'react-native';
+import { FlatList, Text } from 'react-native';
 import getEnvVars from '../../../environment';
 import { Context } from '../../store/Store';
 import { GroupProps } from '../../store/StoreTypes';
 import InvitedGroupOverviewItem from './InvitedGroupOverviewItem';
 
-const GroupOverview = () => {
+const InvitedGroupOverview = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [state, dispatch] = useContext(Context);
 
@@ -30,16 +30,21 @@ const GroupOverview = () => {
     }, [dispatch, state.authentication.token]);
 
     if (isLoading) return <></>;
-
+    if (state.invitedGroups.length === 0) return <></>;
     return (
-        <FlatList
-            data={state.invitedGroups}
-            renderItem={({ item }: { item: GroupProps }) => (
-                <InvitedGroupOverviewItem item={item} />
-            )}
-            keyExtractor={item => item.name}
-        />
+        <>
+            <Text style={{ paddingBottom: 10, alignSelf: 'center' }}>
+                Groups you can join
+            </Text>
+            <FlatList
+                data={state.invitedGroups}
+                renderItem={({ item }: { item: GroupProps }) => (
+                    <InvitedGroupOverviewItem item={item} />
+                )}
+                keyExtractor={item => item.name}
+            />
+        </>
     );
 };
 
-export default GroupOverview;
+export default InvitedGroupOverview;

@@ -32,9 +32,6 @@ const styles = StyleSheet.create({
     invitedGroupContainer: {
         flex: 2,
         width: '100%'
-    },
-    usernameText: {
-        paddingBottom: 20
     }
 });
 
@@ -60,14 +57,9 @@ const DrawerContent = () => {
                 <GroupOverview />
             </View>
             <View style={styles.divider} />
-            {state.invitedGroups.length !== 0 && (
-                <>
-                    <Text style={styles.usernameText}>Groups you can join</Text>
-                    <View style={styles.invitedGroupContainer}>
-                        <InvitedGroupOverview />
-                    </View>
-                </>
-            )}
+            <View style={styles.invitedGroupContainer}>
+                <InvitedGroupOverview />
+            </View>
             <View style={styles.addGroupContainer}>
                 <AddGroupButton />
             </View>
