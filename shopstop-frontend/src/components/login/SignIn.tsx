@@ -120,7 +120,7 @@ const SignIn = () => {
                 <View style={styles.signupSubContainer}>
                     <Text>Don&apos;t have an account already? </Text>
                     <TouchableOpacity
-                        onPress={() => navigation.navigate('signup')}
+                        onPress={() => navigation.navigate('register')}
                     >
                         <Text style={styles.signupLink}>Sign up!</Text>
                     </TouchableOpacity>

@@ -1,18 +1,30 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { StyleSheet, View, FlatList, Text } from 'react-native';
+import {
+    StyleSheet,
+    View,
+    FlatList,
+    Text,
+    KeyboardAvoidingView,
+    Platform
+} from 'react-native';
 import { Icon } from 'react-native-elements';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
+import { useHeaderHeight } from '@react-navigation/stack';
 import getEnvVars from '../../../environment';
 import { Context } from '../../store/Store';
 import { ListItemProps } from '../../store/StoreTypes';
 import ListItem from './ListItem';
 import ListEditOverlay from '../overlay/ListEditOverlay';
+import TextField from './TextField';
 
 const styles = StyleSheet.create({
     container: {
-        alignItems: 'center',
         backgroundColor: '#fff',
         flex: 1,
+        justifyContent: 'space-between'
+    },
+    text: {
+        alignSelf: 'center',
         paddingTop: '5%'
     }
 });
@@ -28,6 +40,7 @@ const List = () => {
     const [isLoading, setIsLoading] = useState(true);
     const navigation = useNavigation();
     const route = useRoute<ProfileScreenRouteProp>();
+    const headerHeight = useHeaderHeight();
 
     // variable to open or close the modal
     const [modalState, setModalState] = useState(false);
@@ -65,9 +78,7 @@ const List = () => {
                 bought: editedItem.bought,
                 list: editedItem.list
             })
-        })
-            .then(res => res.json())
-            .then(data => console.log(data));
+        });
     };
 
     // Function to delete an item in a list
@@ -103,6 +114,8 @@ const List = () => {
 
     // This useEffect is called whenever the component mounts
     useEffect(() => {
+        setIsLoading(true);
+
         if (state.selectedList)
             fetch(
                 `${getEnvVars.apiUrl}list-items/list_items_by_list/?list=${state.selectedList}`,
@@ -137,15 +150,28 @@ const List = () => {
                 type="material"
                 color="#4880b7"
             />
-        ); // can have a loading icon or something here if we want.
+        );
+
     if (state.listItems.length === 0)
         return (
-            <View style={styles.container}>
-                <Text>Your shopping list is empty!</Text>
-            </View>
+            <KeyboardAvoidingView
+                style={styles.container}
+                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                keyboardVerticalOffset={headerHeight}
+            >
+                <Text style={styles.text}>
+                    There are no items in the shopping list.
+                </Text>
+                <TextField />
+            </KeyboardAvoidingView>
         );
+
     return (
-        <View style={styles.container}>
+        <KeyboardAvoidingView
+            style={styles.container}
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            keyboardVerticalOffset={headerHeight}
+        >
             <View
                 style={{
                     alignSelf: 'center',
@@ -189,7 +215,8 @@ const List = () => {
                     changeListItem={changeListItem}
                 />
             )}
-        </View>
+            <TextField />
+        </KeyboardAvoidingView>
     );
 };
 

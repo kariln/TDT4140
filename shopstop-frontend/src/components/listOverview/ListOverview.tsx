@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { StyleSheet, View, FlatList, Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Context } from '../../store/Store';
@@ -16,12 +16,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#fff',
         flex: 1,
+        padding: 20,
         paddingTop: '10%'
     }
 });
 
 const Lists = () => {
-    const [isLoading, setIsLoading] = useState(true);
     const [state, dispatch] = useContext(Context);
     const navigation = useNavigation();
 
@@ -31,9 +31,14 @@ const Lists = () => {
             const thisGroup = await state.groups.find(
                 (groups: ListProps) => groups.id === state.selectedGroup
             );
-            navigation.setOptions({
-                title: thisGroup.name
-            });
+            if (thisGroup)
+                navigation.setOptions({
+                    title: thisGroup.name
+                });
+            else
+                navigation.setOptions({
+                    title: ''
+                });
         };
 
         if (state.selectedGroup) {
@@ -55,9 +60,12 @@ const Lists = () => {
                         payload: data
                     });
                 })
-                .then(() => setIsLoading(false))
                 .catch(e => console.log(e));
         }
+        if (!state.selectedGroup)
+            navigation.setOptions({
+                title: ''
+            });
     }, [
         dispatch,
         navigation,
@@ -66,12 +74,23 @@ const Lists = () => {
         state.selectedGroup
     ]);
 
-    if (isLoading) return <></>;
+    if (state.groups.length === 0)
+        return (
+            <View style={styles.container}>
+                <Text>
+                    You are currently not in a group, you can join a group
+                    through the sidebar.
+                </Text>
+            </View>
+        );
 
     if (state.lists.length === 0)
         return (
             <View style={styles.container}>
-                <Text>Det finnes ingen handlelister i denne gruppen</Text>
+                <Text>
+                    There are no shopping lists in this group, add one on the
+                    button below.
+                </Text>
                 <View style={styles.addButtonContainer}>
                     <AddListButton />
                 </View>

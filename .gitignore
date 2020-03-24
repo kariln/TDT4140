@@ -12,8 +12,6 @@ web-build/
 web-report/
 yarn-error.log
 
-package-lock.json
-
 .coverage
 
 # macOS
@@ -22,7 +20,7 @@ package-lock.json
 vscode.code-workspace
 
 venv/
-
+matrix/
 #idea
 .idea/
 
@@ -33,3 +31,6 @@ venv/
 __pycache__
 db.sqlite3
 media
+
+.env
+.vscode

@@ -2,6 +2,7 @@ export interface StateProps {
     lists: ListProps[];
     listItems: ListItemProps[];
     groups: GroupProps[];
+    invitedGroups: GroupProps[];
     authentication: AuthenticationProps;
     selectedGroup: number | null;
     selectedList: number | null;

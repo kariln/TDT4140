@@ -7,13 +7,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('shopstop', '0004_listitem_bought'),
+        ("shopstop", "0004_listitem_bought"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='listitem',
-            name='time_added',
+            model_name="listitem",
+            name="time_added",
             field=models.DateField(default=django.utils.timezone.now, editable=False),
             preserve_default=False,
         ),

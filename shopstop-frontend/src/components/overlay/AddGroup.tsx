@@ -38,6 +38,11 @@ const AddList = () => {
                 payload: data
             });
             dispatch({
+                type: 'SET_SELECTEDGROUP',
+                payload: data.id
+            });
+
+            dispatch({
                 type: 'TOGGLE_OVERLAY',
                 payload: {
                     type: '',

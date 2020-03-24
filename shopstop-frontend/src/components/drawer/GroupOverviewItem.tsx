@@ -45,13 +45,10 @@ const ListItem: React.FC<GroupItemInterface> = props => {
             type: 'REMOVE_GROUP',
             payload: props.item
         });
-
-        // if the user deletes the group he has selected, it defaults to the first group in the group array instead.
-        if (props.item.id === state.selectedGroup)
-            dispatch({
-                type: 'SET_SELECTEDGROUP',
-                payload: state.groups[0].id
-            });
+        dispatch({
+            type: 'ADD_INVITEDGROUP',
+            payload: props.item
+        });
     };
 
     const confirmationAlert = () => {
