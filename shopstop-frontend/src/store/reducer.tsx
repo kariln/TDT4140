@@ -182,7 +182,7 @@ type Action =
     | { type: 'SIGN_OUT'; payload: null }
     | { type: 'SET_GROUPS' | 'SET_INVITEDGROUPS'; payload: GroupProps[] }
     | {
-          type: 
+          type:
               | 'REMOVE_GROUP'
               | 'REMOVE_INVITEDGROUP'
               | 'ADD_GROUP'
