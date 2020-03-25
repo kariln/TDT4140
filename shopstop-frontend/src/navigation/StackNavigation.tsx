@@ -52,7 +52,7 @@ const MainStack = () => {
                                     : 'push'
                             }}
                         />
-                        <Stack.Screen name="signup" component={SignUp} />
+                        <Stack.Screen name="register" component={SignUp} />
                     </>
                 ) : (
                     <>

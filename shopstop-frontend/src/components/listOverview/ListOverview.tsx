@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { StyleSheet, View, FlatList, Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Context } from '../../store/Store';
@@ -22,7 +22,6 @@ const styles = StyleSheet.create({
 });
 
 const Lists = () => {
-    const [isLoading, setIsLoading] = useState(true);
     const [state, dispatch] = useContext(Context);
     const navigation = useNavigation();
 
@@ -61,9 +60,12 @@ const Lists = () => {
                         payload: data
                     });
                 })
-                .then(() => setIsLoading(false))
                 .catch(e => console.log(e));
         }
+        if (!state.selectedGroup)
+            navigation.setOptions({
+                title: ''
+            });
     }, [
         dispatch,
         navigation,
@@ -71,8 +73,6 @@ const Lists = () => {
         state.groups,
         state.selectedGroup
     ]);
-
-    if (isLoading) return <></>;
 
     if (state.groups.length === 0)
         return (
