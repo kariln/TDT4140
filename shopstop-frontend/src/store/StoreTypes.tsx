@@ -42,3 +42,14 @@ export interface ListItemProps {
     bought: boolean;
     list: number;
 }
+
+export interface ListItemTutorialProps {
+    deleteMode: boolean;
+    viewBoughtMode: boolean;
+    editMode: boolean;
+    toggleBought: boolean;
+}
+
+export interface RemoveListProps {
+    id: number;
+}

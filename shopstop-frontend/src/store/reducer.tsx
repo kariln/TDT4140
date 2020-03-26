@@ -3,7 +3,9 @@ import {
     ListProps,
     StateProps,
     OverlayProps,
-    GroupProps
+    GroupProps,
+    ListItemTutorialProps,
+    RemoveListProps
 } from './StoreTypes';
 
 export const reducers = (state: StateProps, action: Action) => {
@@ -133,6 +135,33 @@ export const reducers = (state: StateProps, action: Action) => {
                     isLoading: false
                 }
             };
+        case 'SET_TUTORIAL_LIST':
+            return {
+                ...state,
+                tutorial: {
+                    editMode: action.payload.editMode,
+                    deleteMode: action.payload.deleteMode,
+                    viewBoughtMode: action.payload.viewBoughtMode,
+                    toggleBought: action.payload.toggleBought
+                }
+            };
+        case 'APPEND_REMOVELIST':
+            return {
+                ...state,
+                removeList: [...state.removeList, action.payload]
+            };
+        case 'REMOVE_REMOVELIST':
+            return {
+                ...state,
+                removeList: state.removeList.filter(
+                    (data: RemoveListProps) => data.id !== action.payload.id
+                )
+            };
+        case 'DELETE_REMOVELIST':
+            return {
+                ...state,
+                removeList: []
+            };
         default:
             return state;
     }
@@ -160,4 +189,8 @@ type Action =
               | 'ADD_INVITEDGROUP';
           payload: GroupProps;
       }
-    | { type: 'SET_SELECTEDGROUP'; payload: number };
+    | { type: 'SET_SELECTEDGROUP'; payload: number }
+    | { type: 'SET_TUTORIAL_LIST'; payload: ListItemTutorialProps }
+    | { type: 'APPEND_REMOVELIST'; payload: RemoveListProps }
+    | { type: 'REMOVE_REMOVELIST'; payload: RemoveListProps }
+    | { type: 'DELETE_REMOVELIST'; payload: null };

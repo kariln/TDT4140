@@ -24,6 +24,13 @@ export const initialState: StateProps = {
     username: null,
     selectedList: null,
     selectedGroup: null,
+    tutorial: {
+        deleteMode: false,
+        viewBoughtMode: false,
+        editMode: false,
+        toggleBought: false
+    },
+    removeList: [],
 
     // This is only here because typescript wanted it
     *[Symbol.iterator]() {

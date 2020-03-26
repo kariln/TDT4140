@@ -5,17 +5,20 @@ import {
     FlatList,
     Text,
     KeyboardAvoidingView,
-    Platform
+    Platform,
+    TouchableOpacity
 } from 'react-native';
-import { Icon } from 'react-native-elements';
+import { Icon, Tooltip } from 'react-native-elements';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { useHeaderHeight } from '@react-navigation/stack';
+import { sortBy, filter } from 'lodash';
 import getEnvVars from '../../../environment';
 import { Context } from '../../store/Store';
-import { ListItemProps } from '../../store/StoreTypes';
+import { ListItemProps, RemoveListProps } from '../../store/StoreTypes';
 import ListItem from './ListItem';
 import ListEditOverlay from '../overlay/ListEditOverlay';
 import TextField from './TextField';
+import ConfirmDeleteItem from '../overlay/ConfirmDeleteItem';
 
 const styles = StyleSheet.create({
     container: {
@@ -43,7 +46,11 @@ const List = () => {
     const headerHeight = useHeaderHeight();
 
     // variable to open or close the modal
-    const [modalState, setModalState] = useState(false);
+    const [editModalState, setEditModalState] = useState(false);
+    const [deleteModalState, setDeleteModalState] = useState(false);
+
+    const [deleteMode, setDeleteMode] = useState(false);
+    const [hideBoughtMode, setHideBoughtMode] = useState(false);
 
     // variable to hold the selected item
     const [selectedItem, updateSelectedItem] = useState({
@@ -82,15 +89,15 @@ const List = () => {
     };
 
     // Function to delete an item in a list
-    const deleteListItem = (item: ListItemProps) => {
+    const deleteListItem = (id: number) => {
         dispatch({
             type: 'REMOVE_LISTITEM',
             payload: {
-                id: item.id
+                id
             }
         });
 
-        fetch(`${getEnvVars.apiUrl}list-items/${item.id}/`, {
+        fetch(`${getEnvVars.apiUrl}list-items/${id}/`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -99,17 +106,80 @@ const List = () => {
         });
     };
 
+    function updateTutorial(tutorialItem: string) {
+        dispatch({
+            type: 'SET_TUTORIAL_LIST',
+            payload: {
+                ...state.tutorial,
+                [tutorialItem]: true
+            }
+        });
+    }
+
     function openEditModal(item: ListItemProps) {
         if (item !== undefined) {
             updateSelectedItem(item);
-            setModalState(true);
-        } else {
-            console.log('Attempted to open an item that does not exist');
+            setEditModalState(true);
         }
     }
 
     function closeEditModal() {
-        setModalState(false);
+        setEditModalState(false);
+    }
+
+    function closeDeleteModal() {
+        dispatch({
+            type: 'DELETE_REMOVELIST',
+            payload: {}
+        });
+        setDeleteModalState(false);
+        setDeleteMode(false);
+    }
+
+    function closeDeleteModalAndDelete() {
+        [...state.removeList].forEach(item => {
+            deleteListItem(item.id);
+        });
+        dispatch({
+            type: 'DELETE_REMOVELIST',
+            payload: {}
+        });
+        setDeleteModalState(false);
+        setDeleteMode(false);
+    }
+
+    function selectForDelete(id: number) {
+        if (
+            state.removeList.find(
+                (element: RemoveListProps) => element.id === id
+            ) === undefined
+        ) {
+            dispatch({
+                type: 'APPEND_REMOVELIST',
+                payload: {
+                    id
+                }
+            });
+        } else {
+            dispatch({
+                type: 'REMOVE_REMOVELIST',
+                payload: {
+                    id
+                }
+            });
+        }
+    }
+
+    function toggleDeleteMode() {
+        if (deleteMode === true) {
+            if (state.removeList.length >= 1) {
+                setDeleteModalState(true);
+            } else {
+                setDeleteMode(false);
+            }
+        } else {
+            setDeleteMode(true);
+        }
     }
 
     // This useEffect is called whenever the component mounts
@@ -136,7 +206,6 @@ const List = () => {
                 })
                 .then(() => setIsLoading(false));
     }, [dispatch, state.authentication.token, state.selectedList]);
-
     // Sets the title of the header to the name of the list
     navigation.setOptions({
         title: route.params.name
@@ -146,9 +215,9 @@ const List = () => {
         return (
             <Icon
                 size={80}
-                name="hourglass-empty"
+                name="access-time"
                 type="material"
-                color="#4880b7"
+                color="lightblue"
             />
         );
 
@@ -179,18 +248,100 @@ const List = () => {
                     justifyContent: 'center'
                 }}
             >
-                <View style={{ flex: 2 }} />
-                <Text style={{ flex: 8, fontSize: 20, paddingRight: 10 }}>
+                <View style={{ flex: 2 }}>
+                    <TouchableOpacity onPress={() => toggleDeleteMode()}>
+                        <Tooltip
+                            backgroundColor="#d00"
+                            toggleOnPress={!state.tutorial.deleteMode}
+                            popover={
+                                <Text style={{ color: '#fff' }}>
+                                    Tap here to enter/exit delete mode
+                                </Text>
+                            }
+                            onClose={() => {
+                                updateTutorial('deleteMode');
+                                toggleDeleteMode();
+                            }}
+                        >
+                            <Icon
+                                name={
+                                    deleteMode === true
+                                        ? state.removeList.length > 0
+                                            ? 'check-circle'
+                                            : 'cancel'
+                                        : 'delete'
+                                }
+                                color={
+                                    state.removeList.length > 0
+                                        ? '#DD0000'
+                                        : '#000000'
+                                }
+                                size={40}
+                            />
+                        </Tooltip>
+                    </TouchableOpacity>
+                </View>
+                <Text
+                    style={{
+                        flex: 8,
+                        fontSize: 20,
+                        paddingRight: 10,
+                        alignSelf: 'center'
+                    }}
+                >
                     Item
                 </Text>
-                <Text style={{ flex: 2, fontSize: 20, paddingLeft: 10 }}>
+                <Text
+                    style={{
+                        flex: 2,
+                        fontSize: 20,
+                        paddingLeft: 10,
+                        alignSelf: 'center'
+                    }}
+                >
                     Qty.
                 </Text>
-                <View style={{ flex: 2 }} />
+                <View style={{ flex: 2 }}>
+                    <TouchableOpacity
+                        onPress={() => setHideBoughtMode(!hideBoughtMode)}
+                    >
+                        <Tooltip
+                            backgroundColor="#00d"
+                            toggleOnPress={!state.tutorial.viewBoughtMode}
+                            popover={
+                                <Text style={{ color: '#fff' }}>
+                                    Tap here to hide or show bought items
+                                </Text>
+                            }
+                            onClose={() => {
+                                updateTutorial('viewBoughtMode');
+                                setHideBoughtMode(!hideBoughtMode);
+                            }}
+                        >
+                            <Icon
+                                size={40}
+                                name={
+                                    hideBoughtMode === true ? 'eye-off' : 'eye'
+                                } // hides the bought items
+                                type="material-community"
+                            />
+                        </Tooltip>
+                    </TouchableOpacity>
+                </View>
             </View>
+            <View
+                style={{ height: 2, width: '100%', backgroundColor: '#000' }}
+            />
             <FlatList
                 style={{ width: '100%', height: '100%' }}
-                data={state.listItems}
+                data={
+                    hideBoughtMode // Only render the items that are not bought if this is true
+                        ? filter(sortBy(state.listItems, ['id']), [
+                              'bought',
+                              false
+                          ])
+                        : sortBy(state.listItems, ['id'])
+                }
                 renderItem={({
                     item,
                     index
@@ -203,16 +354,33 @@ const List = () => {
                         openEditModal={openEditModal}
                         changeListItem={changeListItem}
                         index={index}
+                        selectForDelete={selectForDelete}
+                        deleteMode={deleteMode}
+                        updateTutorial={updateTutorial}
+                        tutorial={state.tutorial}
+                        markedForDelete={
+                            state.removeList.find(
+                                (element: RemoveListProps) =>
+                                    element.id === item.id
+                            ) !== undefined
+                        }
                     />
                 )}
-                keyExtractor={item => item.id.toString()}
+                keyExtractor={item => String(item.id)}
             />
-            {modalState && (
+            {editModalState && (
                 <ListEditOverlay
                     closeModal={closeEditModal}
                     item={selectedItem}
                     deleteListItem={deleteListItem}
                     changeListItem={changeListItem}
+                />
+            )}
+            {deleteModalState && (
+                <ConfirmDeleteItem
+                    closeModal={closeDeleteModal}
+                    closeDeleteModalAndDelete={closeDeleteModalAndDelete}
+                    n_ids={state.removeList.length}
                 />
             )}
             <TextField />
