@@ -30,7 +30,7 @@ const ConfirmDeleteItem: React.FC<ConfirmDeleteItemReq> = props => {
                             fontSize: 20
                         }}
                     >
-                        Delete {props.n_ids} item{props.n_ids ? 's' : ''}
+                        Delete {props.n_ids} item{props.n_ids > 1 ? 's' : ''}
                     </Text>
                     <TouchableOpacity
                         style={{
@@ -62,7 +62,7 @@ const ConfirmDeleteItem: React.FC<ConfirmDeleteItemReq> = props => {
                     <View style={{ flex: 8, justifyContent: 'center' }}>
                         <Button
                             title="Delete"
-                            color="#f22"
+                            color="#D00"
                             onPress={() => props.closeDeleteModalAndDelete()}
                         />
                     </View>
