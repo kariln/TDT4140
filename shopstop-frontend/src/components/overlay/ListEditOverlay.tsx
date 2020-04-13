@@ -132,7 +132,7 @@ const ListEditOverlay: React.FC<ListEditItemReq> = props => {
                         <View style={{ flex: 8, justifyContent: 'center' }}>
                             <Button
                                 title="Delete"
-                                color="#f22"
+                                color="#d00"
                                 onPress={() => closeModalAndDelete()}
                             />
                         </View>
