@@ -14,6 +14,7 @@ export const initialAuthenticationState = {
     token: null
 };
 
+// This is the initial global state
 export const initialState: StateProps = {
     lists: [],
     listItems: [],
@@ -24,8 +25,15 @@ export const initialState: StateProps = {
     username: null,
     selectedList: null,
     selectedGroup: null,
+    tutorial: {
+        deleteMode: false,
+        viewBoughtMode: false,
+        editMode: false,
+        toggleBought: false
+    },
+    removeList: [],
 
-    // This is only here because typescript wanted it
+    // Makes us able to iterate through the state.
     *[Symbol.iterator]() {
         let properties = Object.keys(this);
         for (let i of properties) {

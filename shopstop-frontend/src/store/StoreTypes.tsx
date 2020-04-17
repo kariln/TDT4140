@@ -9,7 +9,7 @@ export interface StateProps {
     username: string | null;
     overlay: OverlayProps;
     [key: string]: any;
-    [Symbol.iterator](): IterableIterator<any>;
+    [Symbol.iterator](): IterableIterator<any>; // This is here so we can iterate through the state, typescript wanted this here.
 }
 
 export interface GroupProps {
@@ -41,4 +41,15 @@ export interface ListItemProps {
     quantity: number;
     bought: boolean;
     list: number;
+}
+
+export interface ListItemTutorialProps {
+    deleteMode: boolean;
+    viewBoughtMode: boolean;
+    editMode: boolean;
+    toggleBought: boolean;
+}
+
+export interface RemoveListProps {
+    id: number;
 }

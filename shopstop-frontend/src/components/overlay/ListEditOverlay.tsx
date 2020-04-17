@@ -6,10 +6,11 @@ import { ListItemProps } from '../../store/StoreTypes';
 export interface ListEditItemReq {
     item: ListItemProps;
     closeModal: (argModalState: void) => void;
-    deleteListItem?: (argDelete: ListItemProps) => void;
+    deleteListItem?: (argDelete: number) => void;
     changeListItem: (argEdit: ListItemProps) => void;
 }
 
+// Overlay that is used for editing a ListItem
 const ListEditOverlay: React.FC<ListEditItemReq> = props => {
     const [hasChanged, setHasChanged] = useState(false);
     const [initialItem] = useState(props.item);
@@ -56,7 +57,7 @@ const ListEditOverlay: React.FC<ListEditItemReq> = props => {
 
     function closeModalAndDelete() {
         if (props.deleteListItem !== undefined) {
-            props.deleteListItem(item);
+            props.deleteListItem(item.id);
         }
         props.closeModal();
     }
@@ -132,7 +133,7 @@ const ListEditOverlay: React.FC<ListEditItemReq> = props => {
                         <View style={{ flex: 8, justifyContent: 'center' }}>
                             <Button
                                 title="Delete"
-                                color="#f22"
+                                color="#d00"
                                 onPress={() => closeModalAndDelete()}
                             />
                         </View>

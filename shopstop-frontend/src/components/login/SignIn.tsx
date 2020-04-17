@@ -54,6 +54,7 @@ const styles = StyleSheet.create({
     }
 });
 
+// screen thats showing when signin in. Default screen when opening app for the first time
 const SignIn = () => {
     const navigation = useNavigation();
     const [, dispatch] = useContext(Context);

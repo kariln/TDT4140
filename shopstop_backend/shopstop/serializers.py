@@ -20,9 +20,15 @@ class ListSerializer(serializers.ModelSerializer):
         read_only_fields = ["modified_at", "created_at"]
 
     def create(self, validated_data):
+        """
+        Create and return a new 'List' instance, given validated data.
+        """
         return List.objects.create(**validated_data)
 
     def update(self, instance, validated_data):
+        """
+        Update and return and existing 'List' instance, given validated data.
+        """
         instance.name = validated_data.get("name", instance.name)
         instance.group = validated_data.get("group", instance.group)
         instance.save()
@@ -31,9 +37,15 @@ class ListSerializer(serializers.ModelSerializer):
 
 class ListItemSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
+        """
+        Create and return a new 'List item' instance, given validated data.
+        """
         return ListItem.objects.create(**validated_data)
 
     def update(self, instance, validated_data):
+        """
+        Update and return and existing 'List item' instance, given validated data.
+        """
         instance.name = validated_data.get("name", instance.name)
         instance.quantity = validated_data.get("quantity", instance.quantity)
         instance.bought = validated_data.get("bought", instance.bought)
@@ -48,6 +60,9 @@ class ListItemSerializer(serializers.ModelSerializer):
 
 class GroupSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
+        """
+        Create and return a new 'Group' instance, given validated data.
+        """
         group = Group.objects.create(**validated_data)
         assign_perm("view_group", self.context["user"], group)
         assign_perm("change_group", self.context["user"], group)
@@ -58,6 +73,9 @@ class GroupSerializer(serializers.ModelSerializer):
         return group
 
     def update(self, instance, validated_data):
+        """
+        Update and return and existing 'Group' instance, given validated data.
+        """
         instance.name = validated_data.get("name", instance.name)
         instance.save()
         return instance
@@ -77,6 +95,9 @@ class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(min_length=7)
 
     def create(self, validated_data):
+        """
+        Create and return a new 'User' instance, given validated data.
+        """
         user = User.objects.create_user(
             validated_data["username"],
             validated_data["email"],

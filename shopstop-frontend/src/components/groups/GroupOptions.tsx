@@ -10,6 +10,7 @@ import {
 } from 'react-native-popup-menu';
 import { Context } from '../../store/Store';
 
+// component on the top navigation bar to invite a user to the group
 const GroupOptions: React.FC = () => {
     const navigation = useNavigation();
     const [state] = useContext(Context);

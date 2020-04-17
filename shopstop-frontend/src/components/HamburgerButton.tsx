@@ -3,6 +3,7 @@ import { View } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
 
+// hamburger button to open drawer on top navigation
 const HamburgerButton = () => {
     const navigation = useNavigation<any>();
     return (
