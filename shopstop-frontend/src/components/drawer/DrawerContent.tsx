@@ -34,6 +34,7 @@ const styles = StyleSheet.create({
     }
 });
 
+// The top component of the drawer, everything we want rendered inside the drawer must be a child of this
 const DrawerContent = () => {
     const [state, dispatch] = useContext(Context);
 

@@ -8,6 +8,9 @@ import {
     RemoveListProps
 } from './StoreTypes';
 
+// Reducers is the actions we can perform on our global state.
+// we determine which action to be taken by action.type
+// Using the reducer functions can be done by calling dispatch, as can be seen in multiple components
 export const reducers = (state: StateProps, action: Action) => {
     switch (action.type) {
         case 'SET_LISTITEMS':

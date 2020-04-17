@@ -74,6 +74,7 @@ const Lists = () => {
         state.selectedGroup
     ]);
 
+    // if there are no groups in state, give info to the user that he can create or join a group
     if (state.groups.length === 0)
         return (
             <View style={styles.container}>
@@ -84,6 +85,7 @@ const Lists = () => {
             </View>
         );
 
+    // If there is no lists in the selected group, give info to user that he can create a list
     if (state.lists.length === 0)
         return (
             <View style={styles.container}>
@@ -97,6 +99,7 @@ const Lists = () => {
             </View>
         );
 
+    // renders all lists, and a button to create new lists
     return (
         <View style={styles.container}>
             <FlatList

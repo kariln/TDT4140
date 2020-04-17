@@ -3,6 +3,7 @@ import { TouchableOpacity } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { Context } from '../../store/Store';
 
+// Button component when creating a new list
 const AddListButton = () => {
     const [, dispatch] = useContext(Context);
     return (

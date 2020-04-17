@@ -7,7 +7,7 @@ export interface ConfirmDeleteItemReq {
     closeModal: (argModalState: void) => void;
     closeDeleteModalAndDelete: (argModalState: void) => void;
 }
-
+// Overlay when deleting items from a list
 const ConfirmDeleteItem: React.FC<ConfirmDeleteItemReq> = props => {
     return (
         <Overlay

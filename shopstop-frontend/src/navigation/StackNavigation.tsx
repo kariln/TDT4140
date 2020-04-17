@@ -13,9 +13,11 @@ import SignUp from '../components/login/Signup';
 
 const Stack = createStackNavigator();
 
+// react navigation stack makes it easy to handle navigation, and includes default functionality like a header and a backbutton if we have gone to a new screen
 const MainStack = () => {
     const [state, dispatch] = useContext(Context);
 
+    // On component load, tries to get the authtoken from expo async storage, which makes data persist through closing of the app.
     useEffect(() => {
         const initAuthToken = async () => {
             const authToken = await SecureStore.getItemAsync('authToken');
@@ -70,5 +72,3 @@ const MainStack = () => {
 };
 
 export default MainStack;
-
-// this component basically lets us navigate through screens easily, so we can click a list, and get sent into a new component which shows the list, and easily go back etc.

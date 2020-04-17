@@ -34,6 +34,7 @@ interface ListOverviewItemProp {
     list: ListProps;
 }
 
+// component that renders each list in the listoverview
 const Item: React.FC<ListOverviewItemProp> = props => {
     const navigation = useNavigation(); // For navigating the stack, see ../navigation/stacknavigation for how the stack looks
     // when you press the list, it navigates to the list screen, with the id of the list selected as a prop, so we can do a query for items in that list.

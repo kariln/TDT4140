@@ -26,6 +26,7 @@ export interface GroupItemInterface {
     item: GroupProps;
 }
 
+// component that renders each individual group the user is part of
 const ListItem: React.FC<GroupItemInterface> = props => {
     const [state, dispatch] = useContext(Context);
     const navigation = useNavigation();

@@ -4,6 +4,7 @@ import AddList from './AddList';
 import EditList from './EditList';
 import AddGroup from './AddGroup';
 
+// decides which overlay to show, depending on the value of state.overlay.type
 const Overlay = () => {
     const [state] = useContext(Context);
 

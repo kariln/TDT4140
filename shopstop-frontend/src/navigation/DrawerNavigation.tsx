@@ -9,7 +9,7 @@ import SubStack from './SubStackNavigation';
 const Drawer = createDrawerNavigator();
 
 // This is the basic drawer component that says to which page buttons direct etc.
-// we can add more drawer.screen, which lets us navigate to the screens from the drawer, can for example be a list of groups in the drawer menu etc.
+// We only want the drawer available from the main listOverview screen, which is why it is the only sub screen of the drawer.
 const DrawerComponent = () => {
     return (
         <Drawer.Navigator drawerContent={() => <DrawerContent />}>
@@ -19,5 +19,3 @@ const DrawerComponent = () => {
 };
 
 export default DrawerComponent;
-
-// this is mostly using react-navigation components, which makes it easy to handle the drawer/sidebar, aswell as navigation between screens.

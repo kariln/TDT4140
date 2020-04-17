@@ -5,6 +5,7 @@ import { Context } from '../../store/Store';
 import { GroupProps } from '../../store/StoreTypes';
 import GroupOverviewItem from './GroupOverviewItem';
 
+// component that renders the list of groups the user is part of
 const GroupOverview = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [state, dispatch] = useContext(Context);

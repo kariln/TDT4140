@@ -38,6 +38,7 @@ type RootStackParamList = {
 };
 type ProfileScreenRouteProp = RouteProp<RootStackParamList, 'list'>;
 
+// component that renders each ListItem in the current list
 const List = () => {
     const [state, dispatch] = useContext(Context);
     const [isLoading, setIsLoading] = useState(true);
@@ -241,6 +242,7 @@ const List = () => {
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             keyboardVerticalOffset={headerHeight}
         >
+            // This is the header of the list, with the eit buttons
             <View
                 style={{
                     alignSelf: 'center',
@@ -332,6 +334,7 @@ const List = () => {
             <View
                 style={{ height: 2, width: '100%', backgroundColor: '#000' }}
             />
+            // This is the rendering of the list
             <FlatList
                 style={{ width: '100%', height: '100%' }}
                 data={

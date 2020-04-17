@@ -1,6 +1,7 @@
 import React from 'react';
 import { Image, View } from 'react-native';
 
+// component that shows the splash screen when trying to fetch token from expo storage at app load
 const Splash = () => {
     return (
         <View

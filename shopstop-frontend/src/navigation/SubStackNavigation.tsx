@@ -10,7 +10,7 @@ import GroupInvitation from '../components/groups/GroupInvitation';
 
 const Stack = createStackNavigator();
 
-// if we want to hide the header from the stack navigator, use this as prop in stack.navigator ------>   headerMode="none"
+// We have this stack navigation inside the drawer navigation, since we only want the drawer available from the "main" screen. and not inside stacks.
 const SubStack = () => {
     return (
         <Stack.Navigator>
@@ -34,5 +34,3 @@ const SubStack = () => {
 };
 
 export default SubStack;
-
-// this component basically lets us navigate through screens easily, so we can click a list, and get sent into a new component which shows the list, and easily go back etc.
