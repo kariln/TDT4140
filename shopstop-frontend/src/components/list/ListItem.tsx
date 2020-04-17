@@ -15,6 +15,7 @@ export interface ListItemInterface {
     tutorial: ListItemTutorialProps;
 }
 
+// This is a component that renders a listItem in the normal mode
 const ListItemNormal: React.FC<ListItemInterface> = props => {
     function handleCheck() {
         props.changeListItem({ ...props.item, bought: !props.item.bought });
@@ -101,6 +102,7 @@ const ListItemNormal: React.FC<ListItemInterface> = props => {
     );
 };
 
+// This is a component that renders a listItem in the deletion mode
 const ListItemDelete: React.FC<ListItemInterface> = props => {
     function handleDelete() {
         props.selectForDelete(props.item.id);
@@ -157,6 +159,7 @@ const ListItemDelete: React.FC<ListItemInterface> = props => {
     );
 };
 
+// This is a component that selects the component that is to mount
 const ListItem: React.FC<ListItemInterface> = props => {
     if (props.deleteMode === true) {
         return <ListItemDelete {...props} />;

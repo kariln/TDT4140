@@ -4,12 +4,12 @@ import { Input, Overlay } from 'react-native-elements';
 import getEnvVars from '../../../environment';
 import { Context, initialOverlayState } from '../../store/Store';
 
+// overlay when adding a new list
 const AddList = () => {
     const [state, dispatch] = useContext(Context);
     const [newList, setNewList] = useState('');
 
     const addList = async () => {
-        // .then chaining dispatch so the id for the new list is made on the backend, and then we update the frontend with it afterwards.
         const res = await fetch(`${getEnvVars.apiUrl}lists/`, {
             method: 'POST',
             headers: {

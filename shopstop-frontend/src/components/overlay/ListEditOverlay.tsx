@@ -10,6 +10,7 @@ export interface ListEditItemReq {
     changeListItem: (argEdit: ListItemProps) => void;
 }
 
+// Overlay that is used for editing a ListItem
 const ListEditOverlay: React.FC<ListEditItemReq> = props => {
     const [hasChanged, setHasChanged] = useState(false);
     const [initialItem] = useState(props.item);

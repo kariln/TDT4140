@@ -5,6 +5,7 @@ import getEnvVars from '../../../environment';
 import { Context, initialOverlayState } from '../../store/Store';
 import { ListProps } from '../../store/StoreTypes';
 
+// overlay when editing a list
 const EditList = () => {
     const [state, dispatch] = useContext(Context);
     const [newList, setNewList] = useState('');

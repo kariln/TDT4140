@@ -9,7 +9,7 @@ export interface StateProps {
     username: string | null;
     overlay: OverlayProps;
     [key: string]: any;
-    [Symbol.iterator](): IterableIterator<any>;
+    [Symbol.iterator](): IterableIterator<any>; // This is here so we can iterate through the state, typescript wanted this here.
 }
 
 export interface GroupProps {

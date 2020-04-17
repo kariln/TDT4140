@@ -28,6 +28,7 @@ const styles = StyleSheet.create({
     }
 });
 
+// screen to invite a user to the group
 const GroupInvitation = () => {
     const [context] = useContext(Context);
     const [state, setstate] = useState({ username: '', status: '' });
