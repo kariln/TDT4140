@@ -42,6 +42,7 @@ const styles = StyleSheet.create({
     }
 });
 
+// Component where a user can create a new listitem
 const TextField = () => {
     const [saveData, setSaveData] = useState('');
     const [saveQuantity, setSaveQuantity] = useState(1);
@@ -73,9 +74,11 @@ const TextField = () => {
                         payload: data
                     })
                 );
+            // resets the fields when a new item is created
             setSaveData('');
             setSaveQuantity(1);
         } else {
+            // if no valid input, give user info
             Alert.alert(
                 'Whops!',
                 'You forgot to enter the name of the item!',

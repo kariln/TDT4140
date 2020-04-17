@@ -11,12 +11,14 @@ const styles = StyleSheet.create({
     }
 });
 
+// Overlay when adding a list
 const AddList = () => {
     const [state, dispatch] = useContext(Context);
     const [newGroup, setNewGroup] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
 
     const addGroup = async () => {
+        // Resets error message
         setErrorMessage('');
         const res = await fetch(`${getEnvVars.apiUrl}groups/`, {
             method: 'POST',
@@ -31,6 +33,7 @@ const AddList = () => {
         if (res.status === 400)
             setErrorMessage('That is not a valid group name');
 
+        // 201 respone status means row was inserted into database, call was successfull
         if (res.status === 201) {
             const data = await res.json();
             dispatch({

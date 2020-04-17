@@ -20,6 +20,7 @@ export interface GroupItemInterface {
     item: GroupProps;
 }
 
+// component that renders each indiviudal group that a user has been invited to
 const ListItem: React.FC<GroupItemInterface> = props => {
     const [state, dispatch] = useContext(Context);
 

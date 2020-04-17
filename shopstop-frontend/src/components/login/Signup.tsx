@@ -23,6 +23,7 @@ const styles = StyleSheet.create({
     }
 });
 
+// screen thats showing when making a new account
 const RegUser = () => {
     const navigation = useNavigation();
     const [username, setUsername] = React.useState('');
@@ -63,6 +64,7 @@ const RegUser = () => {
                     username: 'This username is already used'
                 });
         }
+        // status code 201 means row was inserted, account was successfully created
         if (res.status === 201) navigation.navigate('signin');
     };
 

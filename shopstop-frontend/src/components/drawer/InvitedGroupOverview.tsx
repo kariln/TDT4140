@@ -5,6 +5,7 @@ import { Context } from '../../store/Store';
 import { GroupProps } from '../../store/StoreTypes';
 import InvitedGroupOverviewItem from './InvitedGroupOverviewItem';
 
+// Component that renders the list of groups the user has been invited to
 const InvitedGroupOverview = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [state, dispatch] = useContext(Context);
@@ -30,6 +31,8 @@ const InvitedGroupOverview = () => {
     }, [dispatch, state.authentication.token]);
 
     if (isLoading) return <></>;
+
+    // if the user has been invited to no groups, render nothing
     if (state.invitedGroups.length === 0) return <></>;
     return (
         <>
